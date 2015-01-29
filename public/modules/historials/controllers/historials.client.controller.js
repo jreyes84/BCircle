@@ -127,11 +127,11 @@ angular.module('historials').controller('HistorialsController', ['$scope', '$sta
 
 								if( type !=='' ){
 									if(type === 'Egreso'){
-										all.documento.fromType = 'Egresos';
-										all.documento.icon='gi gi-down_arrow';
+										all.documento.fromType = type;
+										all.documento.icon='gi gi-up_arrow';
 									}else{
-										all.documento.fromType = 'Ingresos';
-										all.documento.icon='gi gi-up_arrow';	
+										all.documento.fromType = type;
+										all.documento.icon='gi gi-down_arrow';	
 									}
 									
 								}
