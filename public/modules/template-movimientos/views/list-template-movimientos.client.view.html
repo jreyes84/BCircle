@@ -1,0 +1,127 @@
+<!-- Tasks Header -->
+<script src="lib/app.js"></script>
+<script src="lib/pages/formsValidation.js"></script>
+<script src="lib/pages/formsWizard.js"></script>
+<script>
+    $(function(){ 
+        FormsWizard.init(); 
+    });
+</script>
+<div class="content-header">
+    <div class="header-section">
+        <h1>
+            <i class="fa fa-sort-amount-desc"></i>Cuentas<br><small>Administra tus template de movimientos!</small>
+        </h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Pages</li>
+    <li><a href="">Templates Movimientos</a></li>
+</ul>
+<!-- END Tasks Header -->
+<!-- Tasks Row -->
+<div data-ng-controller="TemplateMovimientosController" >
+<div class="row" data-ng-init="find()">
+    <div class="col-sm-12 col-lg-12">
+        <!-- Start Tipo Cuenta input search -->
+        <div class="form-group">
+            <!-- Pago de deuda > deuda a pagar C/Tarjeta de credito > Pago con Tarjeta banorte -->
+            <select class="chzn-select" data-placeholder="Nombre Template : MiTemplate > Alguna Subdivision > algun otro valor" id="tipoMovimiento" data-ng-model="myTemplate" data-ng-options="template as template.name for template in templates" data-change-choose="onChangeChoosen()" chosen data-ng-change="changeSelected(template)">
+            </select>
+        </div>
+        <ul class="ul-style">
+            <li class="li-style" data-ng-repeat = "template in templateMovimientos | filter : { name : myTemplate }">
+                <div class="alert alert-info alert-alt">
+                    <!-- <button type="button" class="close" data-dismiss="alert" data-confirm-Alert="Esta seguro de eliminar el tipo de movimiento? Eliminara todo lo relacionado a ella." data-ng-click="deleteItem(indexTipoMovimiento ? indexTipoMovimiento : $index)">×</button> -->
+                    <div class="block-options pull-right">
+                        <!-- <div class="btn-group" circle-option id="c-options_{{$index}}">
+                            <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-info dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-original-title="Círculos"><i class="fa fa-dot-circle-o"></i> <span class="caret"></span></a>
+                            <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <li data-ng-repeat="circulo in circulos" data-ng-click="onClickLi($parent.$index,0, $index)">
+                                    <a href="javascript:void(0)">
+                                        <input type="checkbox" value="{{circulo.name}}" data-ng-model="templateMovimientos[$parent.$index].circles[$index].checked" /> {{ circulo.name }}
+                                    </a>
+                                </li>                                
+                                <li class="divider"></li>
+                                <li data-ng-click="onClickLi($index,1)" data-ng-hide="newCircle">
+                                    <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear círculo nuevo</a>
+                                </li>
+                                <li data-ng-click="onClickLi($index)" data-ng-show="newCircle">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event,$index)" id="newCircleInput_{{$index}}" data-ng-blur="onBlurNewCircle()" data-ng-model="templateMovimientos[$index].circleName">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="clicked($index)" >Crear</button>
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </div> -->
+                        <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-danger" data-toggle="tooltip" title="" data-original-title="Eliminar" data-confirm-Alert="Esta seguro de eliminar el tipo de movimiento? Eliminara todo lo relacionado a ella." data-ng-click="deleteItem(indexTipoMovimiento ? indexTipoMovimiento : $index)"><i class="fa fa-times"></i></a>
+                    </div>
+                    <span data-ng-hide="editName" data-ng-click="enableEdit(template,true)" data-toggle="tooltip" data-tooltip title data-original-title="click para editar">
+                        <h3>{{template.name}}</h3>
+                    </span>
+                    <span data-ng-show="editName">
+                        <input class="form-control" type="text" data-ng-model="template.name" data-ng-keypress="onKeypress($event,template,false)" data-ng-blur="onBlur(template,false)" data-ng-change="onChangeText(template)">
+                    </span>
+                    <select class="span4 chzn-select" data-placeholder="Seleccione cuentas para su template." multiple="true" data-ng-model="news[indexTipoMovimiento?indexTipoMovimiento:$index]" data-ng-options="value as label for (value,label) in inputTagCuentas | orderBy:'created':false" chosen data-no-add="false" data-on-change-select="onChangeThisSelect(deselected, indexTipoMovimiento ? indexTipoMovimiento : $index)" id="news-{{$index}}"></select>
+                    <br>
+                    <div>
+                        <table class="tableAdmin table table-vcenter table-striped" >
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Cuenta</th>
+                                    <th class="text-center">Cargo a</th>
+                                    <th class="text-center">Cargo</th>
+                                    <th class="text-center">Abono</th>
+                                    <th class="text-center">Opción</th>
+                                </tr>
+                            </thead>
+                             <tbody>
+                                <tr data-ng-repeat="cuenta in template.cuenta">
+                                    <td style="display:none">
+                                        <input data-ng-model="cuenta.typeaccount" type="text" class="form-control" />
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="hidden" data-ng-model="cuenta.idcuenta" class="form-control" >
+                                        <a href="javascript:void(0)" class="label label-warning">{{cuenta.name}}</a>
+                                    </td>
+                                    <td class="text-center">
+                                        <select data-ng-model="cuenta.cargo_a" ui-select2 style="width:100%" data-ng-change="cargoChange($parent.$index)">
+                                            <option value="total">Total</option>
+                                            <option value="subtotal">Subtotal</option>
+                                            <option value="iva">IVA</option>
+                                            <option value="ret_iva">Retención IVA</option>
+                                            <option value="ret_isr">Retención ISR</option>
+                                            <option value="ieps">IEPS</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-center">
+                                        <label class="switch switch-success">
+                                            <input type="checkbox" data-ng-model="cuenta.cargo" data-ng-change="onchangeSelect(indexTipoMovimiento)">
+                                            <span></span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label class="switch switch-success">
+                                            <input type="checkbox" data-ng-model="cuenta.abono" data-ng-change="onchangeSelect(indexTipoMovimiento)">
+                                            <span></span>
+                                        </label>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-xs btn-danger" data-original-title="Delete" data-ng-click="onDeleteCuenta(cuenta,indexTipoMovimiento ? indexTipoMovimiento : $parent.$index, $index)"><i class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody> 
+                        </table>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <button data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk" style="display:none">Hola</button>
+</div>
+
+<!-- END Tasks Row -->
+</div>

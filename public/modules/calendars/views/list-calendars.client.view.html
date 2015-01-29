@@ -1,0 +1,369 @@
+<!-- Load and execute javascript code used only in this page -->
+<script src="lib/app.js"></script>
+<script>
+//$(function(){ CompCalendar.init(); });
+</script>
+<!-- Calendar Header -->
+<div class="content-header">
+    <div class="header-section">
+        <h1>
+            <i class="fa fa-calendar"></i>Calendario<br><small></small>
+        </h1>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Componentes</li>
+    <li><a href="">Calendario</a></li>
+</ul>
+<!-- END Calendar Header -->
+
+<!-- FullCalendar Content -->
+<div class="block block-alt-noborder full" data-ng-controller="CalendarsController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block-section">
+                <div class="input-group">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+          <div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="myCalendar" id="myCalendar"> </div>
+        </div>
+    </div>
+    <div id="modal-calendar-addEvent" class="modal fade in" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content"  data-ng-hide="advance">
+                <!-- Modal Header -->
+                
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h2 class="modal-title"><i class="fa fa-pencil"></i> Nuevo evento</h2>
+                </div>
+                <!-- END Modal Header -->
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form class="form-horizontal" >
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="example-username">Fecha</label>
+                            <div class="col-md-8">
+                                <label class="control-label" for="example-username">{{newEvent.start | date:'fullDate'}}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="example-username">Descripción</label>
+                            <div class="col-md-8">
+                                <input type="text" id="example-progress-username" name="example-progress-username" class="form-control ui-wizard-content" placeholder="Descripción de tu evento" data-ng-model="newEvent.title" autocomplete="off" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-4 control-label" for="add-contact-name">Circulos</label>
+                            <div class="col-xs-8">
+                                <div class="btn-group" circle-option name="c-options">
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-primary dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-original-title="Círculos"><i class="fa fa-dot-circle-o"></i> <span class="caret" data-ng-if="circulos.total < 1"></span><span data-ng-if="circulos.total === 1">{{circulos.title}}</span><span data-ng-if="circulos.total > 1">{{circulos.total}} {{circulos.title}}</span></a>
+                                    <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                        <div class="scroll-menu">
+                                            <h4 data-ng-hide="circulos.length" class="without-cirlces">No hay círculos...</h4>
+                                            <li data-ng-repeat="circulo in circulos" data-ng-click="onClickLi( $index , 0, circulo)">
+                                                <a href="javascript:void(0)">
+                                                    <input type="checkbox" value="{{circulo.name}}" data-ng-model="circulo.checked" /> {{ circulo.name }}
+                                                </a>
+                                            </li>  
+                                        </div> 
+                                        <div>
+                                            <li class="divider"></li>
+                                            <li data-ng-click="onClickLi(undefined,1)" data-ng-hide="newCircle">
+                                                <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear círculo nuevo</a>
+                                            </li>
+                                            <li data-ng-click="onClickLi()" data-ng-show="newCircle">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event)" data-ng-blur="onBlurNewCircle()" data-ng-model="documento.circleName" name="newCircleInput">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="clicked()" >Crear</button>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </div>                             
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-danger" alert-Notification alerttitle="{{alertTitle}}" alertcontent="{{alertContent}}" alertbuttons="{{alertButtons}}" alertmethods="{{alertMethods}}" isActive="{{hasGuests}}" methodSend="sendGuestsInvitation" data-ng-model="hasGuests" style="display:none" >Boton <i class="fa fa-trash-o"></i></button>
+                    <button class="btn btn-sm btn-danger" data-ng-click="onDeleteEvent()" data-ng-if="newEvent._id" methodSend="sendGuestsInvitation" data-ng-show="canEdit" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk">Eliminar evento <i class="fa fa-trash-o"></i></button>
+                    <button type="button" class="btn btn-sm btn-primary" data-ng-click="onNewEvent()" data-ng-show="canEdit">Guardar evento</button>
+                    <button type="button" class="btn btn-sm btn-default" data-ng-click="onEditEventAdavnce()"  data-ng-show="canEdit">Configurar evento >></button>
+                    
+                </div>
+                <!-- END Modal Body -->
+            </div> 
+            <div class="modal-content" data-ng-show="advance" data-ng-init="listInvitations()">
+                <!-- Modal Header -->
+                
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h2 class="modal-title"><i class="fa fa-pencil"></i> Nuevo evento avanzado</h2>
+                </div>
+                <!-- END Modal Header -->
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="example-username">Descripción</label>
+                            <div class="col-md-10">
+                                <input type="text" id="example-progress-username" name="example-progress-username" class="form-control ui-wizard-content" placeholder="Descripción de tu evento" data-ng-model="newEvent.title" autocomplete="off" >
+                            </div>
+                        </div>
+                        <div class="form-group" data-ng-show="newEvent.allDay">
+                            <label class="col-md-2 control-label" for="example-username">Fechas</label>
+                            <div class="col-md-10">
+                                <div class="input-group input-daterange" data-date-format="yyyy-mm-dd" style="z-index:9999">
+                                    <input type="date" id="example-daterange1" name="example-daterange1" class="form-control text-center" placeholder="From" data-ng-model="newEvent.start" data-ng-blur="onDateBlur()" data-ng-change="onDateChange()">
+                                    <span class="input-group-addon"><i class="fa fa-angle-right"></i></span>
+                                    <input type="date" id="example-daterange2" name="example-daterange2" class="form-control text-center" placeholder="To" data-ng-model="newEvent.end" data-ng-blur="onDateBlur()" data-ng-change="onDateChange()">
+                                </div>
+
+                            </div>                            
+                        </div>
+                        <div class="form-group" data-ng-hide="newEvent.allDay">
+                            <label class="col-md-2 control-label" for="example-username">Fecha</label>
+                            <div class="col-md-10">
+                                <div class="col-md-3">
+                                    <div class="input-group input-daterange" data-date-format="yyyy-mm-dd" style="z-index:99999">
+                                        <input type="text" id="example-daterange1" name="example-daterange1" class="form-control text-center" placeholder="From" data-ng-model="newEvent.start">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group bootstrap-timepicker">
+                                        
+                                        <input type="text" class="form-control input-timepicker24" data-ng-model="newEvent.starttime">
+                                        <span class="input-group-btn">
+                                            <a href="javascript:void(0)" class="btn btn-primary"><i class="fa fa-clock-o"></i></a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group input-daterange" data-date-format="yyyy-mm-dd" style="z-index:99999">
+                                        <input type="text" id="example-daterange2" name="example-daterange2" class="form-control text-center" placeholder="To" data-ng-model="newEvent.end" data-ng-blur="onDateBlur()" data-ng-change="onDateChange()">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group bootstrap-timepicker">
+                                        <input type="text" class="form-control input-timepicker24" data-ng-model="newEvent.endtime">
+                                        <span class="input-group-btn">
+                                            <a href="javascript:void(0)" class="btn btn-primary"><i class="fa fa-clock-o"></i></a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"></label>
+                            <div class="col-md-9">
+                                <label class="checkbox-inline" for="example-inline-checkbox1">
+                                    <input type="checkbox" id="example-inline-checkbox1" name="example-inline-checkbox" value="1" data-ng-model="newEvent.allDay"/> Todo el día
+                                </label>
+                                <label class="checkbox-inline" for="example-inline-checkbox2">
+                                    <input type="checkbox" id="example-inline-checkbox2" name="example-inline-checkbox" value="0" data-ng-model="newEvent.isrepeat" data-ng-change="onChangeRepeat()" /> Repetir...
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" data-ng-show="newEvent.isrepeat">
+                            <label class="col-md-3">Se repite</label>
+                            <div class="col-md-6">
+                                <select select-2 style="width:100%" ui-select2 data-ng-model="selectOptionRepeat" class="text-center" data-ng-change="onSelectOptionRepeatChange()" class="form-control input-sm">
+                                <option class="text-left" data-ng-repeat="repeat in optionRepeat" value="{{repeat.value}}">{{repeat.text}}</option>
+                            </select>                            
+                            </div>
+                        </div>
+                        <!-- Repeat -->
+                        <div class="form-group" data-ng-show="newEvent.isrepeat" data-ng-if="repeatDays || repeatWeeks || repeatMonths || repeatYears">
+                            <label class="col-md-3">Repetir cada</label>
+                            <div class="col-md-2">
+                                <input type="number" class="form-control input-sm" placeholder="1" data-ng-model="newEvent.repeat.every" min="1" max="30" data-ng-change="onEveryDaysChange()">
+                            </div>
+                            <label class="col-md-2" data-ng-show="repeatDays" >días</label>
+                            <label class="col-md-2" data-ng-show="repeatWeeks">semanas</label>
+                            <label class="col-md-2" data-ng-show="repeatMonths">meses</label>
+                            <label class="col-md-2" data-ng-show="repeatYears">años</label>
+                        </div>
+                        <div class="form-group" data-ng-show="newEvent.isrepeat" data-ng-if="selectOptionRepeat === 'cada_semana'">
+                            <label class="col-md-3">Repetir el</label>
+                            <div class="col-md-7">
+                                <label class="checkbox-inline" for="example-inline-checkbox1">
+                                    <input type="checkbox" id="example-inline-checkbox1" name="example-inline-checkbox1" value="false" data-ng-model="newEvent.repeat.lunes" data-ng-change="getToDay()"> L
+                                </label>
+                                <label class="checkbox-inline" for="example-inline-checkbox2">
+                                    <input type="checkbox" id="example-inline-checkbox2" name="example-inline-checkbox2" value="false" data-ng-model="newEvent.repeat.martes" data-ng-change="getToDay()"> M
+                                </label>
+                                <label class="checkbox-inline" for="example-inline-checkbox3">
+                                    <input type="checkbox" id="example-inline-checkbox3" name="example-inline-checkbox3" value="false" data-ng-model="newEvent.repeat.miercoles" data-ng-change="getToDay()"> Mi
+                                </label>
+                                <label class="checkbox-inline" for="example-inline-checkbox4">
+                                    <input type="checkbox" id="example-inline-checkbox4" name="example-inline-checkbox4" value="false" data-ng-model="newEvent.repeat.jueves" data-ng-change="getToDay()"> J
+                                </label>
+                                <label class="checkbox-inline" for="example-inline-checkbox5">
+                                    <input type="checkbox" id="example-inline-checkbox5" name="example-inline-checkbox5" value="false" data-ng-model="newEvent.repeat.viernes" data-ng-change="getToDay()"> V
+                                </label>
+                                <label class="checkbox-inline" for="example-inline-checkbox6">
+                                    <input type="checkbox" id="example-inline-checkbox6" name="example-inline-checkbox6" value="false" data-ng-model="newEvent.repeat.sabado" data-ng-change="getToDay()"> S
+                                </label>
+                                <label class="checkbox-inline" for="example-inline-checkbox7">
+                                    <input type="checkbox" id="example-inline-checkbox7" name="example-inline-checkbox7" value="false" data-ng-model="newEvent.repeat.domingo" data-ng-change="getToDay()"> D
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" data-ng-show="newEvent.isrepeat" data-ng-if="repeatMonths" >
+                            <label class="col-md-3">Repetir cada</label>
+                            <div class="col-md-9">
+                                <label class="radio-inline" for="example-inline-checkbox1_1">
+                                    <input type="checkbox" id="example-inline-checkbox1_1" name="example-inline-checkbox" value="false" data-ng-model="newEvent.repeat.repeatDayOfMonth" data-ng-change="onCheckMonthChange()"> día del mes
+                                </label>
+                                <label class="radio-inline" for="example-inline-checkbox1_2">
+                                    <input type="checkbox" id="example-inline-checkbox1_2" name="example-inline-checkbox" value="false" data-ng-model="newEvent.repeat.repeatEveryThirdDay" data-ng-change="onCheckMonthThirdChange()"> día de la semana
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" data-ng-show="newEvent.isrepeat" data-ng-if="repeatDays || repeatWeeks || repeatMonths || repeatYears">
+                            <label class="col-md-3">Empieza el</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control input-datepicker-close input-sm" data-date-format="mm/dd/yy"  placeholder="mm/dd/yy" data-ng-model="newEvent.start" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-group" data-ng-show="newEvent.isrepeat">
+                            <label class="col-md-3">Finaliza</label>
+                            <div class="col-md-9">
+                                <div class="radio">
+                                    <label for="example-radio1">
+                                        <input type="checkbox" id="example-radio1" name="example-radios" data-ng-value="true" data-ng-model="newEvent.repeat.end.never" data-ng-change="onChangeNever()">Nunca
+                                    </label>
+                                </div>
+                            </div>
+                            <label class="col-md-3"></label>
+                            <div class="col-md-9 radio">
+                                <label for="example-radio2">
+                                    <input type="checkbox" id="example-radio2" name="example-radios" data-ng-model="afterRepeat" data-ng-change="onChangeAfterRepeat()">Después de <input type="text" class="form-control input-sm" data-ng-model="newEvent.repeat.end.after"> repeticiones
+                                </label>
+                            </div>
+                            <label class="col-md-3"></label>
+                            <div class="col-md-9">
+                                <div class="radio">
+                                    <label for="example-radio3">
+                                        <input type="checkbox" id="example-radio3" name="example-radios" data-ng-change="onChangeFinish()" data-ng-model="finishWhen">El 
+                                        <div class="input-group input-daterange" data-date-format="yyyy-mm-dd" style="z-index:99999" data-ng-model="newEvent.repeat.end.when">
+                                        <input type="text" id="example-daterange1" name="example-daterange1" class="form-control text-center input-sm" placeholder="From" data-ng-model="newEvent.repeat.end.when">
+                                    </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" data-ng-show="newEvent.isrepeat">
+                            <label class="col-md-3">Resumen</label>
+                            <label class="col-md-9">{{newEvent.repeat.resumeStart}} {{newEvent.repeat.resumeDay}} {{newEvent.repeat.resumeWhile}}</label>
+                        </div>
+                        <!-- end repeat -->
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Color</label>
+                            <div class="col-md-10">
+                                <ul class="sidebar-section sidebar-themes clearfix">
+                                    <li>
+                                        <a href="javascript:void(0)" class="themed-background-default themed-border-default" data-toggle="tooltip" title="" data-original-title="Default Blue" data-ng-click="onChangeColorEvent('#1bbae1')"></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="themed-background-night themed-border-night"  data-toggle="tooltip" title="" data-original-title="Night" data-ng-click="onChangeColorEvent('#888888')"></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="themed-background-amethyst themed-border-amethyst" data-toggle="tooltip" title="" data-original-title="Amethyst" data-ng-click="onChangeColorEvent('#af64cc')"></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="themed-background-modern themed-border-modern" data-toggle="tooltip" title="" data-original-title="Modern" data-ng-click="onChangeColorEvent('#46b7bf')"></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="themed-background-autumn themed-border-autumn" data-toggle="tooltip" title="" data-original-title="Autumn" data-ng-click="onChangeColorEvent('#e67e22')"></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="themed-background-flatie themed-border-flatie" data-toggle="tooltip" title="" data-original-title="Flatie" data-ng-click="onChangeColorEvent('#1ec1b8')"></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="themed-background-spring themed-border-spring" data-toggle="tooltip" title="" data-original-title="Spring" data-ng-click="onChangeColorEvent('#27ae60')"></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="themed-background-fancy themed-border-fancy" data-toggle="tooltip" title="" data-original-title="Fancy" data-ng-click="onChangeColorEvent('#d9416c')"></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="themed-background-fire themed-border-fire" data-toggle="tooltip" title="" data-original-title="Fire" data-ng-click="onChangeColorEvent('#e74c3c')"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Notificaciones</label>
+                            <div class="col-md-12" data-ng-repeat="notification in newEvent.notifications">
+                                    <div class="col-md-3">
+                                        <select select-2 style="width:100%" ui-select2 data-ng-model="notification.type_not"class="text-center" data-placeholder="Seleccione tipo de notificación">
+                                            <option value="Correo" class="text-center" selected="selected">Por correo</option>
+                                            <option value="Sistema" class="text-center">Por sistema</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="number" class="form-control" placeholder="1" data-ng-model="notification.time" min="1">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select select-2 style="width:100%" ui-select2 data-ng-model="newEvent.notification.every" class="text-center" data-placeholder="Seleccione el lapso">
+                                            <option value="días" class="text-center" selected="selected">días</option>
+                                            <option value="semanas" class="text-center">semanas</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        antes a las 
+                                        <div class="input-group bootstrap-timepicker">
+                                        <input type="text" class="form-control input-timepicker24" data-ng-model="newEvent.endtime">
+                                        <span class="input-group-btn">
+                                            <a href="javascript:void(0)" class="btn btn-primary"><i class="fa fa-clock-o"></i></a>
+                                        </span>
+                                    </div>
+                                    </div>
+                            </div>
+                            
+                            <div class="col-md-10">
+                                <button type="button" class="btn btn-xs btn-link" data-ng-click="addNewNotificationToEvent()">Agregar nueva notificación </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Público</label>
+                            <div class="col-md-10"></div>
+                            <label class="switch switch-success">
+                                <input type="checkbox" checked="" data-ng-model="newEvent.ispublic"><span></span>
+                            </label>
+                            
+                            <label class="col-md-12 control-label" data-ng-hide="newEvent.ispublic">
+                                Si haces este evento privado, ocultas todo el detalle a los demás usuarios.
+                            </label>
+                            <label class="col-md-12 control-label" data-ng-show="newEvent.ispublic">
+                                Si haces este evento público, muestras todo el detalle a los demás usuarios.
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Invitados</label>
+                            <div class="col-md-10">
+                                <select select-2 style="width:100%" ui-select2 data-ng-model="guestSelected" data-placeholder="Seleccione a sus invitados" multiple >
+                                     <option data-ng-repeat="guest in guests" value="{{guest.idguest}}" >{{guest.name}} ({{guest.type}})</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-primary" data-ng-click="onNewEvent()" data-ng-show="canEdit">Guardar evento</button>
+                    <button type="button" class="btn btn-sm btn-default" data-ng-click="cancelAdvanceEvent()" data-ng-show="canEdit">Cancelar configuración</button>
+                </div>
+                <!-- END Modal Body -->
+            </div> 
+        </div>
+    </div>
+    <!-- end Modal calendar event-->
+</div>
+<!-- END FullCalendar Block -->
+<!-- END FullCalendar Content -->

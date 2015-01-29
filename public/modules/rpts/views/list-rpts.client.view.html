@@ -1,0 +1,217 @@
+<!-- Contacts Header -->
+<script src="lib/app.js"></script>
+<script src="lib/pages/tablesDatatables.js"></script>
+<script>$(function(){ TablesDatatables.init(); });</script>
+<div data-ng-controller="RptsController" >
+    <div class="content-header">
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Pages</li>
+        <li><a href="javascript:void(0)">Reportes</a></li>
+    </ul>
+<!-- END Reportes Header -->
+<!-- Main Row -->
+    <div class="row" >
+        <div class="col-md-12">
+            <!-- Block with Options -->
+            <div class="block">
+                <!-- Block with Options Title -->
+                <div class="block-title">
+                    <div class="block-options pull-right">
+                        <h3><i class="fa fa-exclamation-triangle text-danger animation-pulse" data-toggle="tooltip" title="" data-original-title="Puedes guardar tus filtros y reportes para posteriores usos." ></i></h3>
+                        <div class="btn-group btn-group-sm">
+                            <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-default dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-original-title="Opciones de reporte"><span class="caret"></span></a>
+                            <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <li>
+                                    <a href="javascript:void(0)" data-ng-click="exportToExcel()"><i class="fa fa-file-excel-o pull-right" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk"></i>  Exportar CSV</a>
+                                    <a href="javascript:void(0)"><i class="fa fa-file-pdf-o pull-right"></i> Exportar PDF</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="javascript:void(0)"><i class="fa fa-floppy-o fa-fw pull-right"></i>Guardar filtros</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h2><strong>Configuración</strong> de reporte </h2>
+                </div>
+                <!-- END Block with Options Title -->
+
+                <!-- Block with Options Content -->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!-- Block 1 -->
+                        <div class="block">
+                            <div class="block-title"><h4>Tipo de reporte</h4></div>
+                            <div class="row">
+                                <form data-ng-submit="send()">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Reportes</label>
+                                        <select ui-select2="{allowClear:true}" data-ng-model="selectReporte" data-placeholder="Seleccione tipo de reporte" style="width:100%" class="text-center" name="selectReporte">
+                                            <!-- <option ng-repeat="option in options" value="{{option.value}}">{{option.text}}</option> -->
+                                            <option value="rptIgnis" class="text-center">Reporte Ignis</option>
+                                            <option value="balanceGrl" class="text-center">Balance General</option>
+
+                                        </select>
+                                    </div>                            
+                                    <div class="form-group form-actions">
+                                        <div class="col-xs-12">
+                                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Submit</button>
+                                            <button type="reset" class="btn btn-sm btn-warning" data-ng-click="resetFields()"><i class="fa fa-repeat"></i> Reset</button>
+                                            <a data-ng-href="{{rootFile}}" data-ng-show="rootFile" target="_blank" data-toggle="tooltip" title="" data-tooltip data-original-title="Para descargar, click derecho Guardar archivo como...">
+                                            <span class="label label-info">Descargar reporte</span>
+                                        </a>
+                                        </div>
+                                    </div>
+                                </form>                                
+                            </div>
+                            
+                        </div>
+                        <!-- END Block 1 -->
+                    </div>
+                    <div class="col-sm-6">
+                        <!-- Block 3 -->
+                        <div class="block">
+                            <div class="block-title"><h4>Filtros</h4></div>
+                            <div class="row">
+                                <div class="col-m-6">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label"><a href="#modal-terms" data-toggle="modal">Cuentas</a></label>
+                                        <div class="col-md-2">
+                                            <label class="switch switch-success" for="val_cuenta">
+                                                <input type="checkbox" id="val_cuenta" name="val_cuenta" value="1" data-ng-model="filtros.cuenta" >
+                                                <span data-toggle="tooltip" title="" data-original-title="Filtrar por cuentas"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-m-6">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label" for="example-daterange1">Fechas</label>
+                                        <div class="col-md-6">
+                                            <div class="input-group input-daterange" data-date-format="yyyy-mm-dd">
+                                                <input type="text" id="example-daterange1" name="example-daterange1" class="form-control text-center" placeholder="From" data-ng-model="filtros.start">
+                                                <span class="input-group-addon"><i class="fa fa-angle-right"></i></span>
+                                                <input type="text" id="example-daterange2" name="example-daterange2" class="form-control text-center" placeholder="To" data-ng-model="filtros.end">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                        
+                        </div>
+                        <!-- END Block 3 -->
+                    </div>
+                </div>
+                <!-- END Block with Options Content -->
+                <div class="row" data-ng-show="filtros.cuenta"> 
+                    <div class="col-md-12">
+                        <!-- Block with Options -->
+                        <div class="block">
+                            <!-- Block with Options Title -->
+                            <div class="block-title">
+                                <h2><strong>Selecciona </strong> cuentas a filtrar </h2>
+                            </div>
+                            <!-- END Block with Options Title -->
+
+                            <!-- Block with Options Content -->
+                            <div class="row">
+                                <div class="col-sm-12" data-ng-init="findCuentas()">
+                                    <!-- Block 1 -->
+                                    <select ui-select-2 style="width:100%" ui-select2 data-ng-model="filtros.cuentasSelected" data-placeholder="Seleccione las cuentas"  multiple >
+                                         <option data-ng-repeat="cuenta in inputTagCuentas" value="{{cuenta._id}}" >{{cuenta.name}}</option>
+                                    </select>
+                                    <!-- END Block 1 -->
+                                </div>
+                            </div>
+                            <!-- END Block with Options Content -->
+                        </div>
+                        <!-- END Block with Options -->
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- END Block with Options -->
+        </div>
+    </div>
+    <div class="row" data-ng-if="dtOptionsRes"> 
+        <div class="col-md-12">
+            <!-- Block with Options -->
+            <div class="block">
+                <table id="foobar" class="table table-vcenter table-condensed table-bordered dataTable no-footer" role="grid" aria-describedby="example-datatable_info" datatable dt-options="dtOptionsRes" dt-columns="dtColumnsRes" >
+                    <tbody>
+                        <tr ng-repeat="result in resultados" role = "row">
+                            <td class="text-center">{{result.name_document}}</td>
+                            <td class="text-center">{{result.date_document | date:'MM-dd-yyyy'}}</td>
+                            <td class="text-center">{{result.contacts}}</td>
+                            <td class="text-center">{{result.cargoQty}}</td>
+                            <td class="text-center">{{result.abonoQty}}</td>
+                            <td class="text-center">{{result.name}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-center"> </td>
+                            <td class="text-center"> </td>
+                            <td class="text-center"> </td>
+                            <td class="text-center"> $ {{resultados.totalCargo}}</td>
+                            <td class="text-center"> $ {{resultados.totalAbono}}</td>
+                            <td class="text-center"> </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- END Block with Options -->
+            
+        </div>
+    </div>
+    <div class="row" data-ng-if="balanceGrl"> 
+        <div class="col-md-12">
+            <!-- Block with Options -->
+            <div class="block">
+                <table class="table table-vcenter table-condensed  dataTable" role="grid" aria-describedby="example-datatable_info"  data-ng-repeat="tipo in balanceGrl" border="0">
+                    <thead>
+                        <tr role="row">
+                            <th class="text-center sorting" tabindex="0" aria-controls="example-datatable" rowspan="1" colspan="1">{{tipo.name}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="cuenta in tipo.cuenta" role = "row">
+                            <td colspan="2">
+                                {{cuenta.name}}
+                                <table style="width:100%; margin-left : 20px;" border="0">
+                                    <thead></thead>
+                                    <tbody>
+                                        <tr data-ng-repeat="subcuenta in cuenta.subcuenta"> 
+                                            <td style="width:59.5%">{{subcuenta.name}}</td>
+                                            <td >$ {{subcuenta.cantidad}}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td > Total {{cuenta.name}}</td>
+                                            <td > $ {{cuenta.cantidad}}</td>
+                                        </tr>
+                                    </tfoot>
+                                    
+                                </table>
+                                
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td > Total {{tipo.name}}</td>
+                            <td > $ {{tipo.cantidad}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- END Block with Options -->
+            
+        </div>
+    </div>
+</div>
+<!-- END Main Row -->
+
+

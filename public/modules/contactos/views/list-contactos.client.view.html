@@ -1,0 +1,548 @@
+<!-- Contacts Header -->
+<script src="lib/app.js"></script>
+<script src="lib/pages/formsValidation.js"></script>
+<script>
+$(function(){ 
+    FormsValidation.init(); 
+    $('#block-add-contact').css('display','none');
+    $('#block-update-contact').css('display','none');
+
+    $('[data-toggle-click="block-hide"]').on('click', function(){
+        var id = '#' + $(this).attr('data-idshow');
+        $('#contacts-list').removeClass('col-lg-8');
+        
+        $('#contacts-list').addClass('col-lg-12');
+        $(id).fadeOut();
+    });
+
+    $('[data-toggle-click="block-show"]').on('click', function(){
+        var id = '#' + $(this).attr('data-idshow');
+        $('#contacts-list').removeClass('col-lg-12');
+        $('#contacts-list').addClass('col-lg-8');
+        if($('#block-update-contact').css('display')==='block')
+        {
+            $('#block-update-contact').fadeOut();   
+        }
+        
+        $(id).fadeIn();
+    });
+    $('[data-toggle-click="block-show"]').on('click.BlockShow', function(){
+        var id = '#' + $(this).attr('data-idshow');
+        $('#contacts-list').removeClass('col-lg-12');
+        $('#contacts-list').addClass('col-lg-8');
+        $(id).fadeIn();
+    });
+});
+</script>
+<div  data-ng-controller="ContactosController" >
+<div class="content-header">
+    <div class="header-section">
+        <h1>
+            <i class="gi gi-parents"></i>Contactos<br><small>Administra tus contactos!</small>
+        </h1>
+        <div class="block-options pull-right">
+            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-primary enable-tooltip" data-toggle="tooltip" title="Agregar" data-original-title="Agregar" data-toggle-click="block-show" data-idshow="block-add-contact" data-ng-click="cleanCredentials()"><i class="fa fa-plus"></i></a>
+        </div>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Pages</li>
+    <li><a href="">Contactos</a></li>
+</ul>
+<!-- END Contacts Header -->
+<!-- Main Row -->
+<div class="row" data-ng-init="find()" > 
+    <input type="hidden" data-ng-model="userid" />
+    <div class="col-lg-12"  id="contacts-list">
+        <!-- Contacts Block -->
+        <div class="col-lg-12">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-primary" data-ng-click="startFinding()">{{findMeByText}}</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:void(0)" data-ng-click="changeOption('razonSocial','Por razón social')">Por Razón Social</a></li>
+                        <li><a href="javascript:void(0)" data-ng-click="changeOption('projects.name','Por Proyecto')">Por Proyecto</a></li>
+                        <li><a href="javascript:void(0)" data-ng-click="changeOption('comercialName','Por Nom. Comercial')">Por Nombre comercial</a></li>
+                        <li><a href="javascript:void(0)" data-ng-click="changeOption('tipocontacto','Por Tipo contacto')">Tipo Contacto</a></li>
+                        <li class="divider"></li>
+                        <li><a href="javascript:void(0)" data-ng-click="changeOption('all','Todos')">Todos</a></li>
+                    </ul>
+                </div>
+                <input type="text" class="form-control" placeholder="Buscar contacto..." data-ng-model="textFindMe" data-ng-keypress="onKeyFindMe($event)">
+            </div>
+        </div>
+        <div class="block">
+            <!-- Contacts Title -->
+            <div class="block-title">
+                <div class="block-options text-center">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('')">All</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('A')">A</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('B')">B</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('C')">C</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('D')">D</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('E')">E</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('F')">F</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('G')">G</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('H')">H</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('I')">I</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('J')">J</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('K')">K</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('L')">L</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('M')">M</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('N')">N</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('O')">O</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('P')">P</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Q')">Q</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('R')">R</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('S')">S</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('T')">T</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('V')">V</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('U')">U</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('W')">W</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('X')">X</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Y')">Y</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Z')">Z</a>
+                </div>
+            </div>
+            <!-- END Contacts Title -->
+
+            <!-- Contacts Content -->
+            <div class="row style-alt">
+                <div class="col-sm-6 col-lg-4" data-ng-repeat="contacto in contactos | contactsFilters:letter" deletewidget>
+                        <div class="block-options pull-right" style="z-index: 10000; position:absolute; top:-10px; right:10px;">
+                            <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-danger" data-toggle="tooltip" title="" data-original-title="Delete" data-ng-click="deleteContact(contacto,$index)"><i class="fa fa-times"></i></a>
+                        </div>
+                        <a href="javascript:void(0)" class="widget widget-hover-effect1" data-ng-click="edit(contacto,$index)" 
+                        data-toggle-click="block-show" data-idshow="block-update-contact" user-Update-Block >
+                            <div class="widget-simple">
+
+                                <img data-ng-src="{{contacto.thumbimage}}" alt="avatar" class="widget-image img-circle pull-left" data-ng-if="contacto.thumbimage !==''">
+                                <img src="img/placeholders/avatars/avatar1.jpg" alt="avatar" class="widget-image img-circle pull-left" data-ng-if="contacto.thumbimage===''">
+                                <h4 class="widget-content">
+                                    <strong>{{contacto.razonSocial}}</strong>
+                                    <small>{{contacto.comercialName}}</small>
+                                </h4>
+                            </div>
+                        </a>
+                </div>
+                <!-- END Contact Widget -->
+                <div class="alert alert-warning text-center" data-ng-if="!contactos.length">
+                    No existe contacto aun, <a href="/#!/contactos">crear uno</a>?
+                </div>
+            </div>
+            <!-- END Contacts Content -->
+        </div>
+        <!-- END Contacts Block -->
+
+    </div>
+    <div class="col-lg-4">
+        <!-- Add Contact Block -->
+        <div class="block" id="block-add-contact">
+            <!-- Add Contact Title -->
+            <div class="block-title">
+                <div class="block-options pull-right">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-danger enable-tooltip" data-toggle="block-hide" title="Cerrar" data-toggle-click="block-hide" data-idshow="block-add-contact"><i class="fa fa-times"></i></a>
+                </div>
+                <h2><i class="fa fa-plus"></i> Crear usuarios</h2>
+            </div>
+            <!-- END Add Contact Title -->
+
+            <!-- Add Contact Content -->
+            <form class="form-horizontal form-bordered" name="addcontactForm" data-ng-submit="create()"  autocomplete="off"  novalidate="novalidate" id="form-validation">
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">
+                        <img src="img/placeholders/avatars/avatar1.jpg" alt="avatar" class="widget-image img-circle pull-left animation-fadeIn">
+                    </label>
+                    <div class="col-xs-9">
+                         <input type="file" ng-file-select="copyFiles($files)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-address">Nombre Comercial</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-comercialName" data-ng-model="credentials.comercialName" name="add-contact-comercialName" class="form-control" placeholder="Enter nombre comercial.." data-ng-change="fieldChangeDefault()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-name">Nombre / Razón Social</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="update-contact-name" data-ng-model="credentials.razonSocial" name="update-contact-name" class="form-control" placeholder="Enter razón social.." data-ng-required data-ng-change="fieldChangeDefault()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-email">Email</label>
+                    <div class="col-xs-9">
+                        <input type="email" id="add-contact-email" data-ng-model="credentials.correo" name="add-contact-email" class="form-control" placeholder="Enter Email.." data-ng-required  data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-address">Dirección</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-address" data-ng-model="credentials.address" name="add-contact-address" class="form-control" placeholder="Enter address.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-address">CP</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-address" data-ng-model="credentials.cp" name="add-contact-address" class="form-control" placeholder="Enter CP.." data-ng-change="findCp()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-colonia">Colonia</label>
+                    <div class="col-xs-9">
+                        <select class="span4 chzn-select" data-placeholder="Choose a colonia" data-ng-model="coloniaSelected" data-ng-options="coloniaName as coloniaName.name for coloniaName in colonias" chosen >
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-ciudad">Ciudad</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-ciudad" data-ng-model="credentials.ciudad" name="add-contact-ciudad" class="form-control" placeholder="Enter ciudad.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-estado">Estado</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-estado" data-ng-model="credentials.estado" name="add-contact-estado" class="form-control" placeholder="Enter estado.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-estado">País</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-pais" data-ng-model="credentials.country" name="add-contact-estado" class="form-control" placeholder="Enter Pais.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-rfc">RFC</label>
+                    <div class="col-xs-9">
+                        <input type="text" name="newRFC" class="form-control" placeholder="Enter RFC" data-ng-model="credentials.rfc">
+                    </div>
+                </div>                
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-pageweb">Página Web</label>
+                    <div class="col-xs-9">
+                        <input type="text" data-ng-model="credentials.webPage" name="add-contact-pageweb" class="form-control" placeholder="Enter Página web.."  data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-rating">Rating</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-rating" data-ng-model="credentials.rating" name="add-contact-rating" class="form-control" placeholder="Enter Rating">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-functions">Función</label>
+                    <div class="col-xs-9">
+                        <div class="tagsinput" style="width: auto; height: auto;">
+                            <span data-ng-repeat="(key, tag) in inputTags" class="tag">
+                                <span >{{ tag.name }}  </span>
+                                <a data-ng-click="deleteTag(key)">x</a>
+                            </span>
+                            <div id="example-tags_addTag">
+                                <input type="text" data-tags data-ng-model="tagText" style="color: rgb(102, 102, 102); width: 120px;" data-new-tag="addTag()" data-delete-tag-="deleteTag()" placeholder="Tag Fun.">    
+                            </div>
+                            <div class="tags_clear"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-name">Circulos</label>
+                    <div class="col-xs-9">
+                        <div class="btn-group" circle-option name="c-options">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-primary dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-original-title="Círculos"><i class="fa fa-dot-circle-o"></i> <span class="caret" data-ng-if="circulos.total < 1"></span><span data-ng-if="circulos.total === 1">{{circulos.title}}</span><span data-ng-if="circulos.total > 1">{{circulos.total}} {{circulos.title}}</span></a>
+                            <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <div class="scroll-menu">
+                                    <h4 data-ng-hide="circulos.length" class="without-cirlces">No hay círculos...</h4>
+                                    <li data-ng-repeat="circulo in circulos" data-ng-click="onClickLi( $index , 0, circulo)">
+                                        <a href="javascript:void(0)">
+                                            <input type="checkbox" value="{{circulo.name}}" data-ng-model="circulo.checked" /> {{ circulo.name }}
+                                        </a>
+                                    </li>                                
+                                </div>
+                                <div>
+                                    <li class="divider"></li>
+                                    <li data-ng-click="onClickLi(undefined,1)" data-ng-hide="newCircle">
+                                        <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear círculo nuevo</a>
+                                    </li>
+                                    <li data-ng-click="onClickLi()" data-ng-show="newCircle">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event)" data-ng-blur="onBlurNewCircle()" data-ng-model="documento.circleName" name="newCircleInput">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="clicked()" >Crear</button>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </div>                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-primary enable-tooltip" data-toggle="tooltip" title="Agregar telefono" data-original-title="Agregar telefono" data-ng-click="newAddTelephone()"
+                        ><i class="fa fa-plus"></i> Agregar Teléfono</a>
+                 <div class="form-group" data-ng-repeat="tele in credentials.telephons">
+                    <div class="newTelephone">
+                        <label class="col-xs-4 control-label" for="add-contact-workday">Telefono {{$index+1}}</label>
+                        <div class="col-xs-6">
+                            <input type="text" name="masked_phone_ext" class="form-control" placeholder="(999) 999-9999? x99999" data-ng-model="tele.telephone" add-Contact-Telephons>
+                        </div>
+                        <div class="block-options col-xs-2" style="margin:-5px">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-danger enable-tooltip " data-toggle="tooltip" title="Eliminar" data-original-title="Eliminar" data-ng-click="deleteAddTelephoneContact($index)"><i class="hi hi-minus"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-workday">Fecha de cumpleaños</label>
+                    <div class="col-xs-9">
+                        <input type="text" name="example-datepicker5" data-ng-model="credentials.birthday" class="form-control input-datepicker-close" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-group">Es privado?</label>
+                    <div class="col-xs-9">
+                        <label class="col-xs-3 switch switch-success" for="val_private">
+                        <input type="checkbox" id="val_private" name="val_private" value="1" data-ng-model="credentials.isprivate" >
+                        <span data-toggle="tooltip" title="Solo será visto por tí" data-original-title="Solo será visto por tí"></span>
+                    </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-group">Status</label>
+                    <div class="col-xs-9">
+                        <label class="col-xs-3 switch switch-success" for="val_create">
+                        <input type="checkbox" id="val_create" name="val_create" value="1" data-ng-model="credentials.status" >
+                        <span data-toggle="tooltip" title="" data-original-title="Estatus contacto"></span>
+                    </label>
+                    </div>
+                </div>
+                <div data-ng-show="error" class="text-center text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+                <div class="form-group form-actions">
+                    <div class="col-xs-9 col-xs-offset-3">
+                        <div class="progress" style="display:none" name="progressBar" >
+                            <div class="progress-bar progress-bar-success" role="progressbar" name="progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">0%</div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk"><i class="fa fa-plus"></i>Agregar Contacto</button>
+
+                    </div>
+                </div>
+            </form>
+            
+            <!-- END Add Contact Content -->
+        </div>
+        <!-- END Add Contact Block -->
+        <!-- Edit Contact Block -->
+        <div class="block" id="block-update-contact" >
+            <!-- Edit Contact Title -->
+            <div class="block-title">
+                <div class="block-options pull-right">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-danger enable-tooltip" data-toggle="block-hide" title="Cerrar" data-toggle-click="block-hide" data-ng-click="cleanCredentials()" data-idshow="block-update-contact"><i class="fa fa-times"></i></a>
+                </div>
+                <h2><i class="fa fa-pencil"></i> </h2>
+            </div>
+            <!-- END Edit Contact Title -->
+
+            <!-- Edit Contact Content -->            
+            <form class="form-horizontal form-bordered" name="updatecontactForm" data-ng-submit="update()"  autocomplete="off"  novalidate="novalidate" id="form-update-validation" >
+                <fieldset data-ng-disabled="isdisabled">
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">
+                        <img data-ng-src="{{credentials.thumbimage}}" alt="avatar" class="widget-image img-circle pull-left animation-fadeIn" data-ng-show="credentials.thumbimage">
+                        <img src="img/placeholders/avatars/avatar1.jpg" alt="avatar" class="widget-image img-circle pull-left animation-fadeIn" data-ng-hide="credentials.thumbimage">
+                    </label>
+                    <div class="col-xs-9">
+                         <input type="file" ng-file-select="copyFiles($files)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-address">Nombre Comercial</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="update-contact-comercialName" data-ng-model="credentials.comercialName" name="update-contact-comercialName" class="form-control" placeholder="Enter nombre comercial.." data-ng-change="fieldChangeDefault()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-name">Nombre / Razón Social</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="update-contact-name" data-ng-model="credentials.razonSocial" name="update-contact-name" class="form-control" placeholder="Enter razón social.." data-ng-required data-ng-change="fieldChangeDefault()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-email">Email</label>
+                    <div class="col-xs-9">
+                        <input type="email" id="update-contact-email" data-ng-model="credentials.correo" name="update-contact-email" class="form-control" placeholder="Enter Email.." data-ng-required  data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-address">Dirección</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="update-contact-address" data-ng-model="credentials.address" name="update-contact-address" class="form-control" placeholder="Enter address.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-address">CP</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="update-contact-address" data-ng-model="credentials.cp" name="update-contact-address" class="form-control" placeholder="Enter address.." data-ng-change="findCp()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-colonia">Colonia</label>
+                    <div class="col-xs-9">
+                        <select class="span4 chzn-select" data-placeholder="Choose a colonia" data-ng-model="coloniaSelected" data-ng-options="coloniaName as coloniaName.name for coloniaName in colonias" chosen >
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-ciudad">Ciudad</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="update-contact-ciudad" data-ng-model="credentials.ciudad" name="update-contact-ciudad" class="form-control" placeholder="Enter ciudad.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-estado">Estado</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="update-contact-estado" data-ng-model="credentials.estado" name="update-contact-estado" class="form-control" placeholder="Enter estado.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-estado">País</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-pais" data-ng-model="credentials.country" name="add-contact-estado" class="form-control" placeholder="Enter Pais.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-rfc">RFC</label>
+                    <div class="col-xs-9">
+                        <input type="text" name="newRFC" class="form-control" placeholder="Enter RFC" data-ng-model="credentials.rfc">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-pageweb">Página Web</label>
+                    <div class="col-xs-9">
+                        <input type="text" data-ng-model="credentials.webPage" name="update-contact-pageweb" class="form-control" placeholder="Enter Página web.."  data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-ratind">Rating</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="update-contact-rating" data-ng-model="credentials.rating" name="add-contact-rating" class="form-control" placeholder="Enter Rating">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-functions">Función</label>
+                    <div class="col-xs-9">
+                        <div class="tagsinput" style="width: auto; height: auto;">
+                            <span data-ng-repeat="(key, tag) in inputTags" class="tag">
+                                <span >{{ tag.name }}  </span>
+                                <a data-ng-click="deleteTag(key)">x</a>
+                            </span>
+                            <div id="example-tags_addTag">
+                                <input type="text" data-tags data-ng-model="tagText" style="color: rgb(102, 102, 102); width: 120px;" data-new-tag="addTag()" data-delete-tag="deleteTag()" placeholder="Tag Fun.">    
+                            </div>
+                            <div class="tags_clear"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-name">Circulos</label>
+                    <div class="col-xs-9">
+                        <div class="btn-group" circle-option name="c-options">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-primary dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-original-title="Círculos"><i class="fa fa-dot-circle-o"></i> <span class="caret" data-ng-if="circulos.total < 1"></span><span data-ng-if="circulos.total === 1">{{circulos.title}}</span><span data-ng-if="circulos.total > 1">{{circulos.total}} {{circulos.title}}</span></a>
+                            <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <div class="scroll-menu">
+                                    <h4 data-ng-hide="circulos.length" class="without-cirlces">No hay círculos...</h4>
+                                    <li data-ng-repeat="circulo in circulos" data-ng-click="onClickLi( $index , 0, circulo)">
+                                        <a href="javascript:void(0)">
+                                            <input type="checkbox" value="{{circulo.name}}" data-ng-model="circulo.checked" /> {{ circulo.name }}
+                                        </a>
+                                    </li>                                
+                                </div>
+                                <div>
+                                    <li class="divider"></li>
+                                    <li data-ng-click="onClickLi(undefined,1)" data-ng-hide="newCircle">
+                                        <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear círculo nuevo</a>
+                                    </li>
+                                    <li data-ng-click="onClickLi()" data-ng-show="newCircle">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event)" data-ng-blur="onBlurNewCircle()" data-ng-model="documento.circleName" name="newCircleInput">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="clicked()" >Crear</button>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-tipocontacto">Tipo Contacto</label>
+                    <div class="col-xs-9">
+                        <select class="span4 chzn-select" data-placeholder="Tipo contacto" data-ng-model="credentials.tipocontacto" data-ng-options="value as label for (value,label) in tipocontact" chosen multiple="true">
+                        </select>
+                    </div>
+                </div>
+                
+                <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-primary enable-tooltip" data-toggle="tooltip" title="Agregar telefono" data-original-title="Agregar telefono" data-ng-click="newAddTelephone()"
+                        ><i class="fa fa-plus"></i> Agregar Teléfono</a>
+                 <div class="form-group" data-ng-repeat="tele in credentials.telephons">
+                    <div class="newTelephone">
+                        <label class="col-xs-4 control-label" for="update-contact-workday">Telefono {{$index+1}}</label>
+                        <div class="col-xs-6">
+                            <input type="text" name="masked_phone_ext" class="form-control" placeholder="(999) 999-9999? x99999" data-ng-model="tele.telephone" add-Contact-Telephons>
+                        </div>
+                        <div class="block-options col-xs-2" style="margin:-5px">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-danger enable-tooltip " data-toggle="tooltip" title="Eliminar" data-original-title="Eliminar" data-ng-click="deleteAddTelephoneContact($index)"><i class="hi hi-minus"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-workday">Fecha de cumpleaños</label>
+                    <div class="col-xs-9">
+                        <input type="text" name="example-datepicker5" data-ng-model="credentials.birthday" class="form-control input-datepicker-close" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-group">Es privado?</label>
+                    <div class="col-xs-9">
+                        <label class="col-xs-3 switch switch-success" for="val_private">
+                        <input type="checkbox" id="val_private" name="val_private" value="1" data-ng-model="credentials.isprivate" >
+                        <span data-toggle="tooltip" title="Solo será visto por tí" data-original-title="Solo será visto por tí"></span>
+                    </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-group">Status</label>
+                   <div class="col-xs-9">
+                        <label class="col-xs-3 switch switch-success" for="val_create">
+                            <input type="checkbox" id="val_create" name="val_create" value="1" data-ng-model="credentials.status" >
+                            <span data-toggle="tooltip" title="" data-original-title="Estatus contacto"></span>
+                        </label>
+                </div>
+                </div>
+                <div data-ng-show="error" class="text-center text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+                <div class="form-group form-actions">
+                    <div class="col-xs-9 col-xs-offset-3">
+                        <div class="progress" style="display:none" name="progressBar" >
+                            <div class="progress-bar progress-bar-success" role="progressbar" name="progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">0%</div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isUpdated"><i class="fa fa-plus"></i> Actualizar Usuario</button>
+
+                    </div>
+                </div>
+                </fieldset>
+            </form>
+            <!-- END Edit Contact Content -->
+        </div>
+        <!-- END Edit Contact Block -->
+    </div>
+    </div>
+        <!-- <button data-ng-click="updateCountries()">Countries</button>
+    <div data-ng-repeat="pais in paises">
+    </div> -->
+</div>
+<!-- END Main Row -->
+
+

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if IE 9]>         <html class="no-js lt-ie10"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head >
+            <title>{{title}}</title>
+
+    <!-- General META -->
+    <meta charset="utf-8">
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!-- Semantic META -->
+    <meta name="keywords" content="{{keywords}}">
+    <meta name="description" content="{{description}}">
+
+    <!-- Facebook META -->
+    <meta property="fb:app_id" content="{{facebookAppId}}">
+    <meta property="og:site_name" content="{{title}}">
+    <meta property="og:title" content="{{title}}">
+    <meta property="og:description" content="{{description}}">
+    <meta property="og:url" content="{{url}}">
+    <meta property="og:image" content="/img/brand/logo.png">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter META -->
+    <meta name="twitter:title" content="{{title}}">
+    <meta name="twitter:description" content="{{description}}">
+    <meta name="twitter:url" content="{{url}}">
+    <meta name="twitter:image" content="/img/brand/logo.png">
+
+    <!-- Fav Icon -->
+    <link href="/modules/core/img/brand/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+        <meta name="description" content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
+        <meta name="author" content="pixelcave">
+        <meta name="robots" content="noindex, nofollow">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+
+        <!-- Icons -->
+        <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <link rel="apple-touch-icon" href="img/icon57.png" sizes="57x57">
+        <link rel="apple-touch-icon" href="img/icon72.png" sizes="72x72">
+        <link rel="apple-touch-icon" href="img/icon76.png" sizes="76x76">
+        <link rel="apple-touch-icon" href="img/icon114.png" sizes="114x114">
+        <link rel="apple-touch-icon" href="img/icon120.png" sizes="120x120">
+        <link rel="apple-touch-icon" href="img/icon144.png" sizes="144x144">
+        <link rel="apple-touch-icon" href="img/icon152.png" sizes="152x152">
+        <!-- END Icons -->
+
+        <!-- Stylesheets -->
+        <!-- Bootstrap is included in its original form, unaltered -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+
+        <!-- Related styles of various icon packs and plugins -->
+        <link rel="stylesheet" href="css/plugins.css">
+
+        <!-- The main stylesheet of this template. All Bootstrap overwrites are defined in here -->
+        <link rel="stylesheet" href="css/main.css">
+
+        <!-- Include a specific file here from css/themes/ folder to alter the default theme of the template -->
+
+        <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
+        <link rel="stylesheet" href="css/themes.css">
+        <!-- END Stylesheets -->
+
+        <!-- Modernizr (browser feature detection library) & Respond.js (Enable responsive CSS code on browsers that don't support it, eg IE8) -->
+        <script src="/lib/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
+    </head>
+    <body>
+        <!-- Login Full Background -->
+        <!-- For best results use an image with a resolution of 1280x1280 pixels (prefer a blurred image for smaller file size) -->
+        <img src="img/placeholders/backgrounds/login_full_bg.jpg" alt="Login Full Background" class="full-bg animation-pulseSlow">
+        <!-- END Login Full Background -->
+
+        <!-- Login Container -->
+        <div id="login-container" class="animation-fadeIn" data-ng-controller="AuthenticationController">
+            <!-- Login Title -->
+            <div class="login-title text-center">
+                <h1><i class="gi gi-flash"></i> <strong>LINKUS</strong><br><small>Please <strong>Login</strong></small></h1>
+            </div>
+            <!-- END Login Title -->
+            <!-- Login Block -->
+            <div class="block push-bit">
+                <!-- Login Form -->
+                <form data-ng-submit="signin()" id="form-login" class="form-horizontal form-bordered form-control-borderless" autocomplete="off" >
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="gi gi-envelope"></i></span>
+                                <input type="text" id="login-email" name="login-email" class="form-control input-lg" placeholder="Email" data-ng-model="credentials.username">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="gi gi-asterisk"></i></span>
+                                <input type="password" id="login-password" name="login-password" class="form-control input-lg" placeholder="Password" data-ng-model="credentials.password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-actions">
+                        <div class="col-xs-4">
+                            <label class="switch switch-primary" data-toggle="tooltip" title="Remember Me?">
+                                <input type="checkbox" id="login-remember-me" name="login-remember-me" checked>
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Login to Dashboard</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 text-center">
+                            <a href="javascript:void(0)" id="link-reminder-login"><small>Olvidaste tu password?</small></a>
+                        </div>
+                    </div>
+                </form>
+                <!-- END Login Form -->
+
+                <!-- Reminder Form -->
+                <form id="form-reminder" class="form-horizontal form-bordered form-control-borderless display-none">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="gi gi-envelope"></i></span>
+                                <input type="text" id="reminder-email" name="reminder-email" class="form-control input-lg" placeholder="Email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-actions">
+                        <div class="col-xs-12 text-right">
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Reset Password</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 text-center">
+                            <small>Did you remember your password?</small> <a href="javascript:void(0)" id="link-reminder"><small>Login</small></a>
+                        </div>
+                    </div>
+                </form>
+                <!-- END Reminder Form -->
+            </div>
+            <!-- END Login Block -->
+            <section class="row" data-ng-controller="AuthenticationController">
+    <h3 class="col-md-12 text-center">Sign up using your social accounts</h3>
+    <div class="col-md-12 text-center">
+        <a href="/auth/facebook" class="undecorated-link">
+            <img src="/modules/users/img/buttons/facebook.png">
+        </a>
+        <a href="/auth/twitter" class="undecorated-link">
+            <img src="/modules/users/img/buttons/twitter.png">
+        </a>
+        <a href="/auth/google" class="undecorated-link">
+            <img src="/modules/users/img/buttons/google.png">
+        </a>
+        <a href="/auth/linkedin" class="undecorated-link">
+            <img src="/modules/users/img/buttons/linkedin.png">
+        </a>
+        <a href="/auth/github" class="undecorated-link">
+            <img src="/modules/users/img/buttons/github.png">
+        </a>
+    </div>
+    <h3 class="col-md-12 text-center">Or with your email</h3>
+    <div class="col-xs-offset-2 col-xs-8 col-md-offset-5 col-md-2">
+        <form name="userForm" data-ng-submit="signup()" class="signin form-horizontal" novalidate autocomplete="off">
+            <fieldset>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" required id="firstName" name="firstName" class="form-control" data-ng-model="credentials.firstName" placeholder="First Name">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" class="form-control" data-ng-model="credentials.lastName" placeholder="Last Name">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" data-ng-model="credentials.username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password">
+                </div>
+                <div class="text-center form-group">
+                    <button type="submit" class="btn btn-large btn-primary">Sign up</button>&nbsp; or&nbsp;
+                    <a href="/#!/signin" class="show-signup">Sign in</a>
+                </div>
+                <div data-ng-show="error" class="text-center text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</section>
+        </div>
+        <!-- END Login Container -->
+
+        <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
+        <script type="text/javascript">
+            var user = {{ user | json | safe }};
+        </script>
+            {% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>
+            {% endfor %} 
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script>!window.jQuery && document.write(decodeURI('%3Cscript src="/lib/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
+
+        <!-- Bootstrap.js, Jquery plugins and Custom JS code -->
+        <script src="/lib/vendor/bootstrap.min.js"></script>
+        <script src="/lib/plugins.js"></script>
+        <script src="/lib/app.js"></script>
+
+        <!-- Load and execute javascript code used only in this page -->
+        <script src="/lib/pages/login.js"></script>
+        <script>$(function(){ Login.init(); });</script>
+    </body>
+</html>
+

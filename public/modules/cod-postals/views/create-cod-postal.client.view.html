@@ -1,0 +1,41 @@
+<section data-ng-controller="CodPostalsController">
+    <div class="page-header">
+        <h1>New Cod postal</h1>
+    </div>
+    <div class="col-md-12">
+        <form class="form-horizontal" data-ng-submit="create()" novalidate>
+            <fieldset>
+                <div class="form-group">
+                    <label class="control-label" for="d_codigo">d_codigo</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="d_codigo" id="d_codigo" class="form-control" placeholder="d_codigo" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="d_codigo">d_casenta</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="d_casenta" id="d_casenta" class="form-control" placeholder="d_casenta" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="d_codigo">d_codigo</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="d_codigo" id="d_codigo" class="form-control" placeholder="d_codigo" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="d_codigo">d_codigo</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="d_codigo" id="d_codigo" class="form-control" placeholder="d_codigo" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-default">
+                </div>
+				<div data-ng-show="error" class="text-danger">
+					<strong data-ng-bind="error"></strong>
+				</div>
+            </fieldset>
+        </form>
+    </div>
+</section>

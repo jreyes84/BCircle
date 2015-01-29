@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<Comprobante xmlns="http://www.sat.gob.mx/cfd/2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:otro="http://www.walmartmexico.com.mx" xsi:schemaLocation="http://www.sat.gob.mx/cfd/2 http://www.sat.gob.mx/sitio_internet/cfd/2/cfdv22.xsd http://www.walmartmexico.com.mx http://www.walmartmexico.com.mx/AddendaKioscos.xsd" version="2.2" serie="CACE" folio="361963" fecha="2012-11-12T12:16:53" sello="K9mgVnHPKQVjDVCbCR20Jpkis6Uce5ARMkYEe3qn8cE/ZMj1HFk938H5qeOWQfkQ2uI3l+CsnziZ86/69gbRl/QoALRiygDfHD76HOBkhKS+3WVHMHgbPh8yz0rWCC6ut/+Ki7eXmVjkgChjsi5SGPGVC2scVIfOmJN85cRIWPM=" noAprobacion="23277" anoAprobacion="2009" formaDePago="PAGO EN UNA SOLA EXHIBICION" noCertificado="00001000000103532456" certificado="MIIEbDCCA1SgAwIBAgIUMDAwMDEwMDAwMDAxMDM1MzI0NTYwDQYJKoZIhvcNAQEFBQAwggE2MTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExHzAdBgkqhkiG9w0BCQEWEGFjb2RzQHNhdC5nb2IubXgxJjAkBgNVBAkMHUF2LiBIaWRhbGdvIDc3LCBDb2wuIEd1ZXJyZXJvMQ4wDAYDVQQRDAUwNjMwMDELMAkGA1UEBhMCTVgxGTAXBgNVBAgMEERpc3RyaXRvIEZlZGVyYWwxEzARBgNVBAcMCkN1YXVodGVtb2MxMzAxBgkqhkiG9w0BCQIMJFJlc3BvbnNhYmxlOiBGZXJuYW5kbyBNYXJ0w61uZXogQ29zczAeFw0xMTA1MTEyMjIxMzhaFw0xMzA1MTAyMjIxMzhaMIIBCzEvMC0GA1UEAxMmTlVFVkEgV0FMIE1BUlQgREUgTUVYSUNPIFMgREUgUkwgREUgQ1YxLzAtBgNVBCkTJk5VRVZBIFdBTCBNQVJUIERFIE1FWElDTyBTIERFIFJMIERFIENWMS8wLQYDVQQKEyZOVUVWQSBXQUwgTUFSVCBERSBNRVhJQ08gUyBERSBSTCBERSBDVjElMCMGA1UELRMcTldNOTcwOTI0NFc0IC8gT0VKSjU3MTIzMUxINTEeMBwGA1UEBRMVIC8gT0VKSjU3MTIzMUhTUFJOTDA5MS8wLQYDVQQLEyZOVUVWQSBXQUwgTUFSVCBERSBNRVhJQ08gUyBERSBSTCBERSBDVjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAuRfgKq3rtvJdXm/juPkIoWl5tMAQQ39glI/6YL0RlPHBLwEKXhGGbpCrylHhSHLGxQsFYMjDUqS5Cy+jUE1KRA2aryOzp7XOV1Nm+3gXpRcUKf9E97J3Ou6v8+nKFOasqChIx8BYKUzt9XIr3H1sKLLCGetkaQTm17mywZzBUOUCAwEAAaMdMBswDAYDVR0TAQH/BAIwADALBgNVHQ8EBAMCBsAwDQYJKoZIhvcNAQEFBQADggEBANlSk4Pxd5Q/Q9EhmC8sdcScrPfVaus43RfhNbjn/z/GQXlSWMXjw8TUam9RTwVZKkI1K1TcdUwianUq2wGDsR8coinBg6VGnidYcviFq7Tpr0n3crFW4as1LN9uxmTIf/McN70mqTijJiraHY+PFIo1l9Djxb34HPfpqd1Pwr0WLR864xSOtgbkTptjDjo1Fu2ApIzWHhTSo0fghRwMaQVvZRQQW9NwWbb6tKl49iz2Rl+syb16lazRVedByC6kgRLYXsuK4HZ/80xKGDoFs6UqFojJqSY1ryPh/F06ozyCLZKeX+T/Sf856l2/S6gOt04H9nEjUiturD1CQzReb0k=" condicionesDePago="Inmediato" subTotal="1843.66" descuento="41.47" total="2090.55" metodoDePago="No Identificado" tipoDeComprobante="ingreso" Moneda="MXN" TipoCambio="1.00" LugarExpedicion="ZAPOPAN, JALISCO" NumCtaPago="No identificado">  
+	<Emisor rfc="NWM9709244W4" nombre="Nueva Wal Mart de México, S. de R. L. de C.V.  ">    
+		<DomicilioFiscal calle="NEXTENGO" noExterior="78" localidad="SANTA CRUZ ACAYUCAN" municipio="AZCAPOTZALCO" estado="DISTRITO FEDERAL" pais="MÉXICO" codigoPostal="02770" />    
+		<ExpedidoEn calle="AV PROL MARIANO OTERO" noExterior="3450" localidad="FRACCIONAMIENTO EL COLLI" referencia="AMADO NERVO Y PRADO CEDROS" municipio="ZAPOPAN" estado="JALISCO" pais="MÉXICO" codigoPostal="45036" />    
+		<RegimenFiscal Regimen="Régimen de Consolidación" />  
+	</Emisor>  
+		<Receptor rfc="GTM041006PI8" nombre="GLOBAL TRADE AND MANUFACTURE S DE R L DE C V">    
+			<Domicilio calle="AV MEXICO" noExterior="3370" noInterior="-9U" colonia="VALLARTA SAN JORGE" localidad="JALISCO" referencia="Sin Referencia" municipio="GUADALAJARA" estado="JALISCO" pais="MEXICO" codigoPostal="45120" />  
+		</Receptor>  
+		<Conceptos>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="7874205659" descripcion="MM 32/400H HIGIENICO" valorUnitario="193.13" importe="193.13">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="7874205659" descripcion="MM 32/400H HIGIENICO" valorUnitario="193.13" importe="193.13">          
+			</Concepto>   
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="750102540340" descripcion="9L PINOL" valorUnitario="96.57" importe="96.57">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="750102540326" descripcion="8/1LT PINOL" valorUnitario="99.65" importe="99.65">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="7874205781" descripcion="SC 4+1LT LIMPIAVIDRI" valorUnitario="70.46" importe="70.46">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="750103290197" descripcion="2/420G PLEDGE MADERA" valorUnitario="83.21" importe="83.21">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="750103591249" descripcion="2.8LT AXION LIQUIDO" valorUnitario="64.81" importe="64.81">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="750103591008" descripcion="4/582GR AJAX" valorUnitario="52.82" importe="52.82">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="1801500601" descripcion="NOW MULTIUSOS" valorUnitario="70.46" importe="70.46">         
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="750102310598" descripcion="10PZ FIBRAESPONJA" valorUnitario="128.98" importe="128.98">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="750107640097" descripcion="15PZ PANO CELTEX" valorUnitario="39.70" importe="39.70">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="750619517304" descripcion="6KG SALVO MAXICAJA" valorUnitario="85.10" importe="85.10">          
+			</Concepto>   
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="750119940286" descripcion="8/350G 123ANTIBACTER" valorUnitario="74.95" importe="74.95">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="7874205750" descripcion="SC 20 L DETER LIQ" valorUnitario="220.39" importe="220.39">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="1750619519088" descripcion="9/1KG MAESTRO LIMPI" valorUnitario="141.10" importe="141.10">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="7874205749" descripcion="SC 20 L SUAVIZANTE" valorUnitario="176.29" importe="176.29">          
+			</Concepto>    
+			<Concepto cantidad="1.00" unidad="PIEZA" noIdentificacion="750102540130" descripcion="10LT CLORALEX" valorUnitario="52.91" importe="52.91">           
+			<Parte cantidad="0.00" descripcion="TICKET No: 8958157974627582029094" />    
+		</Concepto>  
+	</Conceptos>  
+	<Impuestos totalImpuestosTrasladados="288.36">        
+		<Traslados>      
+			<Traslado impuesto="IVA" tasa="16.00" importe="288.36" />    
+		</Traslados>  
+	</Impuestos>  
+	<Addenda>
+		<otro:InformacionAdicionalPuntoDeVenta />
+	</Addenda>
+</Comprobante>

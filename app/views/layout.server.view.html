@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>{{title}}</title>
+
+	<!-- General META -->
+	<meta charset="utf-8">
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<!-- Semantic META -->
+	<meta name="keywords" content="{{keywords}}">
+	<meta name="description" content="{{description}}">
+
+	<!-- Facebook META -->
+	<meta property="fb:app_id" content="{{facebookAppId}}">
+	<meta property="og:site_name" content="{{title}}">
+	<meta property="og:title" content="{{title}}">
+	<meta property="og:description" content="{{description}}">
+	<meta property="og:url" content="{{url}}">
+	<meta property="og:image" content="/img/brand/logo.png">
+	<meta property="og:type" content="website">
+
+	<!-- Twitter META -->
+	<meta name="twitter:title" content="{{title}}">
+	<meta name="twitter:description" content="{{description}}">
+	<meta name="twitter:url" content="{{url}}">
+	<meta name="twitter:image" content="/img/brand/logo.png">
+
+	<!-- Fav Icon -->
+	<link href="/modules/core/img/brand/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+	<link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="apple-touch-icon" href="img/icon57.png" sizes="57x57">
+    <link rel="apple-touch-icon" href="img/icon72.png" sizes="72x72">
+    <link rel="apple-touch-icon" href="img/icon76.png" sizes="76x76">
+    <link rel="apple-touch-icon" href="img/icon114.png" sizes="114x114">
+    <link rel="apple-touch-icon" href="img/icon120.png" sizes="120x120">
+    <link rel="apple-touch-icon" href="img/icon144.png" sizes="144x144">
+    <link rel="apple-touch-icon" href="img/icon152.png" sizes="152x152">
+    <!-- END Icons -->
+
+	<!-- Stylesheets -->
+    <!-- Bootstrap is included in its original form, unaltered -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Related styles of various icon packs and plugins -->
+    <link rel="stylesheet" href="css/plugins.css">
+
+    <!-- The main stylesheet of this template. All Bootstrap overwrites are defined in here -->
+    <link rel="stylesheet" href="css/main.css">
+
+    <link rel="stylesheet" href="/lib/angular-ui-grid/ui-grid.css" />
+
+        <!-- Include a specific file here from css/themes/ folder to alter the default theme of the template -->
+
+        <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
+        
+    <!--{% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">
+    {% endfor %}-->
+    <!-- END Stylesheets -->
+
+    <!-- Modernizr (browser feature detection library) & Respond.js (Enable responsive CSS code on browsers that don't support it, eg IE8) -->
+    <script src="lib/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+    <!--<script>!window.jQuery && document.write(decodeURI('%3Cscript src="lib/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>-->
+    <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        <!-- Bootstrap.js, Jquery plugins and Custom JS code -->
+    <script type="text/javascript">
+        var user = {{ user | json | safe }};
+    </script>
+    {% for jsFile in jsFiles %}
+        <script type="text/javascript" src="{{jsFile}}"></script>
+    {% endfor %}
+        <!-- Bootstrap.js, Jquery plugins and Custom JS code -->
+    <script src="lib/vendor/bootstrap.min.js"></script>
+    <script src="lib/plugins.js"></script>  
+    <script src="lib/app.js"></script>  
+    <script src="lib/pages/SmartNotification.min.js"></script>
+    <!-- Google Maps API + Gmaps Plugin, must be loaded in the page you would like to use maps (Remove 'http:' if you have SSL) -->
+</head>
+<body >
+<div data-ng-controller="HomeController">
+
+   <!-- Preloader -->
+    <!-- Preloader functionality (initialized in js/app.js) - pageLoading() -->
+    <!-- Used only if page preloader is enabled from inc/config (PHP version) or the class 'page-loading' is added in body element (HTML version) -->
+    <div class="preloader themed-background">
+        <h1 class="push-top-bottom text-light text-center"><strong>Blue</strong> Circle</h1>
+        <div class="inner">
+            <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
+            <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>
+        </div>
+    </div>
+    <!-- END Preloader -->
+    <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations header-fixed-top">
+        <!-- Alternative Sidebar -->
+        <div id="sidebar-alt" data-ng-include="'/modules/notificaciones/views/list-notificaciones.client.view.html'">
+            
+        </div>
+        <!-- END Alternative Sidebar -->
+
+        <!-- Main Sidebar -->
+        <div id="sidebar" data-ng-include="'/modules/core/views/sidebar.client.view.html'">
+            <!-- Wrapper for scrolling functionality -->
+            
+            <!-- END Wrapper for scrolling functionality -->
+        </div>
+        <!-- END Main Sidebar -->
+
+        <!-- Main Container -->
+        <div id="main-container">
+            <!-- Header -->
+            <header class="navbar navbar-default navbar-fixed-top" data-ng-include="'/modules/core/views/header.client.view.html'">
+                
+            </header>
+            <!-- END Header -->
+
+            <!-- Page content -->
+
+            <div id="page-content" data-ui-view>
+                
+                <!--{% block content %}{% endblock %}-->
+
+            </div>
+            <!-- END Page Content -->
+
+            <!-- Footer -->
+            <footer class="clearfix">
+                <!--<div class="pull-right">
+                    Crafted with <i class="fa fa-heart text-danger"></i> by <a href="http://" target="_blank"></a>
+                </div>-->
+
+                <div class="pull-left">
+                    <span id="year-copy"></span> &copy; <a href="http://zapatasestudios.com.mx" target="_blank">Z@patasEstudios</a>
+                </div>
+            </footer>
+            <!-- END Footer -->
+        </div>
+        <!-- END Main Container -->
+    </div>
+    <!-- END Page Container -->
+
+    <!-- Scroll to top link, initialized in js/app.js - scrollToTop() -->
+    <a href="#" id="to-top"><i class="fa fa-angle-double-up"></i></a>
+
+    <!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
+    <div id="modal-user-settings" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header text-center">
+                    <h2 class="modal-title"><i class="fa fa-pencil"></i> Settings</h2>
+                </div>
+                <!-- END Modal Header -->
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form action="index.html" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered" onsubmit="return false;">
+                        <fieldset>
+                            <legend>Vital Info</legend>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Username</label>
+                                <div class="col-md-8">
+                                    <p class="form-control-static">Admin</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="user-settings-email">Email</label>
+                                <div class="col-md-8">
+                                    <input type="email" id="user-settings-email" name="user-settings-email" class="form-control" value="admin@example.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="user-settings-notifications">Email Notifications</label>
+                                <div class="col-md-8">
+                                    <label class="switch switch-primary">
+                                        <input type="checkbox" id="user-settings-notifications" name="user-settings-notifications" value="1" checked>
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Password Update</legend>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="user-settings-password">New Password</label>
+                                <div class="col-md-8">
+                                    <input type="password" id="user-settings-password" name="user-settings-password" class="form-control" placeholder="Please choose a complex one..">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="user-settings-repassword">Confirm New Password</label>
+                                <div class="col-md-8">
+                                    <input type="password" id="user-settings-repassword" name="user-settings-repassword" class="form-control" placeholder="..and confirm it!">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="form-group form-actions">
+                            <div class="col-xs-12 text-right">
+                                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-sm btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- END Modal Body -->
+            </div>
+        </div>
+    </div>
+    <!-- END User Settings -->
+    <!-- Remember to include excanvas for IE8 chart support -->
+    <!--[if IE 8]><script src="js/helpers/excanvas.min.js"></script><![endif]-->
+    <!-- Socket.io -->
+     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+     <script type="text/javascript" src="/lib/angular-socket-io/socket.min.js"></script>
+     <div id="divSmallBoxes"></div>
+</div>  
+</body> 
+
+</html>

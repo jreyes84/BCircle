@@ -1,0 +1,203 @@
+<!-- Contacts Header -->
+<script src="lib/app.js"></script>
+<script src="lib/pages/formsValidation.js"></script>
+<script>
+$(function(){ 
+    FormsValidation.init(); 
+    $('#block-add-contact').css('display','none');
+    $('#block-update-contact').css('display','none');
+
+    $('[data-toggle-click="block-hide"]').on('click', function(){
+        var id = '#' + $(this).attr('data-idshow');
+        $('#contacts-list').removeClass('col-lg-8');
+        
+        $('#contacts-list').addClass('col-lg-12');
+        $(id).fadeOut();
+    });
+
+    $('[data-toggle-click="block-show"]').on('click', function(){
+        var id = '#' + $(this).attr('data-idshow');
+        $('#contacts-list').removeClass('col-lg-12');
+        $('#contacts-list').addClass('col-lg-8');
+        if($('#block-update-contact').css('display')==='block')
+        {
+            $('#block-update-contact').fadeOut();   
+        }
+        
+        $(id).fadeIn();
+    });
+    $('[data-toggle-click="block-show"]').on('click.BlockShow', function(){
+        var id = '#' + $(this).attr('data-idshow');
+        $('#contacts-list').removeClass('col-lg-12');
+        $('#contacts-list').addClass('col-lg-8');
+        $(id).fadeIn();
+    });
+});
+</script>
+<div  data-ng-controller="CirculosController" >
+    <input class="form-control" type="hidden" data-ng-model="bar">
+<div class="content-header">
+    <div class="header-section">
+        <h1>
+            <i class="fa fa-bookmark"></i>Círculos<br><small>Administra tus círculos!</small>
+        </h1>
+        <div class="block-options pull-right">
+            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-primary enable-tooltip" data-toggle="tooltip" title="Agregar" data-original-title="Agregar" data-toggle-click="block-show" data-idshow="block-add-contact" data-ng-click="clean()"><i class="fa fa-plus"></i></a>
+        </div>
+    </div>
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Pages</li>
+    <li><a href="">Círculos</a></li>
+</ul>
+<!-- END Contacts Header -->
+<!-- Main Row -->
+<div class="row" data-ng-init="find()" > 
+    <div class="col-lg-12"  id="contacts-list">
+        <!-- Contacts Block -->
+        <div class="block">
+            <!-- Contacts Title -->
+            <div class="block-title">
+                <div class="block-options text-center">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('')">All</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('A')">A</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('B')">B</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('C')">C</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('D')">D</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('E')">E</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('F')">F</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('G')">G</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('H')">H</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('I')">I</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('J')">J</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('K')">K</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('L')">L</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('M')">M</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('N')">N</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('O')">O</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('P')">P</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Q')">Q</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('R')">R</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('S')">S</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('T')">T</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('V')">V</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('U')">U</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('W')">W</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('X')">X</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Y')">Y</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Z')">Z</a>
+                </div>
+            </div>
+            <!-- END Contacts Title -->
+
+            <!-- Contacts Content -->
+            <div class="row">
+                <!-- Contact Widget -->
+                <div class="col-sm-6 col-lg-3" data-ng-repeat="circulo in circulos | filterMenuWithLetter:letter" >
+                    <a href="javascript:void(0)" class="widget widget-hover-effect1 themed-background " user-Update-Block  data-toggle-click="block-show" data-ng-click="edit(circulo)">
+                        <div class="widget-simple">
+                            <h4 class="widget-content widget-content-light">
+                                <strong>{{circulo.name}}</strong>
+                                <!--<small>Web Designer</small>-->
+                            </h4>
+                        </div>
+                    </a>
+                </div>
+                <!-- END Contact Widget -->
+                <div class="alert alert-warning text-center" data-ng-if="!circulos.length">
+                    No circles yet, why don't you <a href="/#!/circulos">create one</a>?
+                </div>
+            </div>
+            <!-- END Contacts Content -->
+        </div>
+        <!-- END Contacts Block -->
+    </div>
+    <div class="col-lg-4">
+        <!-- Add Contact Block -->
+        <div class="block" id="block-add-contact">
+            <!-- Add Contact Title -->
+            <div class="block-title">
+                <div class="block-options pull-right">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-danger enable-tooltip" data-toggle="block-hide" title="Remove" data-toggle-click="block-hide" data-idshow="block-add-contact" data-ng-click="clean()"><i class="fa fa-times"></i></a>
+                </div>
+                <h2><i class="fa fa-plus"></i> Crear círculo</h2>
+            </div>
+            <!-- END Add Contact Title -->
+            <form class="form-horizontal form-bordered" name="addcontactForm" data-ng-submit="create()"  autocomplete="off"  novalidate="novalidate" id="form-validation">
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-name">Nombre</label>
+                    <div class="col-xs-9">
+                        <input type="text" data-ng-model="circulo.name" class="form-control" placeholder="Enter name" data-ng-required data-ng-change="changeInput()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-name">Descripción</label>
+                    <div class="col-xs-9">
+                        <input type="text" data-ng-model="circulo.description" class="form-control" placeholder="Enter description" data-ng-required data-ng-change="changeInput()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-menu-status">Status</label>
+                    <label class="col-xs-3 switch switch-success" for="val_statusn">
+                        <input type="checkbox" id="val_statusn" name="val_statusn" value="1" data-ng-model="circulo.status" >
+                        <span data-toggle="tooltip" title="" data-original-title="Círculo activo o inactivo"></span>
+                    </label>
+                </div>
+                <div data-ng-show="error" class="text-center text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+                <div class="form-group form-actions">
+                    <div class="col-xs-9 col-xs-offset-3">
+                        <button type="submit" class="btn btn-sm btn-primary" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk"><i class="fa fa-plus"></i> Agregar círculo</button>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- END Add Contact Content -->
+        </div>
+        <div class="block" id="block-update-contact" >
+            <!-- Edit Contact Title -->
+            <input type="hidden" data-ng-model="circulo._id">
+            <div class="block-title">
+                <div class="block-options pull-right">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-danger enable-tooltip" data-toggle="block-hide" title="Remove" data-toggle-click="block-hide" data-idshow="block-add-contact"><i class="fa fa-times"></i></a>
+                </div>
+                <h2><i class="fa fa-plus"></i> Actualizar círculo</h2>
+            </div>
+            <!-- END Add Contact Title -->
+            <form class="form-horizontal form-bordered" name="addcontactForm" data-ng-submit="update()"  autocomplete="off"  novalidate="novalidate" id="form-validation">
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-name">Nombre</label>
+                    <div class="col-xs-9">
+                        <input type="text" data-ng-model="circulo.name" class="form-control" placeholder="Enter name" data-ng-required data-ng-change="changeInput()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-name">Descripción</label>
+                    <div class="col-xs-9">
+                        <input type="text" data-ng-model="circulo.description" class="form-control" placeholder="Enter description" data-ng-required data-ng-change="changeInput()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-menu-status">Status</label>
+                    <label class="col-xs-3 switch switch-success" for="val_status">
+                        <input type="checkbox" id="val_status" name="val_status" value="1" data-ng-model="circulo.status" >
+                        <span data-toggle="tooltip" title="" data-original-title="Círculo activo o inactivo"></span>
+                    </label>
+                </div>
+                <div data-ng-show="error" class="text-center text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+                <div class="form-group form-actions">
+                    <div class="col-xs-9 col-xs-offset-3">
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Actualizar círculo</button>
+                    </div>
+                </div>
+            </form>
+            <!-- END Edit Contact Content -->
+        </div>
+        <!-- END Block -->
+    </div>
+</div>
+<!-- END Main Row -->
+</div>

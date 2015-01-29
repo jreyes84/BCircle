@@ -1,0 +1,577 @@
+<!-- Tasks Header -->
+<script src="lib/app.js"></script>
+<script src="lib/pages/formsValidation.js"></script>
+<script src="lib/pages/formsWizard.js"></script>
+<script>
+    $(function(){ FormsWizard.init(); });
+</script>
+<div class="content-header">
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Pages</li>
+    <li><a href="">Cuentas <i class="fa fa-tasks"></i></a></li>
+</ul>
+<!-- END Tasks Header -->
+<!-- Tasks Row -->
+<div data-ng-controller="CuentasController" >
+<div class="row" data-ng-init="find()" data-ng-hide="wizardActive">
+    <input type="hidden" data-ng-module="cuentas.created" value=""/>
+    <div class="col-sm-4 col-lg-3">
+        <!-- Task Lists Block -->
+        <div class="block full">
+            <!-- Task Lists Title -->
+            <div class="block-title clearfix">
+                <div class="block-options pull-right">
+                    <div class="btn-group btn-group-sm">
+                        <a href="javascript:void(0)" class="btn btn-sm btn-warning dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-original-title="Options"><span class="fa fa-cog"></span></a>
+                        <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                            <li>
+                                <a href="javascript:void(0)"><i class="gi gi-cloud pull-right" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk"></i>Importar</a>
+                                <a href="javascript:void(0)"><i class="gi gi-airplane pull-right"></i>Exportar</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <h2><i class="fa fa-tasks"></i><strong>Tipo cuentas</strong></h2>
+            </div>
+            <div  data-ng-if="!cuentas.length">
+                
+            </div>
+            <!-- END Task Lists Title -->
+            <!-- END Contact Widget -->
+            <div class="alert alert-warning text-center" data-ng-if="!cuentas.length">
+                <h3><a href="javascript:void(0)" data-ng-click="activeWizard()"><i class="fa fa-magic"></i> Inicia el Wizard </a></h3>
+            </div>
+            <!-- Task Lists Content -->
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active" data-ng-if="cuentas.length"> 
+                    <a href="javascript:void(0)" data-ng-click="onClickCuenta('0',undefined)">
+                        <span class="badge pull-right">{{cuentas.length}}</span>
+                        <i class="fa fa-tasks fa-fw"></i> <strong>Todos</strong>
+                    </a>
+                </li>
+                <li class="active" data-ng-repeat="cuenta in cuentas">
+                    <a href="javascript:void(0)" data-ng-click="onClickCuenta(cuenta,{{tipoCuentaIndex ? tipoCuentaIndex : $index}})">
+                        <span class="badge pull-right">{{cuenta.total}}</span>
+                        <i class="fa fa-tasks fa-fw"></i> <strong>{{cuenta.name}}</strong>
+                    </a>
+                </li>
+            </ul>
+            <!-- END Task Lists Content -->
+        </div>
+        <!-- END Task Lists Block -->
+    </div>
+    <div class="col-sm-8 col-lg-9">
+        <!-- Start Tipo Cuenta input search -->
+        <div class="form-group">
+            <div class="tagsinput" style="width: auto; height: auto;">
+                <span data-ng-repeat="(key, tag) in inputTagTipoCuenta" class="tag">
+                    <span >{{ tag.name }} </span>
+                    <a data-ng-click="deleteTag(key,tag.name)" data-confirm-Alert="Esta seguro de eliminar {{tag.name}}? ">x</a>
+                </span>
+                <div>
+                    <input type="text" data-tag-Input data-ng-model="tagTextTipoCuenta" style="color: rgb(102, 102, 102); width: 300px;" data-new-tag="addTag()" data-delete-tag="deleteTag()" placeholder="Ingresa los Tipo de Cuentas">    
+                </div>
+                <div class="tags_clear"></div>
+            </div>
+        </div>
+        <!-- Ends Tipo Cuenta input search -->
+        <ul class="ul-style">
+            <li class="li-style" data-ng-repeat="(keytipocuentas,tipocuentas) in cuentas | filter : { name : tipoCuentaSelected }">
+                <div class="alert alert-info alert-alt">
+                    <div class="block-options pull-right">
+                        <div class="btn-group" id="c-options_{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}" data-ng-hide="tipocuentas.cuenta.length>0">
+                            <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-info dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-tooltip="Círculos">
+                                <i class="fa fa-dot-circle-o"></i>
+                                <span class="caret" data-ng-show="arrayCircleTipo[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas].showNone"></span>
+                                <span data-ng-show="arrayCircleTipo[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas].showSingle"> {{arrayCircleTipo[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas].title}}</span>
+                                <span data-ng-show="arrayCircleTipo[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas].showMore"> {{arrayCircleTipo[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas].total}} {{arrayCircleTipo[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas].title}}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <div class="scroll-menu">
+                                    <h4 data-ng-hide="circulos.length" class="without-cirlces">No hay círculos...</h4>
+                                    <li data-ng-repeat="circuloTipo in arrayCircleTipo[tipoCuentaIndex ? tipoCuentaIndex : $index]" data-ng-click="onClickLi( tipocuentas, 0, circuloTipo, tipoCuentaIndex ? tipoCuentaIndex : $parent.$index)">
+                                        <a href="javascript:void(0)">
+                                            <input type="checkbox" value="{{circuloTipo.name}}" data-ng-model="circuloTipo.checked" /> {{ circuloTipo.name }}
+                                        </a>
+                                    </li>
+                                </div>
+                                <div>
+
+                                    <li class="divider"></li>
+                                    <li data-ng-click="onClickLi(tipocuentas, 1, circuloTipo, tipoCuentaIndex ? tipoCuentaIndex : $index)" data-ng-hide="newCircle">
+                                        <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear círculo nuevo</a>
+                                    </li>
+                                    <li data-ng-click="onClickLi(tipocuentas, undefined, circuloTipo)" data-ng-show="newCircle">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event,tipocuentas ,arrayCircleTipo[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas], tipoCuentaIndex ? '#c-options_'+tipoCuentaIndex : '#c-options_'+$index)" id="newCircleInput_{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}" data-ng-model="arrayCircleTipo[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas].circleName">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="createCircle( tipocuentas ,arrayCircleTipo[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas], tipoCuentaIndex ? '#c-options_'+tipoCuentaIndex : '#c-options_'+keytipocuentas )" >Crear</button>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
+                        <div class="btn-group btn-group-sm">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-warning dropdown-toggle enable-tooltip" data-toggle="dropdown" data-tooltip="Comportamiento de la cuenta: esta opción es necesaria para identificar como la cuenta se debe comportar"><span class="fa fa-cog"></span></a>
+                            <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <li>
+                                    <select ui-select2="{allowClear:true}" data-ng-model="tipocuentas.typecuenta" data-placeholder="Seleccione el comportamiento" style="width:90%" class="text-center" data-ng-change="onSelectOptChange(keytipocuentas)">
+                                        <option ng-repeat="option in optionTypeOfAccount" value="{{option.value}}">{{option.text}}</option>
+                                    </select>
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-danger" data-tooltip="Eliminar {{tipocuentas.name}}" data-confirm-Alert="Esta seguro de eliminar el tipo de movimiento? Eliminara todo lo relacionado a ella." data-ng-click="deleteItem(tipocuentas)"><i class="fa fa-times"></i></a>
+                    </div>
+                        <div>
+                            <span data-ng-hide="tipocuentas.isVisible" data-ng-click="enableEdit(tipocuentas,tipoCuentaIndex ? tipoCuentaIndex :keytipocuentas)" data-tooltip="Click para editar" data-tooltip-placement="left">
+                                <h3>{{tipocuentas.name}}</h3>
+                            </span>
+                            
+                            <span data-ng-hide="tipocuentas.quantityVisible" data-ng-click="enableEdit(tipocuentas, tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas, true)" data-tooltip-placement="left">
+                                <!--  title data-original-title="" -->
+                                <h4>Total {{tipocuentas.name}}: ${{tipocuentas.cantidad}}</h4>
+                            </span>
+                           <span data-ng-show="tipocuentas.quantityVisible">
+                                <input type="text" class="form-control" data-ng-model="tipocuentas.cantidad" name="inputText" data-ng-keypress="onKeypress(tipocuentas,$event,keytipocuentas)" data-ng-blur="onBlur(tipocuentas,keytipocuentas)" autocomplete="off" data-ng-change="onChangeEdit(tipocuentas)">
+                            </span>
+                            <span data-ng-show="tipocuentas.isVisible">
+                                <input type="text" class="form-control" data-ng-model="tipocuentas.name" name="inputText" data-ng-keypress="onKeypress(tipocuentas,$event,keytipocuentas)" data-ng-blur="onBlur(tipocuentas,keytipocuentas)" autocomplete="off" data-ng-change="onChangeEdit(tipocuentas)">
+                            </span>
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <div class="tagsinput" style="width: auto; height: auto;">
+                                    <span data-ng-repeat="(key, tag) in inputTagCuenta[tipoCuentaIndex ? tipoCuentaIndex : $index]" class="tag">
+                                        <span>{{ tag.name }}</span>
+                                        <a data-ng-click="deleteTagCuentas(tipoCuentaIndex ? tipoCuentaIndex : $parent.$index, tipoCuentaIndex ? tipoCuentaIndex : key, $index)" data-confirm-Alert="Esta seguro?">x</a>
+                                    </span>
+                                    <div>
+                                        <input type="text" data-tag-Input id="tagTextCuenta{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}" name="tagTextCuenta{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}" style="color: rgb(102, 102, 102); width: 300px;" data-new-tag="addTagCuentas(tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas, keytipocuentas)" data-delete-tag="deleteTagCuentas(tipoCuentaIndex ? tipoCuentaIndex : $index,undefined, tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas)" placeholder="Ingresa las Cuentas" autocomplete="off" data-msgdelete="Esta seguro?">    
+                                    </div>
+                                    <div class="tags_clear"></div>
+                                </div>
+                        </div>
+                    
+                    </div>
+                    <ul class="ul-style">
+                        <li data-ng-repeat="(keycuentas,cuenta) in tipocuentas.cuenta">
+                            <div class="alert alert-success alert-alt">
+                                <div class="block-options pull-right">
+                                    <div class="btn-group" id="c-options_{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}_{{$index}}" data-ng-hide="cuenta.subcuenta.length>0">
+                                        <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-info dropdown-toggle enable-tooltip" data-toggle="dropdown" data-tooltip="Círculos">
+                                            <i class="fa fa-dot-circle-o"></i> 
+
+                                            <span class="caret" data-ng-show="arrayCircleCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas].showNone"></span>
+
+                                            <span data-ng-show="arrayCircleCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas].showSingle"> {{arrayCircleCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas].title}}</span>
+
+                                            <span data-ng-show="arrayCircleCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas].showMore"> {{arrayCircleCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas].total}} {{arrayCircleCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas].title}}</span>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                            <div class="scroll-menu">
+                                                <h4 data-ng-hide="circulos.length" class="without-cirlces">No hay círculos...</h4>
+                                                <li data-ng-repeat="circuloCuenta in arrayCircleCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas]" data-ng-click="onClickLi(cuenta, 0, circuloCuenta, tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas,keycuentas)">
+                                                    <a href="javascript:void(0)"  style="display:block;">
+                                                        <input type="checkbox" value="{{circuloCuenta.name}}" data-ng-model="circuloCuenta.checked" /> {{ circuloCuenta.name }}
+                                                    </a>
+                                                </li>
+                                            </div>
+                                            <div>
+                                                <li class="divider"></li>
+                                                <li data-ng-click="onClickLi(cuenta, 1, circuloCuenta, tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas, keycuentas)" data-ng-hide="newCircle">
+                                                    <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear círculo nuevo</a>
+                                                </li>
+                                                <li data-ng-click="onClickLi(cuenta, undefined, circuloCuenta, tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas, keycuentas)" data-ng-show="newCircle">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event,cuenta ,arrayCircleCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas], tipoCuentaIndex ? '#c-options_'+tipoCuentaIndex+'_'+keycuentas : '#c-options_'+keytipocuentas+'_'+keycuentas)" id="newCircleInput_{{tipoCuentaIndex ? tipoCuentaIndex : $keytipocuentas}}_{{keycuentas}}" data-ng-model="arrayCircleCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas].circleName">
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="createCircle( cuenta ,arrayCircleCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas], tipoCuentaIndex ? '#c-options_'+tipoCuentaIndex+'_'+keycuentas : '#c-options_'+keytipocuentas + '_' + keycuentas )" >Crear</button>
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                            </div>            
+                                        </ul>
+                                    </div>
+                                    <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-danger" data-tooltip="Eliminar {{cuenta.name}}" data-ng-click="deleteItem(cuenta)" data-confirm-Alert="Esta seguro de eliminar la cuenta? Eliminara todo lo relacionado a ella."><i class="fa fa-times"></i></a>
+                                </div>
+                                <div>
+                                    <span data-ng-hide="cuenta.isVisible" data-ng-click="enableEdit(cuenta,keytipocuentas)" data-tooltip="Click para editar" data-tooltip-placement="left">
+                                        <strong>{{cuenta.name}}</strong>
+                                    </span>
+                                    <span data-ng-hide="cuenta.quantityVisible" data-ng-click="enableEdit(cuenta,keytipocuentas, true)" data-tooltip="Puedes editar, solo si NO tienes subcuentas o detalle" data-tooltip-placement="left">
+                                        <h4>Total {{cuenta.name}}: ${{cuenta.cantidad}}</h4>
+                                    </span>
+                                    <span data-ng-show="cuenta.quantityVisible">
+                                        <input type="text" class="form-control" data-ng-model="cuenta.cantidad" name="inputText" data-ng-keypress="onKeypress(cuenta,$event,keytipocuentas)" data-ng-blur="onBlur(cuenta,keytipocuentas)" autocomplete="off">
+                                    </span>
+                                    <span data-ng-show="cuenta.isVisible">
+                                        <input type="text" class="form-control" data-ng-model="cuenta.name" name="inputText" data-ng-keypress="onKeypress(cuenta,$event,keytipocuentas)" data-ng-blur="onBlur(cuenta,keytipocuentas)" autocomplete="off">
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <div class="tagsinput" style="width: auto; height: auto;">
+                                        <span data-ng-repeat="(key, tagSubCuenta) in inputTagSubCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas]" class="tag">
+                                            <span>{{tagSubCuenta.name}}</span>
+                                            <a data-ng-click="deleteTagSubCuentas(tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas, key, keycuentas)" data-confirm-Alert="Esta seguro?">x</a>
+                                        </span>
+                                        <div>
+                                            <input type="text" data-tag-Input id="tagTextSubCuenta{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}-{{keycuentas}}" name="tagTextSubCuenta{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}-{{keycuentas}}" style="color: rgb(102, 102, 102); width: 300px;" data-new-tag="addTagSubCuentas(tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas, keycuentas)" data-delete-tag="deleteTagSubCuentas(tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas , undefined , keycuentas)" placeholder="Ingresa las Sub Cuentas" autocomplete="off" />
+                                        </div>
+                                        <div class="tags_clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul>
+                                <li data-ng-repeat="(keysubcuenta,subcuenta) in cuenta.subcuenta">
+                                    <div class="alert alert-warning alert-alt">
+                                        <div class="block-options pull-right">
+                                            <div class="btn-group" id="c-options_{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}_{{keycuentas}}_{{keysubcuenta}}" data-ng-hide="subcuenta.detalle.length > 0">
+                                                <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-info dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-tooltip="Círculos"><i class="fa fa-dot-circle-o"></i> <span class="caret" data-ng-show="arrayCircleSubCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta].showNone"></span><span data-ng-show="arrayCircleSubCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta].showSingle"> {{arrayCircleSubCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta].title}} </span><span data-ng-show="arrayCircleSubCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta].showMore"> {{arrayCircleSubCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta].total}} {{arrayCircleSubCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta].title}}</span></a>
+                                                <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                                    <div class="scroll-menu">
+                                                        <h4 data-ng-hide="circulos.length" class="without-cirlces">No hay círculos...</h4>
+                                                        <li data-ng-repeat="circuloSubcuenta in arrayCircleSubCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta]" data-ng-click="onClickLi(subcuenta, 0, circuloSubcuenta,tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas,keycuentas,keysubcuenta)">
+                                                            <a href="javascript:void(0)">
+                                                                <input type="checkbox" value="{{circuloSubcuenta.name}}" data-ng-model="circuloSubcuenta.checked" /> {{ circuloSubcuenta.name }}
+                                                            </a>
+                                                        </li>
+                                                    </div> 
+                                                    <div>
+                                                        <li class="divider"></li>
+                                                        <li data-ng-click="onClickLi(subcuenta, 1 , circuloSubcuenta ,tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas,keycuentas,keysubcuenta)" data-ng-hide="newCircle">
+                                                            <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear círculo nuevo</a>
+                                                        </li>
+                                                        <li data-ng-click="onClickLi(subcuenta, undefined, circuloSubcuenta ,tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas,keycuentas, keysubcuenta)" data-ng-show="newCircle">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event, subcuenta , arrayCircleSubCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta], tipoCuentaIndex ? '#c-options_'+tipoCuentaIndex+'_'+keycuentas+'_'+keysubcuenta : '#c-options_'+keytipocuentas+'_'+keycuentas+'_'+keysubcuenta)" id="newCircleInput_{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}_{{keycuentas}}_{{keysubcuenta}}" data-ng-model="arrayCircleSubCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta].circleName">
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="createCircle( subcuenta ,arrayCircleSubCuenta[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta], tipoCuentaIndex ? '#c-options_'+tipoCuentaIndex+'_'+keycuentas+'_'+keysubcuenta : '#c-options_'+keytipocuentas+'_'+keycuentas+'_'+keysubcuenta)" >Crear</button>
+                                                                </span>
+                                                            </div>
+                                                        </li>
+                                                    </div> 
+                                                </ul>
+                                            </div>
+                                            <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-danger" data-tooltip="Eliminar {{subcuenta.name}}" data-ng-click="deleteItem(subcuenta)" data-confirm-Alert="Esta seguro de eliminar la sub cuenta? Eliminara todo lo relacionado a ella."><i class="fa fa-times"></i></a>
+                                        </div>
+                                        <span data-ng-hide="subcuenta.isVisible" data-ng-click="enableEdit(subcuenta,keytipocuentas)" data-tooltip="Click para editar" data-tooltip-placement="left">
+                                            <strong>{{subcuenta.name}}</strong>
+                                        </span>
+                                        <span data-ng-hide="subcuenta.quantityVisible" data-ng-click="enableEdit(subcuenta,keytipocuentas, true)" data-tooltip="Puedes editar, solo si NO tienes detalle" data-tooltip-placement="left">
+                                            <h4>Total {{subcuenta.name}}: ${{subcuenta.cantidad}}</h4>
+                                        </span>
+                                        <span data-ng-show="subcuenta.quantityVisible">
+                                            <input type="text" class="form-control" data-ng-model="subcuenta.cantidad" name="inputText" data-ng-keypress="onKeypress(subcuenta,$event,keytipocuentas)" data-ng-blur="onBlur(subcuenta,keytipocuentas)" autocomplete="off">
+                                        </span>
+                                        <span data-ng-show="subcuenta.isVisible">
+                                            <input type="text" class="form-control" data-ng-model="subcuenta.name" name="inputText" data-ng-keypress="onKeypress(subcuenta,$event,keytipocuentas)" data-ng-blur="onBlur(subcuenta,keytipocuentas)" autocomplete="off">
+                                        </span>
+                                        <div class="form-group">
+                                        <div class="tagsinput" style="width: auto; height: auto;">
+                                                <span data-ng-repeat="(key, tagDetalle) in inputTagDetalle[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta]" class="tag">
+                                                    <span>{{ tagDetalle.name}}</span>
+                                                    <a data-ng-click="deleteTagDetalle(tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas , keycuentas , key, keysubcuenta)" data-confirm-Alert="Esta seguro?">x</a>
+                                                </span>
+                                                <div>
+                                                    <input type="text" data-tag-Input data-ng-model="tagTextDetalle" name="tagTextDetalle{{tipoCuentaIndex ? tipoCuentaIndex :keytipocuentas}}-{{keycuentas}}-{{keysubcuenta}}" id="tagTextDetalle{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}-{{keycuentas}}-{{keysubcuenta}}" style="color: rgb(102, 102, 102); width: 300px;" data-new-tag="addTagDetalle(tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas,keycuentas, keysubcuenta)" data-delete-tag="deleteTagDetalle(tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas, keycuentas , undefined, keysubcuenta)" placeholder="Ingresa los detalles" autocomplete="off">   
+                                                </div>
+                                                <div class="tags_clear"></div>
+                                            </div>
+                                        </div>
+                                        <ul>
+                                            <li data-ng-repeat="(keydetalle, detalle) in subcuenta.detalle">
+                                                <div class="alert alert-danger alert-alt">
+                                                    <div class="block-options pull-right">
+                                                        <div class="btn-group" id="c-options_{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}_{{keycuentas}}_{{keysubcuenta}}_{{keydetalle}}">
+                                                            <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-info dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-tooltip="Círculos">
+                                                                <i class="fa fa-dot-circle-o"></i> 
+                                                                <span class="caret" data-ng-if="arrayCircleDetalle[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta][keydetalle].showNone"></span>
+                                                                <span data-ng-show="arrayCircleDetalle[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta][keydetalle].showSingle"> {{arrayCircleDetalle[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta][keydetalle].title}}</span>
+                                                                <span data-ng-show="arrayCircleDetalle[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta][keydetalle].showMore"> 
+                                                                    {{arrayCircleDetalle[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta][keydetalle].total}} {{arrayCircleDetalle[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta][keydetalle].title}}
+                                                                </span>
+                                                            </a>
+                                                            <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                                                <div class="scroll-menu">
+                                                                    <h4 data-ng-hide="circulos.length" class="without-cirlces">No hay círculos...</h4>
+                                                                    <li data-ng-repeat="circuloDetalle in arrayCircleDetalle[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta][keydetalle]" data-ng-click="onClickLi(detalle, 0, circuloDetalle, tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas, keycuentas,keysubcuenta,keydetalle)">
+                                                                        <a href="javascript:void(0)">
+                                                                            <input type="checkbox" value="{{circuloDetalle.name}}" data-ng-model="circuloDetalle.checked" id="newCircleInput_{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}_{{keycuentas}}_{{keysubcuenta}}_{{keydetalle}}" /> {{ circuloDetalle.name }}
+                                                                        </a>
+                                                                    </li>
+                                                                </div>  
+                                                                <div>
+                                                                    <li class="divider"></li>
+                                                                    <li data-ng-click="onClickLi(detalle, 1, circuloDetalle , tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas,keycuentas,keysubcuenta, keydetalle)" data-ng-hide="newCircle">
+                                                                        <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear círculo nuevo</a>
+                                                                    </li>
+                                                                    <li data-ng-click="onClickLi(detalle, undefined, circuloDetalle, tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas,keycuentas,keysubcuenta, keydetalle)" data-ng-show="newCircle">
+                                                                        <div class="input-group">
+                                                                            <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event, detalle , arrayCircleDetalle[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta][keydetalle], tipoCuentaIndex ? '#c-options_'+tipoCuentaIndex+'_'+keycuentas+'_'+keysubcuenta+'_'+keydetalle : '#c-options_'+keytipocuentas+'_'+keycuentas+'_'+keysubcuenta+'_'+keydetalle)" id="newCircleInput_{{tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas}}_{{keycuentas}}_{{keysubcuenta}}_{{keydetalle}}" data-ng-model="arrayCircleDetalle[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta][keydetalle].circleName">
+                                                                            <span class="input-group-btn">
+                                                                                <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="createCircle( detalle , arrayCircleDetalle[tipoCuentaIndex ? tipoCuentaIndex : keytipocuentas][keycuentas][keysubcuenta][keydetalle], tipoCuentaIndex ? '#c-options_'+tipoCuentaIndex+'_'+keycuentas+'_'+keysubcuenta+'_'+keydetalle : '#c-options_'+keytipocuentas+'_'+keycuentas+'_'+keysubcuenta+'_'+keydetalle)" >Crear</button>
+                                                                            </span>
+                                                                        </div>
+                                                                    </li>
+                                                                </div>
+                                                            </ul>
+                                                        </div>
+                                                        <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-danger" data-tooltip="Eliminar {{detalle.name}}" data-ng-click="deleteItem(detalle)" data-confirm-Alert="Esta seguro de eliminar?"><i class="fa fa-times"></i></a>
+                                                    </div>
+                                                    <span data-ng-hide="detalle.isVisible" data-ng-click="enableEdit(detalle,keytipocuentas)" data-tooltip="click para editar" data-tooltip-placement="left">
+                                                        <strong>{{detalle.name}}</strong>
+                                                    </span>
+                                                    <span data-ng-hide="detalle.quantityVisible" data-ng-click="enableEdit(detalle,keytipocuentas, true)">
+                                                        <h4>Saldo {{detalle.name}}: ${{detalle.cantidad}}</h4>
+                                                    </span>
+                                                    <span data-ng-show="detalle.quantityVisible">
+                                                        <input type="text" class="form-control" data-ng-model="detalle.cantidad" name="inputText" data-ng-keypress="onKeypress(detalle,$event,keytipocuentas)" data-ng-blur="onBlur(detalle,keytipocuentas)" autocomplete="off">
+                                                    </span>
+                                                    <span data-ng-show="detalle.isVisible">
+                                                        <input type="text" class="form-control" data-ng-model="detalle.name" name="inputText" data-ng-keypress="onKeypress(detalle,$event,keytipocuentas)" data-ng-blur="onBlur(detalle,keytipocuentas)" autocomplete="off">
+                                                    </span>
+                                                </div>
+                                            </li>                                    
+                                        </ul>
+                                    </div>
+                                    
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>                
+            </li> 
+        </ul>
+        
+        <!-- Task List -->
+    </div>
+</div>
+<div  class="row" data-ng-show="wizardActive">
+    <div class="block" data-ng-show="showActivo">
+        <!-- Progress Bars Wizard Title -->
+        <div class="block-title">
+            <h2><strong>Wizard</strong> Cuentas Activo</h2>
+            <div class="block-options pull-right">
+                <a href="javascript:void(0)" class="btn btn-sm btn-danger" data-confirm-Alert="Esta seguro?, no ha guardado la información." data-ng-click="cancelWizard()" ><i class="fa fa-times"></i></a>
+            </div>
+        </div>
+        <!-- END Progress Bar Wizard Title -->
+
+        <!-- Progress Bar Wizard Content -->
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-1">
+                <div class="block-section" data-ng-show="ACBlockVisible">
+                    <h3 class="sub-header text-center"><strong>Activo Circulante</strong></h3>
+                    <p class="clearfix"><i class="fa fa-plus fa-5x text-primary pull-left"></i>Los activos circulantes son bienes y derechos de una empresa que se caracterizan por su liquidez.</p>
+                    <p>
+                        <a href="javascript:void(0)" class="btn btn-lg btn-primary btn-block">Learn More.. <i class="fa fa-arrow-right"></i></a>
+                    </p>
+                </div>
+                <div class="block-section" data-ng-show="AFBlockVisible">
+                    <h3 class="sub-header text-center"><strong>Activo Fijo</strong></h3>
+                    <p class="clearfix"><i class="fa fa-plus fa-5x text-primary pull-left"></i>Los activos fijos se definen como los bienes que una empresa utiliza de manera continua en el curso normal de sus operaciones; representan al conjunto de servicios que se recibirán en el futuro a lo largo de la vida útil de un bien adquirido.</p>
+                    <p>
+                        <a href="javascript:void(0)" class="btn btn-lg btn-primary btn-block">Learn More.. <i class="fa fa-arrow-right"></i></a>
+                    </p>
+                </div>
+                <div class="block-section" data-ng-show="ADBlockVisible">
+                    <h3 class="sub-header text-center"><strong>Activo Diferido</strong></h3>
+                    <p class="clearfix"><i class="fa fa-plus fa-5x text-primary pull-left"></i>Los cargos diferidos son aquellos gastos pagados por anticipado y que no son susceptibles de ser recuperados, por la empresa, en ningún mo­mento.</p>
+                    <p>
+                        <a href="javascript:void(0)" class="btn btn-lg btn-primary btn-block">Learn More.. <i class="fa fa-arrow-right"></i></a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-sm-offset-1">
+                <!-- Wizard Progress Bar, functionality initialized in js/pages/formsWizard.js -->
+                <div class="progress progress-striped active">
+                    <div id="progress-bar-wizard" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: 33%;"></div>
+                </div>
+                <!-- END Wizard Progress Bar -->
+
+                <!-- Progress Wizard Content -->
+                <form id="progress-wizard" method="post" class="form-horizontal ui-formwizard" data-ng-submit="activoSubmit()">
+                    <!-- First Step -->
+                    <div id="progress-first" class="step ui-formwizard-content" style="display: block;">
+                        <div class="form-group">
+                        </div>
+                        <div class="form-group">
+                            <div class="tagsinput" style="width: auto; height: auto;">
+                                <span data-ng-repeat="(key, tagSubCuenta) in inputTagActivoCirculante" class="tag">
+                                    <span>{{tagSubCuenta.name}}</span>
+                                    <a data-ng-click="deleteTagActivoCirculante( key )">x</a>
+                                </span>
+                                <div>
+                                    <input type="text" data-tag-Input data-ng-model="tagTextActivoCirculante" id="tagTextActivoCirculante" name="tagTextActivoCirculante" style="color: rgb(102, 102, 102); width: 300px;" data-new-tag="addTagActivoCirculante()" data-delete-tag="deleteTagActivoCirculante()" placeholder="Sub Cuentas de Activo Circulante" autocomplete="off" />
+                                </div>
+                                <div class="tags_clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END First Step -->
+
+                    <!-- Second Step -->
+                    <div id="progress-second" class="step ui-formwizard-content" style="display: none;">
+                        <div class="form-group">
+                            <div class="tagsinput" style="width: auto; height: auto;">
+                                <span data-ng-repeat="(key, tagSubCuenta) in inputTagActivoFijo" class="tag">
+                                    <span>{{tagSubCuenta.name}}</span>
+                                    <a data-ng-click="deleteTagActivoFijo( key )">x</a>
+                                </span>
+                                <div>
+                                    <input type="text" data-tag-Input data-ng-model="tagTextActivoFijo" id="tagTextActivoFijo" name="tagTextActivoFijo" style="color: rgb(102, 102, 102); width: 300px;" data-new-tag="addTagActivoFijo()" data-delete-tag="deleteTagActivoFijo()" placeholder="Sub Cuentas de Activo Fijo" autocomplete="off" />
+                                </div>
+                                <div class="tags_clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Second Step -->
+
+                    <!-- Third Step -->
+                    <div id="progress-third" class="step ui-formwizard-content" style="display: none;">
+                        <div class="form-group">
+                            <div class="tagsinput" style="width: auto; height: auto;">
+                                <span data-ng-repeat="(key, tag) in inputTagActivoDiferido" class="tag">
+                                    <span>{{tag.name}}</span>
+                                    <a data-ng-click="deleteTagActivoFijo( key )">x</a>
+                                </span>
+                                <div>
+                                    <input type="text" data-tag-Input data-ng-model="tagTextActivoDiferido" id="tagTextActivoDiferido" name="tagTextActivoDiferido" style="color: rgb(102, 102, 102); width: 300px;" data-new-tag="addTagActivoDiferido()" data-delete-tag="deleteTagActivoDiferido()" placeholder="Sub Cuentas de Activo Diferido" autocomplete="off" />
+                                </div>
+                                <div class="tags_clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Third Step -->
+
+                    <!-- Form Buttons -->
+                    <div class="form-group form-actions">
+                        <div class="col-md-8 col-md-offset-4">
+                            <input type="reset" class="btn btn-sm btn-warning ui-wizard-content ui-formwizard-button" id="back" value="Back" disabled="disabled" data-ng-click="nextActivo()">
+                            <input type="submit" class="btn btn-sm btn-primary ui-wizard-content ui-formwizard-button" id="next" value="Next" data-ng-click="nextActivo()" >
+                        </div>
+                    </div>
+                    <!-- END Form Buttons -->
+                </form>
+                <!-- END Progress Wizard Content -->
+            </div>
+        </div>
+        <!-- END Progress Bar Wizard Content -->
+    </div>
+    <div class="block" data-ng-show="showPasivos">
+        <!-- Progress Bars Wizard Title -->
+        <div class="block-title">
+            <h2><strong>Wizard</strong> Cuentas Pasivo</h2>
+            <div class="block-options pull-right">
+                <a href="javascript:void(0)" class="btn btn-sm btn-danger" data-confirm-Alert="Esta seguro?, no ha guardado la información." data-ng-click="cancelWizard()" ><i class="fa fa-times"></i></a>
+            </div>
+        </div>
+        <!-- END Progress Bar Wizard Title -->
+
+        <!-- Progress Bar Wizard Content -->
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-1">
+                <div class="block-section" data-ng-show="PCBlockVisible">
+                    <h3 class="sub-header text-center"><strong>Pasivo Circulante</strong></h3>
+                    <p class="clearfix"><i class="fa fa-plus fa-5x text-primary pull-left"></i>Los activos circulantes son bienes y derechos de una empresa que se caracterizan por su liquidez.</p>
+                    <p>
+                        <a href="javascript:void(0)" class="btn btn-lg btn-primary btn-block">Learn More.. <i class="fa fa-arrow-right"></i></a>
+                    </p>
+                </div>
+                <div class="block-section" data-ng-show="PFBlockVisible">
+                    <h3 class="sub-header text-center"><strong>Pasivo Fijo</strong></h3>
+                    <p class="clearfix"><i class="fa fa-plus fa-5x text-primary pull-left"></i>Los activos fijos se definen como los bienes que una empresa utiliza de manera continua en el curso normal de sus operaciones; representan al conjunto de servicios que se recibirán en el futuro a lo largo de la vida útil de un bien adquirido.</p>
+                    <p>
+                        <a href="javascript:void(0)" class="btn btn-lg btn-primary btn-block">Learn More.. <i class="fa fa-arrow-right"></i></a>
+                    </p>
+                </div>
+                <div class="block-section" data-ng-show="PDBlockVisible">
+                    <h3 class="sub-header text-center"><strong>Pasivo Diferido</strong></h3>
+                    <p class="clearfix"><i class="fa fa-plus fa-5x text-primary pull-left"></i>Los cargos diferidos son aquellos gastos pagados por anticipado y que no son susceptibles de ser recuperados, por la empresa, en ningún mo­mento.</p>
+                    <p>
+                        <a href="javascript:void(0)" class="btn btn-lg btn-primary btn-block">Learn More.. <i class="fa fa-arrow-right"></i></a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-sm-offset-1">
+                <!-- Wizard Progress Bar, functionality initialized in js/pages/formsWizard.js -->
+                <div class="progress progress-striped active">
+                    <div id="progress-bar-wizard-pasivo" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: 33%;"></div>
+                </div>
+                <!-- END Wizard Progress Bar -->
+
+                <!-- Progress Wizard Content -->
+                <form id="progress-wizard-pasivo" method="post" class="form-horizontal ui-formwizard" data-ng-submit="pasivoSubmit()">
+                    <!-- First Step -->
+                    <div id="progress-first-pasivo" class="step ui-formwizard-content" style="display: block;">
+                        <div class="form-group">
+                        </div>
+                        <div class="form-group">
+                            <div class="tagsinput" style="width: auto; height: auto;">
+                                <span data-ng-repeat="(key, tagSubCuenta) in inputTagPasivoCirculante" class="tag">
+                                    <span>{{tagSubCuenta.name}}</span>
+                                    <a data-ng-click="deleteTagActivoCirculante( key )">x</a>
+                                </span>
+                                <div>
+                                    <input type="text" data-tag-Input data-ng-model="tagTextPasivoCirculante" id="tagTextActivoCirculante" name="tagTextPasivoCirculante" style="color: rgb(102, 102, 102); width: 300px;" data-new-tag="addTagPasivoCirculante()" data-delete-tag="deleteTagPasivoCirculante()" placeholder="Sub Cuentas de Pasivo Circulante" autocomplete="off" />
+                                </div>
+                                <div class="tags_clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END First Step -->
+
+                    <!-- Second Step -->
+                    <div id="progress-second-pasivo" class="step ui-formwizard-content" style="display: none;">
+                        <div class="form-group">
+                            <div class="tagsinput" style="width: auto; height: auto;">
+                                <span data-ng-repeat="(key, tagSubCuenta) in inputTagPasivoFijo" class="tag">
+                                    <span>{{tagSubCuenta.name}}</span>
+                                    <a data-ng-click="deleteTagPasivoFijo( key )">x</a>
+                                </span>
+                                <div>
+                                    <input type="text" data-tag-Input data-ng-model="tagTextPasivoFijo" id="tagTextPasivoFijo" name="tagTextPasivoFijo" style="color: rgb(102, 102, 102); width: 300px;" data-new-tag="addTagPasivoFijo()" data-delete-tag="deleteTagPasivoFijo()" placeholder="Sub Cuentas de Pasivo Fijo" autocomplete="off" />
+                                </div>
+                                <div class="tags_clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Second Step -->
+
+                    <!-- Third Step -->
+                    <div id="progress-third-pasivo" class="step ui-formwizard-content" style="display: none;">
+                        <div class="form-group">
+                            <div class="tagsinput" style="width: auto; height: auto;">
+                                <span data-ng-repeat="(key, tag) in inputTagPasivoDiferido" class="tag">
+                                    <span>{{tag.name}}</span>
+                                    <a data-ng-click="deleteTagPasivoFijo( key )">x</a>
+                                </span>
+                                <div>
+                                    <input type="text" data-tag-Input data-ng-model="tagTextPasivoDiferido" id="tagTextPasivoDiferido" name="tagTextPasivoDiferido" style="color: rgb(102, 102, 102); width: 300px;" data-new-tag="addTagPasivoDiferido()" data-delete-tag="deleteTagPasivoDiferido()" placeholder="Sub Cuentas de Pasivo Diferido" autocomplete="off" />
+                                </div>
+                                <div class="tags_clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Third Step -->
+
+                    <!-- Form Buttons -->
+                    <div class="form-group form-actions">
+                        <div class="col-md-8 col-md-offset-4">
+                            <input type="reset" class="btn btn-sm btn-warning ui-wizard-content ui-formwizard-button" id="back2" value="Back" disabled="disabled" data-ng-click="nextPasivo()">
+                            <input type="submit" class="btn btn-sm btn-primary ui-wizard-content ui-formwizard-button" id="next2" value="Next" data-ng-click="nextPasivo()">
+                        </div>
+                    </div>
+                    <!-- END Form Buttons -->
+                </form>
+                <!-- END Progress Wizard Content -->
+            </div>
+        </div>
+        <!-- END Progress Bar Wizard Content -->
+    </div>
+</div>
+<!-- END Tasks Row -->
+</div>

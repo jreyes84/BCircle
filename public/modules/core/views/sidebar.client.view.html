@@ -1,0 +1,106 @@
+<div class="sidebar-scroll" data-ng-controller="HeaderController">
+    <link rel="stylesheet" data-ng-href="{{user.theme}}.css" data-ng-if="user.theme!==''">
+    <link rel="stylesheet" href="css/themes.css">
+    <!-- Sidebar Content -->
+    <div class="sidebar-content">
+        <!-- Brand -->
+        <a href="#!/" class="sidebar-brand">
+            <i class="gi gi-flash"></i><strong>Blue</strong> Circle
+        </a>
+        <!-- END Brand -->
+
+        <!-- User Info -->
+        <div class="sidebar-section sidebar-user clearfix">
+            <div class="sidebar-user-avatar">
+                <a href="/#!/profile">
+                    <img data-ng-src="{{user.thumbimage}}" alt="avatar">
+                </a>
+            </div>
+            <div class="sidebar-user-name">{{authentication.user.displayName}}</div>
+            <div class="sidebar-user-links">
+                <a href="page_ready_user_profile.html" data-toggle="tooltip" data-placement="bottom" title="Profile"><i class="gi gi-user"></i></a>
+                <a href="page_ready_inbox.html" data-toggle="tooltip" data-placement="bottom" title="Messages"><i class="gi gi-envelope"></i></a>
+                <!-- Opens the user settings modal that can be found at the bottom of each page (page_footer.html in PHP version) -->
+                <a href="#modal-user-settings" data-toggle="modal" class="enable-tooltip" data-placement="bottom" title="Settings"><i class="gi gi-cogwheel"></i></a>
+                <a href="/auth/signout" data-ng-click="logout()" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="gi gi-exit"></i></a>
+            </div>
+        </div>
+        <!-- END User Info -->
+
+        <!-- Theme Colors -->
+        <!-- Change Color Theme functionality can be found in js/app.js - templateOptions() -->
+        <ul class="sidebar-section sidebar-themes clearfix" id="colors-thems">
+            <li data-ng-click="onColorClick('default')" id="default">
+                <a href="javascript:void(0)" class="themed-background-dark-default themed-border-default" data-theme="default" data-toggle="tooltip" title="Default Blue"></a>
+            </li>
+            <li id="night" data-ng-click="onColorClick('night')">
+                <a href="javascript:void(0)" class="themed-background-dark-night themed-border-night" data-theme="css/themes/night.css" data-toggle="tooltip" title="Night"></a>
+            </li>
+            <li id="amethyst" data-ng-click="onColorClick('amethyst')">
+                <a href="javascript:void(0)" class="themed-background-dark-amethyst themed-border-amethyst" data-theme="css/themes/amethyst.css" data-toggle="tooltip" title="Amethyst"></a>
+            </li>
+            <li id="modern" data-ng-click="onColorClick('modern')">
+                <a href="javascript:void(0)" class="themed-background-dark-modern themed-border-modern" data-theme="css/themes/modern.css" data-toggle="tooltip" title="Modern"></a>
+            </li>
+            <li id="autumn" data-ng-click="onColorClick('autumn')">
+                <a href="javascript:void(0)" class="themed-background-dark-autumn themed-border-autumn" data-theme="css/themes/autumn.css" data-toggle="tooltip" title="Autumn"></a>
+            </li>
+            <li id="flatie" data-ng-click="onColorClick('flatie')">
+                <a href="javascript:void(0)" class="themed-background-dark-flatie themed-border-flatie" data-theme="css/themes/flatie.css" data-toggle="tooltip" title="Flatie"></a>
+            </li>
+            <li id="spring" data-ng-click="onColorClick('spring')">
+                <a href="javascript:void(0)" class="themed-background-dark-spring themed-border-spring" data-theme="css/themes/spring.css" data-toggle="tooltip" title="Spring"></a>
+            </li>
+            <li id="fancy" data-ng-click="onColorClick('fancy')">
+                <a href="javascript:void(0)" class="themed-background-dark-fancy themed-border-fancy" data-theme="css/themes/fancy.css" data-toggle="tooltip" title="Fancy"></a>
+            </li>
+            <li id="fire" data-ng-click="onColorClick('fire')">
+                <a href="javascript:void(0)" class="themed-background-dark-fire themed-border-fire" data-theme="css/themes/fire.css" data-toggle="tooltip" title="Fire"></a>
+            </li>
+        </ul>
+        <!-- END Theme Colors -->
+
+        <!-- Sidebar Navigation -->
+        <ul class="sidebar-nav" data-ng-init="getMenus()">
+            <li data-ng-repeat="menu in menus">
+                <a href="javascript:void(0)" class="sidebar-nav-menu" data-ng-click="changeLocation(menu.url)" data-sidebar>
+                    <i class="fa fa-angle-left sidebar-nav-indicator" data-ng-if="menu.children.length"></i>
+                    <i class="{{menu.icon}}"></i>{{menu.name}}</a>
+                <ul data-ng-if="menu.children.length">
+                    <li data-ng-repeat="child in menu.children">
+                        <a href="javascript:void(0)" data-ng-click="childClickLocation(child.url)">{{child.name}}</a>
+                    </li> 
+                </ul>
+            </li>
+        </ul>
+        <!-- END Sidebar Navigation -->
+
+        <!-- Sidebar Notifications -->
+        <div class="sidebar-header">
+            <span class="sidebar-header-options clearfix">
+                <a href="javascript:void(0)" data-toggle="tooltip" title="Refresh"><i class="gi gi-refresh"></i></a>
+            </span>
+            <span class="sidebar-header-title">Activity</span>
+        </div>
+        <div class="sidebar-section">
+            <!--<div class="alert alert-success alert-alt">
+                <small>5 min ago</small><br>
+                <i class="fa fa-thumbs-up fa-fw"></i> You had a new sale ($10)
+            </div>
+            <div class="alert alert-info alert-alt">
+                <small>10 min ago</small><br>
+                <i class="fa fa-arrow-up fa-fw"></i> Upgraded to Pro plan
+            </div>
+            <div class="alert alert-warning alert-alt">
+                <small>3 hours ago</small><br>
+                <i class="fa fa-exclamation fa-fw"></i> Running low on space<br><strong>18GB in use</strong> 2GB left
+            </div>
+            <div class="alert alert-danger alert-alt">
+                <small>Yesterday</small><br>
+                <i class="fa fa-bug fa-fw"></i> <a href="javascript:void(0)"><strong>New bug submitted</strong></a>
+            </div>-->
+        </div>
+        <!-- END Sidebar Notifications -->
+    </div>
+    <!-- END Sidebar Content -->
+</div>

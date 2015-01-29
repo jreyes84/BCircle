@@ -1,0 +1,618 @@
+<script src="lib/app.js"></script>
+<script src="lib/pages/tablesDatatables.js"></script>
+<script>$(function(){ TablesDatatables.init(); });</script>
+<!-- Wizard Header -->
+<div data-ng-controller="DocumentosController" data-ng-init="find()">
+    <div class="content-header">
+        <input type="hidden" data-ng-model="userid" />
+    </div>
+    <div  class="row">
+        <div data-ng-show="showList">
+            
+            <div class="block">
+                <div class="block-title">
+                    <h2>Documento</h2>
+                    <div class="block-options pull-right">
+                        <a href="javascript:void(0)" class="btn btn-sm btn-info" data-ng-click="addDocument()" ><i class="fa fa-plus" data-toggle="tooltip" title="" data-tooltip data-original-title="Crear un nuevo documento"></i></a>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <div id="example-datatable_wrapper" class="form-inline no-footer" >
+                        <table id="foobar" class="table table-vcenter table-condensed table-bordered dataTable no-footer" role="grid" aria-describedby="example-datatable_info" datatable dt-options="dtOptions" dt-columns="dtColumns" data-ng-if="dtOptions">
+                            <tbody>
+                                <tr ng-repeat="document in documentos" role = "row">
+                                    <td class="text-center">{{ document.date_document | date:'MM-dd-yyyy' }}</td>
+                                    <td class="text-center">
+                                        <a href="#!/documentos/{{document._id}}" data-ng-click="showDetail(document)">
+                                            <span class="label label-info">{{ document.name_document }}</span>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="label label-warning">{{ document.date_end | date:'MM-dd-yyyy' }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span data-ng-repeat="razon in document.contacts">{{razon}}</span>
+                                        
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="btn-group">
+                                            <a href="javascript:void(0)" class="btn btn-xs btn-default" data-toggle="tooltip" title="" data-original-title="Cuentas">{{document.subtotal + document.descuento}}</a> 
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="btn-group">
+                                            <a href="javascript:void(0)" class="btn btn-xs btn-default" data-toggle="tooltip" title="" data-original-title="Cuentas">{{document.totalImpuestosTrasladados}}</a> 
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="btn-group">
+                                            <a href="javascript:void(0)" class="btn btn-xs btn-default" data-toggle="tooltip" title="" data-original-title="Cuentas">{{document.total}}</a> 
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-xs">
+                                            <a href="#!/documentos/{{document._id}}" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Editar" data-ng-click="showDetail(document)"><i class="fa fa-pencil"></i></a>
+                                            <a data-ng-href="#!/documentos/{{document._id}}" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Eliminar" data-ng-click="deleteFields(item,$index)"><i class="fa fa-times"></i></a>
+                                        </div>
+                                    </td> 
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-ng-hide="showList">
+            <div class="block">
+                <!-- Input Grid Title -->
+                <div class="block-title">
+                    <h2>Documento</h2>
+
+                    <div class="block-options pull-right">
+                        <div class="btn-group btn-group-sm" data-ng-show="documento._id">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-info dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-original-title="Options"><span class="caret"></span></a>
+                            <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <li>
+                                    <a href="javascript:void(0)" data-ng-click="copyDocument()" class="ng-click-active"><i class="gi gi-cloud pull-right"></i><span class="label label-warning ng-binding">Copiar documento</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="btn-group" circle-option id="c-options">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-primary dropdown-toggle enable-tooltip" data-ng-class="circulos.showNone ? 'red button' : ''" data-toggle="dropdown" title="" data-original-title="Círculos"><i class="fa fa-dot-circle-o"></i> <span class="caret" data-ng-show="circulos.showNone"></span><span data-ng-show="circulos.showSingle">{{circulos.title}}</span><span data-ng-show="circulos.showMore">{{circulos.total}} {{circulos.title}}</span></a>
+                            <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <div class="scroll-menu">
+                                    <h4 data-ng-hide="circulos.length" class="without-cirlces">No hay círculos...</h4>
+                                    <li data-ng-repeat="circulo in circulos" data-ng-click="onClickLi( $index , 0, circulo)">
+                                    <a href="javascript:void(0)">
+                                        <input type="checkbox" value="{{circulo.name}}" data-ng-model="circulo.checked" /> {{ circulo.name }}
+                                    </a>
+                                </li>                                
+                                </div>
+                                <div>
+                                    <li class="divider"></li>
+                                <li data-ng-click="onClickLi(undefined,1)" data-ng-hide="newCircle">
+                                    <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear círculo nuevo</a>
+                                </li>
+                                <li data-ng-click="onClickLi()" data-ng-show="newCircle">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event)" data-ng-model="documento.circleName" id="newCircleInput">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="clicked()" >Crear</button>
+                                        </span>
+                                    </div>
+                                </li>
+                                </div>
+                                
+                            </ul>
+                        </div>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-info" data-ng-click="addDocument()" ><i class="fa fa-plus" data-toggle="tooltip" title="" data-tooltip="Crear / limpiar documento"></i></a>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-info" data-toggle="tooltip" data-tooltip="Guardar" data-ng-click="saveDocument()" id="save"><i class="hi hi-floppy_disk"></i></a>
+                        <a data-ng-href="#!/documentos" class="btn btn-sm btn-danger" title="" data-tooltip="Regresar/ Cancelar" data-ng-click="cancelDetail()"><i class="fa fa-times"></i></a>
+                        <a href="javascript:void(0);" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk" style="display:none"></a>
+                    </div>
+                </div>
+                <!-- END Input Grid Title -->
+                <!-- Input Grid Content -->
+                <form method="post" class="form-horizontal" onsubmit="return false;">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="example-hf-email">No. Documento</label>
+                        <div class="col-md-2">
+                            <input type="text" id="example-progress-username" name="example-progress-username" class="form-control" data-ng-model="documento.name_document" placeholder="Nombre o No. Documento" data-ng-required autocomplete="off">
+                        </div>
+                        <label class="col-md-2 control-label" >
+                            Contactos 
+                        </label>
+                        <div class="block-options col-md-1">
+                                <a href="#modal-contactos" data-toggle="modal" class="enable-tooltip btn btn-sm btn-info" data-ng-click=""><i class="fa fa-plus ng-scope" data-toggle="tooltip" title="" data-tooltip="" data-original-title="Crear un nuevo contacto"></i></a>
+                        </div>
+                        <div class="col-md-4">
+                            <select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="documento.contacto" data-placeholder="Seleccione contactos" multiple >
+                                 <option ng-repeat="contact in inputTagContactos" value="{{contact.id}}">{{contact.text}}</option>
+                            </select>
+                            <a href="javascript:void(0)" data-ng-click="saveNewContact()" data-ng-if="newContacto.length">
+                                <span class="label label-danger">Agregar a {{newContacto[0].razonSocial}} como tu contacto? Click para agregarlo.</span>
+                            </a>
+                        </div>
+                            <!-- modal-contactos -->
+                        </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="example-hf-email">Fecha documento</label>
+                        <div class="col-md-4">
+                            <input type="text" id="created" name="created" class="form-control input-datepicker-close" data-date-format="mm-dd-yyyy" placeholder="mm-dd-yyyy" data-ng-model="documento.date_document">
+                        </div>
+                        <label class="col-md-2 control-label" for="example-hf-email">Fecha Vencimiento</label>
+                        <div class="col-md-4">
+                            <input type="text" id="vencimiento" name="vencimiento" class="form-control input-datepicker-close" data-date-format="mm-dd-yyyy" placeholder="mm-dd-yyyy" data-ng-model="documento.date_end">
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label class="col-md-2 control-label" for="example-hf-email">Tipo de pago</label>
+                        <div class="col-md-4">
+                            <select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="documento.pay_type" data-placeholder="Seleccione tipo de pago">
+                            </select>
+                        </div>
+                        <label class="col-md-2 control-label" for="example-hf-email">Tipo de póliza</label>
+                        <div class="col-md-4">
+                            <select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="documento.documents_type" data-placeholder="Seleccione tipo de documento">
+                            </select>
+                        </div>
+                    </div> -->
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="example-hf-email">XML</label>
+                        <div class="col-md-4">
+                            <input type="file" ng-file-select="copyFilesXML($files)">
+                        </div>
+                        <label class="col-md-2 control-label" for="example-hf-email">PDF</label>
+                        <div class="col-md-4">
+                            <input type="file" ng-file-select="copyFilesPDF($files)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="example-hf-email"></label>
+                        <div class="col-md-4"  data-ng-if="documento.xml">
+                            <span><a href="{{documento.xml}}" target="_blank" class="label label-primary">{{documento.name_document}}.xml</a></span>    
+                        </div>
+                        <label class="col-md-2 control-label" for="example-hf-email"></label>
+                        <div class="col-md-4" data-ng-if="documento.pdf">
+                            <span><a href="{{documento.pdf}}" target="_blank" class="label label-primary">{{documento.name_document}}.pdf</a></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="progress" style="display:none" name="progressBar" >
+                                <div class="progress-bar progress-bar-success" role="progressbar" name="progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END Input Grid Content -->
+            </div>
+            <div class="block">
+            <!-- Forum Tabs Title -->
+            <div class="block-title">
+                <ul class="nav nav-tabs" data-toggle="tabs">
+                    <li class="active"><a href="#forum-categories">Movimientos</a></li>
+                    <li class=""><a href="#forum-topics">Cuentas afectadas</a></li>
+                    <!-- <li class=""><a href="#forum-discussion">Almacén</a></li> -->
+                </ul>
+            </div>
+            <!-- END Forum Tabs -->
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Forum -->
+                <div class="tab-pane active" id="forum-categories">
+                    <div>
+                        <a href="javascript:void(0)" data-ng-click="addItemToTable()"><i class="fa fa-plus fa-2x text-primary pull-left"></i></a>
+                    </div>
+                    <table id="general-table" class="table table-striped table-vcenter table-hover table-condensed">
+                        <thead >
+                            <tr>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-center">Código o No. Fabricante</th>
+                                <th class="text-center">Descripción</th>
+                                <th class="text-center">No. Serie</th>
+                                <th class="text-center">Precio Unitario</th>
+                                <th class="text-center">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="item in documento.items">
+                                <td class="text-center">
+                                    <span data-ng-hide="item.edit" data-ng-click="editField(item , true)">{{item.cantidad}}</span>
+                                    <span>
+                                        <input type="number" class="form-control text-center" data-ng-model="item.cantidad" min="1" value="1"  data-ng-show="item.edit" data-ng-keypress="editField(item,false,$event)" data-ng-blur="onChangeFootItems(item)" data-input-focus="true"/>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span data-ng-hide="item.edit" data-ng-click="editField(item,'editCod_fabricante',true)">{{item.cod_fabricante}}</span>
+                                    <span>
+                                        <input type="text" class="form-control text-center" data-ng-model="item.cod_fabricante" data-ng-show="item.edit" data-ng-keypress="editField(item,false,$event)" data-ng-blur="onChangeFootItems(item)"/>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span data-ng-hide="item.edit" data-ng-click="editField(item,true)">{{item.descripcion}}</span>
+                                    <span>
+                                        <input type="text" class="form-control text-center" data-ng-model="item.descripcion" data-ng-show="item.edit" data-ng-keypress="editField(item,false,$event)" data-ng-blur="onChangeFootItems(item,false)"/>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span data-ng-hide="item.edit" data-ng-click="editField(item,true)">{{item.no_serie}}</span>
+                                    <span>
+                                        <input type="text" class="form-control text-center" data-ng-model="item.no_serie" data-ng-show="item.edit" data-ng-keypress="editField(item,false,$event)" data-ng-blur="onChangeFootItems(item)"/>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span data-ng-hide="item.edit" data-ng-click="editField(item,true)">$ {{item.precio}}</span>
+                                    <span>
+                                        <input type="text" class="form-control text-center" data-ng-model="item.precio" data-ng-show="item.edit" data-ng-keypress="editField(item,false,$event)" data-ng-blur="onChangeFootItems(item)"/>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span>$ {{item.precio*item.cantidad}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs">
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Editar" data-ng-click="editField(item,true)"><i class="fa fa-pencil"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Eliminar" data-ng-click="deleteFields(item,$index)"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </td> 
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center">
+                                    
+                                </td>
+                                <td class="text-center">
+                                    <label class="col-md-3 control-label" for="example-hf-email">Subtotal</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control text-center" data-ng-model="documento.subtotal" data-ng-blur="onChangeFootItems()" data-ng-keypress="editField(undefined,false,$event)"/>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                </td> 
+                            </tr>
+                            <tr data-ng-if="documento.descuento">
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center">
+                                    
+                                </td>
+                                <td class="text-center">
+                                    <label class="col-md-3 control-label" for="example-hf-email">Descuento</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control text-center" data-ng-model="documento.descuento"/>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                </td> 
+                            </tr>
+                            <tr data-ng-repeat = "traslado in documento.traslados">
+                                <td></td><td class="text-center"><!-- <label class="col-md-3 control-label" for="example-hf-email">Impuesto</label> --></td>
+                                <td class="text-center">
+                                    <a href="javascript:void(0)" class="pull-right" data-toggle="tooltip" title="" data-tooltip data-original-title="Agregar otro tipo de impuesto" data-ng-click="onAddImpuesto()"><i class="fa fa-plus fa-2x text-primary pull-left"></i></a>
+                                </td>
+                                <td>
+                                    <div class="col-md-8">
+                                        <select ui-select2="{allowClear:true}" data-ng-model="traslado.impuesto" data-placeholder="Seleccione tipo de impuesto" style="width:90%" class="text-center" name="selectImpuesto" data-ng-change="cleanValuesSelects()">
+                                            <option ng-repeat="option in options" value="{{option.value}}">{{option.text}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control text-center" data-ng-model="traslado.tasa" data-ng-keypress="editField(undefined,false,$event)" data-ng-blur="onChangeFootItems()" data-ng-change="onTasaChange(traslado,true)"/>
+                                    </div>
+                                    
+                                </td>
+                                <td class="text-center">
+                                    <label class="col-md-3 control-label" for="example-hf-email"></label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control text-center" data-ng-model="traslado.importe" data-ng-keypress="editField(undefined,false,$event)" data-ng-blur="onChangeFootItems()"/>
+                                    </div>                                    
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs">
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Eliminar" data-ng-click="onRemoveImpuesto(traslado,$index)"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </td>  
+                            </tr>
+                            <tr data-ng-hide="documento.traslados.length !==0">
+                                <td></td><td class="text-center"></td>
+                                <td class="text-center">
+                                    <a href="javascript:void(0)" class="pull-right" data-toggle="tooltip" title="" data-tooltip data-original-title="Agregar otro tipo de impuesto" data-ng-click="onAddImpuesto()"><i class="fa fa-plus fa-2x text-primary pull-left"></i></a>
+                                </td>
+                                <td style="pointer-events:none;">
+                                    <div class="col-md-8">
+                                        <select ui-select2="{allowClear:true}" data-ng-model="impuesto" data-placeholder="Seleccione tipo de impuesto" style="width:90%" class="text-center" name="selectImpuesto">
+                                            <option ng-repeat="option in options" value="{{option.value}}">{{option.text}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control text-center" data-ng-model="tasa"/>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <label class="col-md-3 control-label" for="example-hf-email"></label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control text-center" data-ng-model="importe"/>
+                                    </div>                                    
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs">
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Eliminar"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </td> 
+                            </tr>
+                            <tr >
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center"></td>
+                                <td class="text-center">
+                                </td>
+                                <td class="text-center">
+                                    <label class="col-md-3 control-label" for="example-hf-email">Total</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control text-center" data-ng-model="documento.total"/>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                </td> 
+                            </tr>
+                            
+                        </tfoot>
+                    </table>                    
+                </div>
+                <!-- END Forum -->
+
+                <!-- Topics -->
+                <div class="tab-pane" id="forum-topics" >
+                    <h3><i class="fa fa-exclamation-triangle text-danger animation-pulse" data-toggle="tooltip" title="" data-original-title="Puedes agregar tus templates buscandolos y automaticamente cargará las cuentas asociadas a tu template, puedes agregar las cuentas que desees. Recuerda seleccionar un círculo antes de todo." ></i></h3>
+                    <select select-2 style="width:100%" ui-select2 data-ng-model="templates" data-placeholder="Seleccione las cuentas afectadas"  multiple >
+                         <option data-ng-repeat="cuentas in inputTagCuentas" value="{{cuentas.id}}" >{{cuentas.text}}</option>
+                    </select>
+
+                    <table id="general-table" class="table table-striped table-vcenter table-hover table-condensed">
+                        <thead >
+                            <tr data-ng-if="documento.cuentas.length">
+                                <th class="text-center">Cuenta</th>
+                                <th class="text-center" data-ng-show="whereToCharge.edit">Monto a donde cargar</th>
+                                <th class="text-center">Cargo</th>
+                                <th class="text-center">Abono</th>
+                                <th class="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <tr data-ng-repeat="movimiento in documento.cuentas">
+                                <td class="text-center">
+                                    <span><a href="javascript:void(0)" class="label label-primary">{{movimiento.name}}</a></span>
+                                </td>
+                                <td class="text-center" data-ng-show="movimiento.edit">
+                                    <span data-ng-hide="movimiento.edit">
+                                        {{movimiento.cargo_a}}
+                                    </span>
+                                    <span data-ng-if="movimiento.cargo_a===''" data-ng-hide="movimiento.edit" >
+                                        <h4><i class="fa fa-exclamation-triangle text-warning animation-pulse" data-toggle="tooltip" title="" data-tooltip data-original-title="Es necesario  que configures a donde se va a cargar" ></i></h4>
+                                    </span>
+                                    <span data-ng-show="movimiento.edit">
+                                        <select ui-select2 data-ng-model="movimiento.cargo_a" style="width:50%">
+                                            <option value="total">Total</option>
+                                            <option value="subtotal">Subtotal</option>
+                                            <option value="iva">IVA</option>
+                                            <option value="ret_iva">Retención IVA</option>
+                                            <option value="ret_isr">Retención ISR</option>
+                                        </select>
+                                    </span>                                    
+                                </td>
+                                <td class="text-center">
+                                    <span data-ng-hide="movimiento.edit" data-ng-if="movimiento.cargo || movimiento.abono">
+                                        $ {{movimiento.cargoQty}}
+                                    </span>  
+                                    <span data-ng-if="!movimiento.cargo && !movimiento.abono" data-ng-hide="movimiento.edit" >
+                                        <h4><i class="fa fa-exclamation-triangle text-warning animation-pulse" data-toggle="tooltip" title="" data-tooltip data-original-title="Es necesario especificar si es cargo" ></i></h4>
+                                    </span>
+                                    <span data-ng-show="movimiento.edit">
+                                        <label class="switch switch-success">
+                                            <input type="checkbox" data-ng-model="movimiento.cargo" >
+                                            <span></span>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span data-ng-hide="movimiento.edit" data-ng-if="movimiento.cargo || movimiento.abono">
+                                        $ {{movimiento.abonoQty}}
+                                    </span>
+                                    <span data-ng-if="!movimiento.cargo && !movimiento.abono" data-ng-hide="movimiento.edit" >
+                                        <h4><i class="fa fa-exclamation-triangle text-warning animation-pulse" data-toggle="tooltip" title="" data-tooltip data-original-title="Es necesario especificar si es abono" ></i></h4>
+                                    </span>
+                                    <span data-ng-show="movimiento.edit">
+                                        <label class="switch switch-success">
+                                            <input type="checkbox" data-ng-model="movimiento.abono">
+                                            <span></span>
+                                        </label>
+                                    </span>
+                                    
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs">
+                                        <a href="javascript:void(0)" data-ng-hide="movimiento.edit" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Editar" data-ng-click="clickEdit(movimiento)"><i class="fa fa-pencil"></i></a>
+                                        <a href="javascript:void(0)" data-ng-show="movimiento.edit" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="" data-ng-click="clickEdit(movimiento)"><i class="hi hi-ok"></i></a>                                        
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Eliminar" data-ng-click="deleteCuentaMov($index)"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table> 
+                </div>
+                <!-- END Topics -->
+
+                <!-- Discussion -->
+                <div class="tab-pane" id="forum-discussion">
+                    
+                </div>
+                <!-- END Discussion -->
+            </div>
+            <!-- END Tab Content -->
+        </div>
+    </div>
+    <div id="modal-contactos" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header text-center">
+                    <h2 class="modal-title"><i class="fa fa-pencil"></i> Nuevo Contacto</h2>
+                </div>
+                <!-- END Modal Header -->
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form class="form-horizontal form-bordered" onsubmit="return false;" data-ng-submit="createContact()" autocomplete="off"  novalidate="novalidate">
+                        <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-address">Nombre Comercial</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-comercialName" data-ng-model="credentials.comercialName" name="add-contact-comercialName" class="form-control" placeholder="Enter nombre comercial.." data-ng-change="fieldChangeDefault()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="update-contact-name">Nombre / Razón Social</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="update-contact-name" data-ng-model="credentials.razonSocial" name="update-contact-name" class="form-control" placeholder="Enter razón social.." data-ng-required data-ng-change="fieldChangeDefault()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-email">Email</label>
+                    <div class="col-xs-9">
+                        <input type="email" id="add-contact-email" data-ng-model="credentials.correo" name="add-contact-email" class="form-control" placeholder="Enter Email.." data-ng-required  data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-address">Dirección</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-address" data-ng-model="credentials.address" name="add-contact-address" class="form-control" placeholder="Enter address.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-address">CP</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-address" data-ng-model="credentials.cp" name="add-contact-address" class="form-control" placeholder="Enter CP.." data-ng-change="findCp()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-colonia">Colonia</label>
+                    <div class="col-xs-9">
+                        <select class="span4 chzn-select" data-placeholder="Choose a colonia" data-ng-model="coloniaSelected" data-ng-options="coloniaName as coloniaName.name for coloniaName in colonias" chosen >
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-ciudad">Ciudad</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-ciudad" data-ng-model="credentials.ciudad" name="add-contact-ciudad" class="form-control" placeholder="Enter ciudad.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-estado">Estado</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-estado" data-ng-model="credentials.estado" name="add-contact-estado" class="form-control" placeholder="Enter estado.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-estado">País</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-pais" data-ng-model="credentials.country" name="add-contact-estado" class="form-control" placeholder="Enter Pais.." data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-rfc">RFC</label>
+                    <div class="col-xs-9">
+                        <input type="text" name="newRFC" class="form-control" placeholder="Enter RFC" data-ng-model="credentials.rfc">
+                    </div>
+                </div>                
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-pageweb">Página Web</label>
+                    <div class="col-xs-9">
+                        <input type="text" data-ng-model="credentials.webPage" name="add-contact-pageweb" class="form-control" placeholder="Enter Página web.."  data-ng-change="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-rating">Rating</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="add-contact-rating" data-ng-model="credentials.rating" name="add-contact-rating" class="form-control" placeholder="Enter Rating">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-functions">Función</label>
+                    <div class="col-xs-9">
+                        <div class="tagsinput" style="width: auto; height: auto;">
+                            <span data-ng-repeat="(key, tag) in inputTags" class="tag">
+                                <span >{{ tag.name }}  </span>
+                                <a data-ng-click="deleteTag(key)">x</a>
+                            </span>
+                            <div id="example-tags_addTag">
+                                <input type="text" data-tags data-ng-model="tagText" style="color: rgb(102, 102, 102); width: 120px;" data-new-tag="addTag()" data-delete-tag-="deleteTag()" placeholder="Tag Fun.">    
+                            </div>
+                            <div class="tags_clear"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-projects">Proyectos</label>
+                    <div class="col-xs-9">
+                        <div class="tagsinput" style="width: auto; height: auto;">
+                            <span data-ng-repeat="(key, tag) in inputProjects" class="tag">
+                                <span >{{ tag.name }}  </span>
+                                <a data-ng-click="deleteTagProject(key)">x</a>
+                            </span>
+                            <div id="example-tags_addTagProject">
+                                <input type="text" data-tags-project data-ng-model="tagTextProject" style="color: rgb(102, 102, 102); width: 120px;" data-new-tag-project="addTagProject()" data-delete-tag-project="deleteTagProject()" placeholder="Tag project.">    
+                            </div>
+                            <div class="tags_clear"></div>
+                        </div>
+                    </div>
+                </div>
+                <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-primary enable-tooltip" data-toggle="tooltip" title="Agregar telefono" data-original-title="Agregar telefono" data-ng-click="newAddTelephone()"
+                        ><i class="fa fa-plus"></i> Agregar Teléfono</a>
+                 <div class="form-group" data-ng-repeat="tele in credentials.telephons">
+                    <div class="newTelephone">
+                        <label class="col-xs-4 control-label" for="add-contact-workday">Telefono {{$index+1}}</label>
+                        <div class="col-xs-6">
+                            <input type="text" name="masked_phone_ext" class="form-control" placeholder="(999) 999-9999? x99999" data-ng-model="tele.telephone" add-Contact-Telephons>
+                        </div>
+                        <div class="block-options col-xs-2" style="margin:-5px">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-danger enable-tooltip " data-toggle="tooltip" title="Eliminar" data-original-title="Eliminar" data-ng-click="deleteAddTelephoneContact($index)"><i class="hi hi-minus"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-workday">Fecha de cumpleaños</label>
+                    <div class="col-xs-9">
+                        <input type="text" name="example-datepicker5" data-ng-model="credentials.birthday" class="form-control input-datepicker-close" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-group">Es privado?</label>
+                    <div class="col-xs-9">
+                        <label class="col-xs-3 switch switch-success" for="val_private">
+                        <input type="checkbox" id="val_private" name="val_private" value="1" data-ng-model="credentials.isprivate" >
+                        <span data-toggle="tooltip" title="Solo será visto por tí" data-original-title="Solo será visto por tí"></span>
+                    </label>
+                    </div>
+                </div>
+                        <div class="form-group form-actions">
+                            <div class="col-xs-12 text-right">
+                                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-sm btn-primary" >Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- END Modal Body -->
+            </div>
+        </div>
+    </div>
+</div>

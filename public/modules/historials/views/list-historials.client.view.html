@@ -1,0 +1,163 @@
+<!-- Timeline Header -->
+<div data-ng-controller="HistorialsController" data-ng-init="find()">
+    <div class="content-header">
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Pages</li>
+        <li><a href="">Timeline <i class="fa fa-rss"></i></a></li>
+    </ul>
+    <!-- END Timeline Header -->
+
+    <!-- Timeline Content Row -->
+    <div class="row">
+        <div class="col-sm-3">
+            <!-- Feed Style Block -->
+            <div class="block">
+                <!-- Feed Style Title -->
+                <div class="block-title">
+                    <div class="block-options pull-right">
+                        <a href="#!/historials" class="btn btn-alt btn-sm btn-default" data-tooltip="Ver todos" data-ng-click="onClickCircleName('')"><i class="gi gi-eye_open"></i></a>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Settings"><i class="fa fa-cog"></i></a>
+                    </div>
+                    <h2><strong>Círculos</strong></h2>
+                </div>
+                <!-- END Feed Style Title -->
+                <!-- Feed Style Content -->
+                <div class="block-content-full">
+                    <!-- You can remove the class .media-feed-hover if you don't want each event to be highlighted on mouse hover -->
+                    <ul class="media-list media-feed media-feed-hover">
+                        <!-- Check in -->
+                        <li class="media" data-ng-repeat="circulo in circulos">
+                            <div class="widget-advanced widget-advanced-alt">
+                                <!-- Widget Header -->
+                                    <div class="widget-header text-center themed-background-dark">
+                                        <div class="block-options pull-right compact-options">
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="onClickOptions(circulo)"><i class="{{circulo.icon}}"></i></a>
+                                        </div>
+                                        <h4 class="widget-content-light">
+                                            <a href="javascript:void(0)" data-ng-click="onClickCircleName(circulo.name)"><img src="img/logo_circle.png" alt="avatar" class="widget-image img-circle" width="25px;"/>{{circulo.name}}</a><br>
+                                        </h4>
+                                    </div>
+                                <!-- END Widget Header -->
+                                <!-- Widget Main -->
+                                <div class="widget-main" data-ng-class="circulo.class" data-ng-show="circulo.visible">
+                                    <div class="list-group remove-margin">
+                                        <a href="javascript:void(0)" class="list-group-item" data-ng-click="onClickCircleName(circulo.name, 'Documento')">
+                                            <span class="pull-right"><strong>160</strong></span>
+                                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-file fa-fw"></i> Documentos</h4>
+                                        </a>
+                                        <a href="javascript:void(0)" class="list-group-item" data-ng-click="onClickCircleName(circulo.name, 'Documento', 'Ingresos')">
+                                            <span class="pull-right"><strong>900</strong></span>
+                                            <h4 class="list-group-item-heading remove-margin"><i class="gi gi-up_arrow fa-fw"></i> Ingresos</h4>
+                                        </a>
+                                        <a href="javascript:void(0)" class="list-group-item" data-ng-click="onClickCircleName(circulo.name, 'Documento','Egresos')">
+                                            <span class="pull-right"><strong>280</strong></span>
+                                            <h4 class="list-group-item-heading remove-margin"><i class="gi gi-down_arrow fa-fw"></i> Egresos</h4>
+                                        </a>
+                                        <a href="javascript:void(0)" class="list-group-item" data-ng-click="onClickCircleName(circulo.name, 'Contacto')">
+                                            <span class="pull-right"><strong>90</strong></span>
+                                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-user fa-fw"></i> Contactos</h4>
+                                            <p class="list-group-item-text"></p>
+                                        </a>
+                                        <a href="javascript:void(0)" class="list-group-item" data-ng-click="onClickCircleName(circulo.name, 'Usuario')">
+                                            <span class="pull-right"><strong>3.589</strong></span>
+                                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-users fa-fw"></i> Usuarios</h4>
+                                            <p class="list-group-item-text"></p>
+                                        </a>
+                                        <a href="javascript:void(0)" class="list-group-item" data-ng-click="onClickCircleName(circulo.name, 'Calendario')">
+                                            <span class="pull-right"><strong>15.325</strong></span>
+                                            <h4 class="list-group-item-heading remove-margin"><i class="fa fa-calendar fa-fw"></i> Calendario</h4>
+                                            <p class="list-group-item-text"></p>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- END Widget Main -->
+                            </div>
+                        </li>
+                        <!-- END Check in -->
+                        <!-- <li class="media text-center">
+                            <a href="javascript:void(0)" class="btn btn-xs btn-default push">View more..</a>
+                        </li> -->
+                        <!-- END Status Updated -->
+                    </ul>
+                </div>
+                <!-- END Feed Style Content -->
+            </div>
+            <!-- END Feed Style Block -->
+            <!-- END Timeline Style Block -->
+        </div>
+        <div class="col-sm-9">
+            <!-- Timeline Style Block -->
+            <div class="block full">
+                <!-- Timeline Style Title -->
+                <div class="block-title">
+                    <div class="block-options pull-right">
+                        <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-default" data-toggle="tooltip" title="Settings"><i class="fa fa-cog"></i></a>
+                    </div>
+                    <h2><strong>Tu circulo {{nameCircleFilter}}</strong></h2>
+                </div>
+                <!-- END Timeline Style Title -->
+
+                <!-- Timeline Style Content -->
+                <!-- You can remove the class .block-content-full if you want the block to have its regular padding -->
+                <div class="timeline block-content-full" data-ng-repeat="historia in historials.logList | orderBy:['-year','monthNumber','circleName'] | filter :{ circleName: nameCircleFilter }" >
+                    <h3 class="timeline-header">
+                        {{historia.circleName}} - {{historia.month}} {{historia.year}} Historial (logs)
+                    </h3>
+                    <!-- You can remove the class .timeline-hover if you don't want each event to be highlighted on mouse hover -->
+                    <ul class="timeline-list timeline-hover" >
+                        <li data-ng-repeat="log in historia.logs | filter:{ from : nameCircleType , fromType: nameCircleTypeDoc }" class="active">
+                            <div class="timeline-icon"><i class="{{log.icon}}" data-tooltip="{{log.from}}"></i></div>
+                            <div class="timeline-time" data-ng-if="log.date_document">
+                                {{log.date_document | date: 'dd/MM/yyyy'}}
+                            </div>
+                            <div class="timeline-time" data-ng-if="log.created">{{log.created | date: 'dd/MM/yyyy'}}</div>
+                            <div class="timeline-content">
+                                <table class="historial-table" >
+                                    <tr data-ng-if="log.name_document">
+                                        <!-- Start Documento -->
+                                        <td data-ng-if="log.name_document" class="historial-table-1">
+                                            <a data-ng-href="#!/{{log.url}}">{{log.name_document}}</a>
+                                        </td>
+                                        <td data-ng-if="log.contacto.length" class="historial-table-l2">{{log.contacto[0]}}</td>
+                                        <td data-ng-if="log.subtotal" data-tooltip="Subtotal" >${{log.subtotal}}</td>
+                                        <!-- <td data-ng-if="log.impuesto" data-tooltip="Impuesto" class="historial-table-doc-3">${{log.impuesto}}</td> -->
+                                        <td data-ng-if="log.total" data-tooltip="Total">${{log.total}}</td>
+                                        <!-- End documento -->
+                                    </tr>
+                                    <tr>
+                                        <!-- Contacto -->
+                                        <td data-ng-if="log.comercialName" class="historial-table-1">{{log.comercialName}}</td>
+                                        <!-- End contacto -->
+                                        <!-- Usuario -->
+                                        <td data-ng-if="log.firstName" class="historial-table-1">{{log.firstName}}</td>
+                                        <td data-ng-if="log.lastName"class="historial-table-s2">{{log.lastName}}</td>
+                                        <td data-ng-if="log.username">{{log.username}}</td>
+                                        <!-- End usuario  -->
+                                        <!-- calendar -->
+                                        <td data-ng-if="log.color" class="historial-table-1">
+                                                <div class="square-calendar" style="background-color:{{log.color}}"></div>
+                                        </td>
+                                        <td data-ng-if="log.color">
+                                            <h4>{{log.title}}</h4>
+                                        </td>
+                                        <!-- End calendar -->
+                                    </tr>
+                                </table>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- <div class="timeline block-content-full">
+                    <ul>
+                        <li class="media text-center">
+                            <a href="javascript:void(0)" class="btn btn-xs btn-default push">View more..</a>
+                        </li>
+                    </ul>
+                </div> -->
+                <!-- END Timeline Style Content -->
+            </div>
+        </div>
+    </div>
+    <!-- END Timeline Content Row -->
+</div>

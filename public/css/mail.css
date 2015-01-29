@@ -1,0 +1,21 @@
+#content{
+	border: 1px solid #ccc;
+	font-family: Sans-Serif;
+	font-size: 9pt;
+}
+.etiqueta{
+	color: #aaa;
+	font-family: 'MS Sans Serif', Geneva, sans-serif;
+	font-size: 12pt;
+}
+ul.list{
+	list-style: circle;
+	font-size: 8pt;
+}
+.list span{
+	color: #aaa;
+}
+.texto{
+	font-family: Verdana;
+	font-size: 9pt; 
+}

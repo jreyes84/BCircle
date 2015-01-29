@@ -1,0 +1,136 @@
+<div data-ng-controller="HeaderController">
+<!-- Left Header Navigation -->
+	<ul class="nav navbar-nav-custom">
+	    <!-- Main Sidebar Toggle Button -->
+	    <li>
+	        <a href="javascript:void(0)" onclick="App.sidebar('toggle-sidebar');">
+	            <i class="fa fa-bars fa-fw"></i>
+	        </a>
+	    </li>
+	    <!-- END Main Sidebar Toggle Button -->
+	    <!-- Change Options functionality can be found in js/app.js - templateOptions() -->
+	</ul>
+	<!-- END Left Header Navigation -->
+	<!-- Search Form -->
+	<form action="javascript:void(0)" method="post" class="navbar-form-custom" role="search">
+	    <div class="form-group">
+	    	<!-- <i class="gi gi-electricity"></i> <i class="fa fa-lightbulb-o"></i> -->
+	    	<div class="input-group">
+	    		<input type="text" id="top-note" name="top-note" class="form-control" placeholder="Escribe una nota o idea">
+	    		<!-- <div class="btn-group" circle-option id="c-options">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-primary dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-original-title="Círculos"><i class="fa fa-dot-circle-o"></i> <span class="caret" data-ng-if="circulos.total < 1"></span><span data-ng-if="circulos.total === 1">{{circulos.title}}</span><span data-ng-if="circulos.total > 1">{{circulos.total}} {{circulos.title}}</span></a>
+                    <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                        <div class="scroll-menu">
+                            <h4 data-ng-hide="circulos.length" class="without-cirlces">No hay círculos...</h4>
+                            <li data-ng-repeat="circulo in circulos" data-ng-click="onClickLi( $index , 0, circulo)">
+                            <a href="javascript:void(0)">
+                                <input type="checkbox" value="{{circulo.name}}" data-ng-model="circulo.checked" /> {{ circulo.name }}
+                            </a>
+                        </li>                                
+                        </div>
+                        <div>
+                            <li class="divider"></li>
+                        <li data-ng-click="onClickLi(undefined,1)" data-ng-hide="newCircle">
+                            <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear círculo nuevo</a>
+                        </li>
+                        <li data-ng-click="onClickLi()" data-ng-show="newCircle">
+                            <div class="input-group">
+                                <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event)" data-ng-model="documento.circleName" id="newCircleInput">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="clicked()" >Crear</button>
+                                </span>
+                            </div>
+                        </li>
+                        </div>
+                        
+                    </ul>
+                </div> -->
+	    	</div>
+	        
+	    </div>
+
+	</form>
+	<!-- END Search Form -->
+
+	<!-- Right Header Navigation -->
+	<ul class="nav navbar-nav-custom pull-right">
+	    <!-- Alternative Sidebar Toggle Button -->
+	    <li>
+	        <!-- If you do not want the main sidebar to open when the alternative sidebar is closed, just remove the second parameter: App.sidebar('toggle-sidebar-alt'); -->
+
+	        <a href="javascript:void(0)" onclick="App.sidebar('toggle-sidebar-alt', 'toggle-other');">
+	            <i class="gi gi-share_alt"></i>
+				<span class="label label-primary label-indicator animation-floating" data-ng-if="total > 0">{{total}}</span>
+	        </a>
+	    </li>
+	    <!-- END Alternative Sidebar Toggle Button -->
+
+	    <!-- User Dropdown -->
+	    <li class="dropdown">
+	        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+	            <img data-ng-src="{{user.thumbimage}}" alt="avatar"> <i class="fa fa-angle-down"></i>
+	        </a>
+	        <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+	            <li class="dropdown-header text-center">Account</li>
+	            <li>
+	                <a href="page_ready_timeline.html">
+	                    <i class="fa fa-clock-o fa-fw pull-right"></i>
+	                    <span class="badge pull-right">10</span>
+	                    Updates
+	                </a>
+	                <a href="page_ready_inbox.html">
+	                    <i class="fa fa-envelope-o fa-fw pull-right"></i>
+	                    <span class="badge pull-right">5</span>
+	                    Messages
+	                </a>
+	                <a href="page_ready_pricing_tables.html"><i class="fa fa-magnet fa-fw pull-right"></i>
+	                    <span class="badge pull-right">3</span>
+	                    Subscriptions
+	                </a>
+	                <a href="page_ready_faq.html"><i class="fa fa-question fa-fw pull-right"></i>
+	                    <span class="badge pull-right">11</span>
+	                    FAQ
+	                </a>
+	            </li>
+	            <li class="divider"></li>
+	            <li>
+	                <a href="page_ready_user_profile.html">
+	                    <i class="fa fa-user fa-fw pull-right"></i>
+	                    Profile
+	                </a>
+	                <!-- Opens the user settings modal that can be found at the bottom of each page (page_footer.html in PHP version) -->
+	                <a href="#modal-user-settings" data-toggle="modal">
+	                    <i class="fa fa-cog fa-fw pull-right"></i>
+	                    Settings
+	                </a>
+	            </li>
+	            <li class="divider"></li>
+	            <li>
+	                <a href="page_ready_lock_screen.html"><i class="fa fa-lock fa-fw pull-right"></i> Lock Account</a>
+	                <a href="login.html"><i class="fa fa-ban fa-fw pull-right"></i> Logout</a>
+	            </li>
+	            <li class="dropdown-header text-center">Activity</li>
+	            <li>
+	                <div class="alert alert-success alert-alt">
+	                    <small>5 min ago</small><br>
+	                    <i class="fa fa-thumbs-up fa-fw"></i> You had a new sale ($10)
+	                </div>
+	                <div class="alert alert-info alert-alt">
+	                    <small>10 min ago</small><br>
+	                    <i class="fa fa-arrow-up fa-fw"></i> Upgraded to Pro plan
+	                </div>
+	                <div class="alert alert-warning alert-alt">
+	                    <small>3 hours ago</small><br>
+	                    <i class="fa fa-exclamation fa-fw"></i> Running low on space<br><strong>18GB in use</strong> 2GB left
+	                </div>
+	                <div class="alert alert-danger alert-alt">
+	                    <small>Yesterday</small><br>
+	                    <i class="fa fa-bug fa-fw"></i> <a href="javascript:void(0)" class="alert-link">New bug submitted</a>
+	                </div>
+	            </li>
+	        </ul>
+	    </li>
+	    <!-- END User Dropdown -->
+	</ul>
+	<!-- END Right Header Navigation -->
+</div>
