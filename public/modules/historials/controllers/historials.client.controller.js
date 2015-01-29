@@ -95,9 +95,20 @@ angular.module('historials').controller('HistorialsController', ['$scope', '$sta
 			$http.post('/historials/listById', param ).success(function(resDoc){
 				$scope.getCirculos(function(){
 					$scope.historials = { logList : [] };
+					
 					angular.forEach(resDoc, function(all){ //Documentos, contactos, usuarios, calendario.
 						if(all.documento !== null){
-							$scope.pushDocumentToLog(all.documento, $scope.historials.logList, all);
+							var type = '';
+							var egreso = '';
+							var ingreso = '';
+							angular.forEach(all.documento.cuentas, function(cuentas){
+								switch(cuentas.typeaccount){
+									case 'Egreso': egreso ='Egreso'; break;
+									case 'Ingreso': ingreso='Ingreso';break;
+								}	
+							});
+							//config historial
+							$scope.pushDocumentToLog(all.documento, $scope.historials.logList, all, egreso, ingreso);
 							Contactos.query(function(contactos){
 								angular.forEach(contactos, function(contacto){
 									angular.forEach($scope.historials.logList, function(logslist){
@@ -113,29 +124,7 @@ angular.module('historials').controller('HistorialsController', ['$scope', '$sta
 										});
 									});
 								});
-								var type = '';
-
-								angular.forEach(all.documento.cuentas, function(cuentas){
-									if( type ==='' ){
-										switch(cuentas.typeaccount){
-											case 'Egreso': type='Egreso'; break;
-											case 'Ingreso': type='Ingreso'; break;
-										}	
-									}
-									
-								});
-
-								if( type !=='' ){
-									if(type === 'Egreso'){
-										all.documento.fromType = type;
-										all.documento.icon='gi gi-up_arrow';
-									}else{
-										all.documento.fromType = type;
-										all.documento.icon='gi gi-down_arrow';	
-									}
-									
-								}
-							});
+							});//End contct
 						}else if(all.contacto!== null && all.contacto){
 							$scope.pushDocumentToLog(all.contacto, $scope.historials.logList, all);
 						}else if(all.usuario!== null && all.usuario){
@@ -149,7 +138,7 @@ angular.module('historials').controller('HistorialsController', ['$scope', '$sta
 			});
 		};
 		//Push array History Log
-		$scope.pushDocumentToLog = function(doc, scopeHistorials, principal, circulo){
+		$scope.pushDocumentToLog = function(doc, scopeHistorials, principal, Egreso, Ingreso){
 			if(principal.active){
 				var dt;
 				dt = principal.created;
@@ -189,13 +178,39 @@ angular.module('historials').controller('HistorialsController', ['$scope', '$sta
 							i = $scope.historials.logList.length-1;
 							scopeHistorials[i].logs = [];
 						}
-						scopeHistorials[i].logs.push(doc);
-						doc.from = principal.from;
-						doc.fromType = '';
-						doc.icon = principal.icon;
-						doc.userC = {};
-						doc.userC = principal.user;
-						doc.url = principal.url;
+
+
+						if(Egreso && Ingreso){
+							//insert egreso
+							var aEgreso = {};
+							angular.copy(doc, aEgreso);
+							aEgreso.from = principal.from;
+							aEgreso.fromType = Egreso;
+							aEgreso.icon = 'gi gi-up_arrow';
+							aEgreso.userC = {};
+							aEgreso.userC = principal.user;
+							aEgreso.url = principal.url;	
+							scopeHistorials[i].logs.push(aEgreso);
+							
+							//Insert Ingreso
+							var aIngreso = {};
+							angular.copy(doc, aIngreso);
+							aIngreso.from = principal.from;
+							aIngreso.fromType = Ingreso;
+							aIngreso.icon = 'gi gi-down_arrow';
+							aIngreso.userC = {};
+							aIngreso.userC = principal.user;
+							aIngreso.url = principal.url;	
+							scopeHistorials[i].logs.push(aIngreso);
+						}else{
+							scopeHistorials[i].logs.push(doc);
+							doc.from = principal.from;
+							doc.fromType = '';
+							doc.icon = principal.icon;
+							doc.userC = {};
+							doc.userC = principal.user;
+							doc.url = principal.url;
+						}
 					}
 				});
 			}

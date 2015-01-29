@@ -46,13 +46,13 @@
                                             <span class="pull-right"><strong>160</strong></span>
                                             <h4 class="list-group-item-heading remove-margin"><i class="fa fa-file fa-fw"></i> Documentos</h4>
                                         </a>
-                                        <a href="javascript:void(0)" class="list-group-item" data-ng-click="onClickCircleName(circulo.name, 'Documento', 'Ingresos')">
+                                        <a href="javascript:void(0)" class="list-group-item" data-ng-click="onClickCircleName(circulo.name, 'Documento', 'Ingreso')">
                                             <span class="pull-right"><strong>900</strong></span>
-                                            <h4 class="list-group-item-heading remove-margin"><i class="gi gi-up_arrow fa-fw"></i> Ingresos</h4>
+                                            <h4 class="list-group-item-heading remove-margin"><i class="gi gi-down_arrow fa-fw"></i> Ingresos</h4>
                                         </a>
-                                        <a href="javascript:void(0)" class="list-group-item" data-ng-click="onClickCircleName(circulo.name, 'Documento','Egresos')">
+                                        <a href="javascript:void(0)" class="list-group-item" data-ng-click="onClickCircleName(circulo.name, 'Documento', 'Egreso')">
                                             <span class="pull-right"><strong>280</strong></span>
-                                            <h4 class="list-group-item-heading remove-margin"><i class="gi gi-down_arrow fa-fw"></i> Egresos</h4>
+                                            <h4 class="list-group-item-heading remove-margin"><i class="gi gi-up_arrow fa-fw"></i> Egresos</h4>
                                         </a>
                                         <a href="javascript:void(0)" class="list-group-item" data-ng-click="onClickCircleName(circulo.name, 'Contacto')">
                                             <span class="pull-right"><strong>90</strong></span>
@@ -107,6 +107,7 @@
                     <!-- You can remove the class .timeline-hover if you don't want each event to be highlighted on mouse hover -->
                     <ul class="timeline-list timeline-hover" >
                         <li data-ng-repeat="log in historia.logs | filter:{ from : nameCircleType , fromType: nameCircleTypeDoc }" class="active">
+                            {{}}
                             <div class="timeline-icon"><i class="{{log.icon}}" data-tooltip="{{log.from}}"></i></div>
                             <div class="timeline-time" data-ng-if="log.date_document">
                                 {{log.date_document | date: 'dd/MM/yyyy'}}
@@ -116,10 +117,17 @@
                                 <table class="historial-table" >
                                     <tr data-ng-if="log.name_document">
                                         <!-- Start Documento -->
+                                        <td data-ng-if="log.fromType">
+                                            {{log.fromType}}
+                                        </td>
                                         <td data-ng-if="log.name_document" class="historial-table-1">
                                             <a data-ng-href="#!/{{log.url}}">{{log.name_document}}</a>
                                         </td>
                                         <td data-ng-if="log.contacto.length" class="historial-table-l2">{{log.contacto[0]}}</td>
+                                        <td data-ng-if="log.fromType"  class="historial-table-1">
+                                            $ {{log.cuentas|sumByKey:'cargoQty':log.fromType}}
+                                            <!-- <span data-ng-repeat="cuenta in log.cuentas | filter : { typeaccount : log.fromType}">$ {{cuenta.cargoQty}}</span> -->
+                                        </td>
                                         <td data-ng-if="log.subtotal" data-tooltip="Subtotal" >${{log.subtotal}}</td>
                                         <!-- <td data-ng-if="log.impuesto" data-tooltip="Impuesto" class="historial-table-doc-3">${{log.impuesto}}</td> -->
                                         <td data-ng-if="log.total" data-tooltip="Total">${{log.total}}</td>
