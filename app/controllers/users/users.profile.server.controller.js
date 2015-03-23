@@ -60,26 +60,28 @@ exports.me = function(req, res) {
  * List of Articles
  */
 exports.listMyusers = function(req, res) { 
-	var email=[];
-	var query = null;
-	email.push(req.user.username);
-	var role = [];
-	role.push(req.user.roles);
+	if(req.user){
+		var email=[];
+		var query = null;
+		email.push(req.user.username);
+		var role = [];
+		role.push(req.user.roles);
 
-	if(req.user.roles[0] === 'admin'){
-		query = { $or: [ { admin: email }, { username: req.user.username } , {roles:role} ] };
-	}else{
-		query = { admin : email };
-	}	
-	User.find(query).sort('-created').populate('user', 'displayName').exec(function(err, users) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(users);
-		}
-	});
+		if(req.user.roles[0] === 'admin'){
+			query = { $or: [ { admin: email }, { username: req.user.username } , {roles:role} ] };
+		}else{
+			query = { admin : email };
+		}	
+		User.find(query).sort('-created').populate('user', 'displayName').exec(function(err, users) {
+			if (err) {
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.jsonp(users);
+			}
+		});
+	}
 };
 
 exports.list = function(req, res){
