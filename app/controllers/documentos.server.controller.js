@@ -101,65 +101,81 @@ exports.list = function(req, res) {
 		}
 	});
 };
+
+exports.listByDocument = function(req, res){
+	var doc = req.body;
+
+	Documento.find({ name_document : doc.name_document }).exec(function(err, documentos){
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(documentos);
+		}
+	});
+};
 /*
  * List of expirated Documents
  */
 exports.listExpiratedDocuments = function(req, res){
 	var user = req.user._id;
-	Documento.find( { userCreated : user , date_end : { $gt : new Date(req.body.start), $lt : new Date(req.body.end)}, notificado : false } ).exec(function(err, documentos){
-		if(err){
-			return res.status(400).send({
-				message : errorHandler.getErrorMessage(err)
-			});
-		}else{
-			documentos.forEach(function(doc){
-				Notificaciones.find( { idProceso : doc._id } ).exec(function(errNoty, noty){
-					if(errNoty){
-						return res.status(400).send({
-							message : errorHandler.getErrorMessage(errNoty)
-						});		
-					}else
-					{
-						if(noty.length === 0){
-							var descrip = req.body.descripcion;
-							descrip = descrip.replace('%DOC%',doc.name_document);
-							var notificacion = new Notificaciones(
-									  { title: req.body.title, 
-										idProceso : doc._id, 
-										descripcion : descrip,
-										url : req.body.url,
-										icon : req.body.icon,
-										alertColor : req.body.alertColor,
-										user: req.user._id });
-							
-							notificacion.save(function(errN,thisNoty){
-								Notificaciones.find( { user : user , visto : false } ).exec(function(e,not){
-									if(e){
-										return res.status(400).send({
-											message : errorHandler.getErrorMessage(errNoty)
-										});	
-									}else{
-
-										var socketio = req.app.get('socketio');
-										socketio.sockets.emit('notify.newnotify' , thisNoty);
-										var array = {
-											total : not.length
-										};
-
-										socketio.sockets.emit('notify.totalNotifying' , array);
-
-									}
-								});
-							});
-						}
-					}
+	if(user){
+		Documento.find( { userCreated : user , date_end : { $gt : new Date(req.body.start), $lt : new Date(req.body.end)}, notificado : false } ).exec(function(err, documentos){
+			if(err){
+				return res.status(400).send({
+					message : errorHandler.getErrorMessage(err)
 				});
-				doc.notificado = true;
-				doc.save();
-			});			
-			res.jsonp(documentos);
-		}
-	});
+			}else{
+				documentos.forEach(function(doc){
+					Notificaciones.find( { idProceso : doc._id } ).exec(function(errNoty, noty){
+						if(errNoty){
+							return res.status(400).send({
+								message : errorHandler.getErrorMessage(errNoty)
+							});		
+						}else
+						{
+							if(noty.length === 0){
+								var descrip = req.body.descripcion;
+								descrip = descrip.replace('%DOC%',doc.name_document);
+								var notificacion = new Notificaciones(
+										  { title: req.body.title, 
+											idProceso : doc._id, 
+											descripcion : descrip,
+											url : req.body.url,
+											icon : req.body.icon,
+											alertColor : req.body.alertColor,
+											user: req.user._id });
+								
+								notificacion.save(function(errN,thisNoty){
+									Notificaciones.find( { user : user , visto : false } ).exec(function(e,not){
+										if(e){
+											return res.status(400).send({
+												message : errorHandler.getErrorMessage(errNoty)
+											});	
+										}else{
+
+											var socketio = req.app.get('socketio');
+											socketio.sockets.emit('notify.newnotify' , thisNoty);
+											var array = {
+												total : not.length
+											};
+
+											socketio.sockets.emit('notify.totalNotifying' , array);
+
+										}
+									});
+								});
+							}
+						}
+					});
+					doc.notificado = true;
+					doc.save();
+				});			
+				res.jsonp(documentos);
+			}
+		});
+	}
 };
 
 /**

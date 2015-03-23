@@ -1,0 +1,244 @@
+<script src="scripts/app.js"></script>
+<script src="scripts/pages/formsValidation.js"></script>
+<script>
+$(function(){ 
+    FormsValidation.init();
+});
+</script>
+<div data-ng-controller="ProductsController" >
+<div class="content-header">
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Pages</li>
+    <li><a href="">Productos</a></li>
+</ul>
+<!-- END Contacts Header -->
+<!-- Main Row -->
+<div class="row" data-ng-init="find()" > 
+    <input type="hidden" data-ng-model="userid" />
+    <div class="col-lg-12" data-id-content="content-list" data-toggle-config-fields id="content-list">
+        <div class="col-lg-12">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-primary">{{findMeByText}}</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:void(0)" data-ng-click="changeOption('nombre','Nombre')">Nombre</a></li>
+                        <li><a href="javascript:void(0)" data-ng-click="changeOption('proveedor.comercialName','Proveedor')">Proveedor</a></li>
+                        <li><a href="javascript:void(0)" data-ng-click="changeOption('precio_venta','Precio Venta')">Precio Venta</a></li>
+                        <li><a href="javascript:void(0)" data-ng-click="changeOption('precio_compra','Precio Compra')">Precio Compra</a></li>
+                        <li class="divider"></li>
+                    </ul>
+                </div>
+                <input type="text" class="form-control" placeholder="Buscar" data-ng-model="letter" data-ng-keypress="onKeyFindMe($event)">
+            </div>
+        </div>
+        <!-- Contacts Block -->
+        <div class="block">
+            <!-- Contacts Title -->
+            <div class="block-title">
+                <div class="block-options pull-right">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-primary enable-tooltip" data-toggle="tooltip" title="Agregar" data-original-title="Agregar" data-toggle-config-fields data-type-animation="add" data-ng-click="cleanCredentials()"><i class="fa fa-plus"></i>
+                    </a>
+                </div>
+                <div class="block-options text-center">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('')">All</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('A')">A</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('B')">B</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('C')">C</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('D')">D</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('E')">E</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('F')">F</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('G')">G</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('H')">H</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('I')">I</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('J')">J</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('K')">K</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('L')">L</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('M')">M</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('N')">N</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('O')">O</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('P')">P</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Q')">Q</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('R')">R</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('S')">S</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('T')">T</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('V')">V</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('U')">U</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('W')">W</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('X')">X</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Y')">Y</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Z')">Z</a>
+                </div>
+            </div>
+            <!-- END Contacts Title -->
+
+            <!-- Contacts Content -->
+            <div class="row style-alt">
+                <div class="col-sm-6 col-lg-4" data-ng-repeat="product in products | filterByFields:letter:field" >
+                    <a href="javascript:void(0)" class="widget widget-hover-effect1" data-ng-click="edit(product,$index)" >
+                        <div class="widget-simple">
+                            <img data-ng-src="{{product.thumbimage}}" alt="avatar" class="widget-image img-circle pull-left">
+                            <h4 class="widget-content">
+                                <strong>{{product.name}}</strong>
+                                <small>Precio venta: ${{product.precio_venta}}</small>
+                                <small>Precio Compra: ${{product.precio_compra}}</small>
+                            </h4>
+                        </div>
+                    </a>
+                </div>
+                <!-- END Contact Widget -->
+                <div class="alert alert-warning text-center" data-ng-if="!products.length">
+                    No existen productos aun, <a href="javascript:void(0)">crear uno</a>?
+                </div>
+            </div>
+            <!-- END Contacts Content -->
+        </div>
+        <!-- END Contacts Block -->
+
+    </div>
+    <div class="col-lg-4 animation-slideLeft" data-id-content="add-content" data-toggle-config-fields id="add-content">
+        <!-- Add Contact Block -->
+        <div class="block">
+            <!-- Add Contact Title -->
+            <div class="block-title">
+                <div class="block-options pull-right">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-danger enable-tooltip" data-tooltip="Cancelar" data-ng-click="onClickCancel()" data-toggle-config-fields data-type-animation="cancel"><i class="fa fa-times"></i></a>
+                </div>
+                <h2  data-ng-show="blockNew"><i class="fa fa-plus"></i> Crear producto</h2>
+                <h2  data-ng-show="blockEdit"><i class="fa fa-plus"></i> Modificar producto</h2>
+
+            </div>
+            <!-- END Add Contact Title -->
+
+            <!-- Add Contact Content -->
+            <form class="form-horizontal form-bordered" name="addcontactForm" data-ng-submit="create()"  autocomplete="off"  novalidate="novalidate" id="form-validation">
+                <div class="form-group" data-ng-show="blockNew">
+                    <label class="col-xs-3 control-label">
+                        <img src="img/placeholders/avatars/avatar1.jpg" alt="avatar" class="widget-image img-circle pull-left animation-fadeIn" width="64" height="64" name="img-product">
+                    </label>
+                    <div class="col-xs-9">
+                         <input type="file" data-ng-file-select="copyFiles($files)">
+                    </div>
+                </div>
+                <div class="form-group" data-ng-show="blockEdit">
+                    <label class="col-xs-3 control-label">
+                        <img data-ng-src="{{producto.thumbimage}}" alt="avatar" class="widget-image img-circle pull-left animation-fadeIn" width="64" height="64" name="img-product">
+                    </label>
+                    <div class="col-xs-9">
+                         <input type="file" data-ng-file-select="copyFiles($files)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">Nombre</label>
+                    <div class="col-xs-9">
+                        <input type="text" data-ng-model="producto.name" class="form-control" placeholder="Ingrese Nombre de producto">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" >Código de barras</label>
+                    <div class="col-xs-9">
+                        <input type="text"  data-ng-model="producto.code_bar" name="update-contact-name" class="form-control" placeholder="Codigo de barras" data-ng-required data-ng-change="fieldChangeDefault()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-email">Stock mínimo</label>
+                    <div class="col-xs-9">
+                        <input type="number" data-ng-model="producto.stock_min" class="form-control" placeholder="Stock minimo">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-email">Stock máximo</label>
+                    <div class="col-xs-9">
+                        <input type="number" data-ng-model="producto.stock_max" class="form-control" placeholder="Stock maximo">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">Proveedor</label>
+                    <div class="col-xs-9">
+                         <select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="producto.proveedor" data-placeholder="Seleccione contactos" >
+                             <option ng-repeat="contact in inputTagContactos" value="{{contact.id}}">{{contact.text}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" >Precio de compra</label>
+                    <div class="col-xs-9">
+                        <input type="text" data-ng-model="producto.precio_compra" class="form-control" placeholder="Precio de compra">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" >Precio de venta</label>
+                    <div class="col-xs-9">
+                        <input type="text" data-ng-model="producto.precio_venta" class="form-control" placeholder="Precio de venta">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">Grupos</label>
+                    <div class="col-xs-9">
+                        <div class="btn-group" circle-option name="c-options" id="c-options">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-primary dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-original-title="Grupos">
+                                <i class="fa fa-dot-circle-o"></i> 
+                                <span class="caret" data-ng-if="circulos.total < 1"></span>
+                                <span data-ng-if="grupos.total === 1">{{grupos.title}}</span>
+                                <span data-ng-if="grupos.total > 1">{{grupos.total}} {{grupos.title}}</span></a>
+                            <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
+                                <div class="scroll-menu">
+                                    <h4 data-ng-hide="grupos.length" class="without-cirlces">No hay grupos...</h4>
+                                    <li data-ng-repeat="grupo in grupos" data-ng-click="onClickLi( $index , 0, grupo)">
+                                        <a href="javascript:void(0)">
+                                            <input type="checkbox" value="{{grupo.name}}" data-ng-model="grupo.checked" /> {{ grupo.name }}
+                                        </a>
+                                    </li>                                
+                                </div>
+                                <div>
+                                    <li class="divider"></li>
+                                    <li data-ng-click="onClickLi(undefined,1)" data-ng-hide="newCircle">
+                                        <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear grupo nuevo</a>
+                                    </li>
+                                    <li data-ng-click="onClickLi()" data-ng-show="newCircle">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event)" data-ng-blur="onBlurNewCircle()" data-ng-model="circleName" name="newCircleInput" id="newCircleInput">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="clicked()" >Crear</button>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </div>                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-group">Activo</label>
+                    <div class="col-xs-9">
+                        <label class="col-xs-3 switch switch-success" for="val_create">
+                        <input type="checkbox" id="val_create" name="val_create" value="1" data-ng-model="producto.active" >
+                        <span data-toggle="tooltip" title="" data-original-title="Estatus producto"></span>
+                    </label>
+                    </div>
+                </div>
+                <div data-ng-show="error" class="text-center text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+                <div class="form-group form-actions">
+                    <div class="col-xs-9 col-xs-offset-3">
+                        <div class="progress" style="display:none" name="progressBar" >
+                            <div class="progress-bar progress-bar-success" role="progressbar" name="progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">0%</div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk"><i class="fa fa-plus"></i><span data-ng-show="blockNew">Agregar Producto</span><span data-ng-show="blockEdit">Modificar Producto</span></button>
+                    </div>
+                </div>
+            </form>
+            <!-- END Add Contact Content -->
+        </div>
+        <!-- END Add Contact Block -->
+    </div>
+    </div>
+        <!-- <button data-ng-click="updateCountries()">Countries</button>
+    <div data-ng-repeat="pais in paises">
+    </div> -->
+</div>
+<!-- END Main Row -->
+
+

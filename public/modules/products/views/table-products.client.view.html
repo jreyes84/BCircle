@@ -1,0 +1,169 @@
+<script src="scripts/app.js"></script>
+<script src="scripts/pages/formsValidation.js"></script>
+<script>
+$(function(){ 
+    FormsValidation.init();
+});
+</script>
+<div data-ng-controller="ProductsController" >
+    <div class="content-header">
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Pages</li>
+        <li><a href="javascript:void(0)">Productos</a></li>
+    </ul>
+    <!-- END Contacts Header -->
+    <!-- Main Row -->
+    <div class="row" data-ng-init="find()" > 
+        <input type="hidden" data-ng-model="userid" />
+        <div class="col-lg-12" data-id-content="content-list" data-toggle-config-fields id="content-list">
+            <!-- Contacts Block -->
+            <div class="block">
+                <!-- Contacts Title -->
+                <div class="block-title">
+                    <div class="block-options pull-right">
+                        <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-primary enable-tooltip" data-toggle="tooltip" title="Agregar" data-original-title="Agregar" data-ng-click="newProduct={}; showEditFields=true"><i class="fa fa-plus"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-primary enable-tooltip" data-toggle="tooltip" title="Guardar" data-original-title="Guardar" data-ng-click="create()" data-ng-show="showEditFields" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk">
+                            <i class="fa fa-floppy-o"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-danger enable-tooltip" data-toggle="tooltip" title="Cancelar" data-original-title="Cancelar" data-ng-click="newProduct={}; showEditFields=false" data-ng-show="showEditFields">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <h2>Catálogo de productos</h2>
+                </div>
+                <!-- END Contacts Title -->
+
+                <!-- Contacts Content -->
+                <div class="row style-alt" >
+                    <table st-table="displayedCollection" st-safe-src="products" class="table table-vcenter table-striped table-sm-th">
+                        <thead >
+                        <tr>
+                            <th>
+                                <input st-search="" class="form-control" placeholder="Busqueda" type="text" data-tooltip="Ingrese el valor que desea buscar" data-ng-model="lookFor"/>
+                            </th>
+                            <th class="text-center">
+                                <input class="input-sm form-control ng-valid ng-dirty ng-valid-number ng-touched" name="items" id="items" type="number" data-ng-model="itemsByPage" st-pagination="" data-tooltip="Número de registros por página" min="1">
+                            </th>
+                            <th class="text-center">
+                                <input class="form-control" type="text" data-ng-model="newProduct.name_document" placeholder="Número documento" data-tooltip="Ingrese el número o folio del documento para agregar los productos, presione enter para buscar" data-ng-keypress="lookForDocument($event)">
+                            </th>
+                            <th data-ng-show="showStatusValidateDocument">
+                                <a href="javascript:void(0)" class="btn btn-alt btn-primary" data-tooltip="Guardar todos los productos de este documento o seleccione aquellos que quiera gardar" data-ng-click="onSaveSelected()">Guardar todos los seleccionados</a>
+                            </th>
+                            <th data-ng-show="showStatusValidateDocument">
+                                <a href="javascript:void(0)" class="btn btn-alt btn-danger" data-tooltip="Guardar todos los productos de este documento o seleccione aquellos que quiera gardar" data-ng-click="onCancelDocument()">Cancelar</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="11">
+                                Productos: <a href="javascript:void(0)" class="label label-primary">{{displayedCollection.length}} - {{products.length}}</a>
+                            </th>
+                        </tr>
+                        
+                        <tr>
+                            <th data-ng-show="showStatusValidateDocument">
+                                <input class="form-control" type="checkbox" data-ng-model="allCheck" data-ng-change="onAllInputCheck()">
+                            </th>
+
+                            <th data-ng-show="showStatusValidateDocument"></th>
+                            <th class="text-center" data-ng-show="false">ID</th>
+                            <th class="text-center" st-sort="name_document">Documento</th>
+                            <th class="text-center" st-sort="name" >Nombre</th>
+                            <th class="text-center" st-sort="descripcion" >Decripción</th>
+                            <th class="text-center" st-sort="stock_min" data-ng-hide="showStatusValidateDocument">S. Min</th>
+                            <th class="text-center" st-sort="stock_actual" data-ng-hide="showStatusValidateDocument">S. Actual</th>
+                            <th class="text-center" st-sort="stock_max" data-ng-hide="showStatusValidateDocument">S. Max</th>
+                            <th class="text-center" st-sort="status" data-ng-hide="showStatusValidateDocument" >
+                                <select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="statusSelected" data-placeholder="Seleccione estatus" data-ng-change="onAllStatusChange()" data-toggle="tooltip"alert-Notification alerttitle="{{alertTitle}}" alertcontent="{{alertContent}}" alertbuttons="{{alertButtons}}" alertmethods="{{alertMethods}}" isActive="{{hasGuests}}" methodSend="sendGuestsInvitation">
+                                    <option ng-repeat="status in statusAll" value="{{status.id}}">{{status.text}}</option>
+                                </select>
+                            </th>
+                            <th data-ng-show="showStatusValidateDocument">Opciones</th>
+                        </tr>
+                        <tr data-ng-show="showEditFields">
+                            <th>
+                                <input class="form-control" type="text" data-ng-model="newProduct.name_document" placeholder="Documento"/>
+                            </th>
+                            <th>
+                                <input class="form-control" type="text" data-ng-model="newProduct.name" placeholder="Nombre producto"/>
+                            </th>
+                            <th>
+                                <input class="form-control" type="text" data-ng-model="newProduct.descripcion" placeholder="Descripción producto"/>
+                            </th>
+                            <th>
+                                <input class="form-control" type="number" data-ng-model="newProduct.stock_min" placeholder="Stock mínimo"/>
+                            </th>
+                            <th>
+                                <input class="form-control" type="number" data-ng-model="newProduct.stock_actual" placeholder="Stock actual"/>
+                            </th>
+                            <th>
+                                <input class="form-control" type="number" data-ng-model="newProduct.stock_max" placeholder="Stock máximo"/>
+                            </th>
+
+                            <th >
+                                <select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="newProduct.status" data-placeholder="Seleccione estatus" >
+                                    <option ng-repeat="status in statusProduct" value="{{status.id}}">{{status.text}}</option>
+                                </select>
+                            </th>
+                            <th>
+                                <a href="javascript:void(0)" class="btn btn-xs btn-alt btn-primary enable-tooltip" data-toggle="tooltip" title="Guardar" data-original-title="Guardar" data-ng-click="create()" data-ng-show="showEditFields" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk">
+                                    <i class="fa fa-floppy-o"></i>
+                                </a>
+                                <a href="javascript:void(0)" class="btn btn-xs btn-alt btn-danger enable-tooltip" data-toggle="tooltip" title="Cancelar" data-original-title="Cancelar" data-ng-click="newProduct={}; showEditFields=false" data-ng-show="showEditFields">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="product in displayedCollection">
+                            <td class="text-center" data-ng-show="showStatusValidateDocument">
+                                <input class="form-control" type="checkbox" data-ng-model="product.selected" data-ng-click="onCheckClick(product)">
+                            </td>
+                            <td class="text-center" data-ng-show="showStatusValidateDocument">
+                                <i class="fa fa-check text-success" data-tooltip="Producto existente" data-ng-show="product.exist"></i>
+                                <i class="fa fa-times-circle text-danger" data-tooltip="Producto NO existente" data-ng-hide="product.exist"></i>
+                            </td>
+                            <td class="text-center">{{product.name_document}}</td>
+                            <td class="text-center">{{product.name}}</td>
+                            <td class="text-center">{{product.descripcion}}</td>
+                            <td class="text-center" data-ng-hide="showStatusValidateDocument">{{product.stock_min}}</td>
+                            <td class="text-center" data-ng-hide="showStatusValidateDocument">{{product.stock_actual}}</td>
+                            <td class="text-center" data-ng-hide="showStatusValidateDocument">{{product.stock_max}}</td>
+                            <td class="text-center" data-ng-hide="showStatusValidateDocument">
+                               <a href="javascript:void(0)" class="label label-success" data-ng-show="product.status==='Recibido'">{{product.status}}</a>
+                               <a href="javascript:void(0)" class="label label-primary" data-ng-show="product.status==='No recibido'">{{product.status}}</a>
+                               <a href="javascript:void(0)" class="label label-danger" data-ng-show="product.status==='Defectuoso'">{{product.status}}</a>
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-xs">
+                                    <a href="javascript:void(0)" class="btn btn-default" data-tooltip="Editar {{product.name}}" data-ng-click="onEditProduct(product)" data-ng-hide="product.exist"><i class="fa fa-pencil"></i></a>
+                                    <a data-ng-href="#!/products/{{product._id}}/advance" class="btn btn-warning" data-tooltip="Configuración avanzada del producto" data-ng-hide="showStatusValidateDocument"><i class="fa fa-wrench"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="11" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="20"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <!-- END Contact Widget -->
+                    <div class="alert alert-warning text-center" data-ng-if="!products.length">
+                        No existen productos aun, <a href="javascript:void(0)" data-ng-click="newProduct={}; showEditFields=true">crear uno</a>?
+                    </div>
+                </div>
+                <!-- END Contacts Content -->
+            </div>
+            <!-- END Contacts Block -->
+
+        </div>
+    </div>
+
+</div>
+<!-- END Main Row

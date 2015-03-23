@@ -1,7 +1,7 @@
 <!-- Contacts Header -->
-<script src="lib/app.js"></script>
-<script src="lib/pages/formsValidation.js"></script>
-<script src="lib/pages/uiProgress.js"></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/pages/formsValidation.js"></script>
+<script src="scripts/pages/uiProgress.js"></script>
 <script>$(function(){ UiProgress.init(); });</script>
 <script>
 $(function(){ 
@@ -136,15 +136,10 @@ $(function(){
             <form class="form-horizontal form-bordered" name="addcontactForm" data-ng-submit="signup()"  autocomplete="off"  novalidate="novalidate" id="form-validation">
                 <div class="form-group">
                     <label class="col-xs-3 control-label">
-                        <img data-ng-src="{{credentials.thumbimage}}" alt="avatar" class="widget-image img-circle pull-left animation-fadeIn" data-ng-show="{{credentials.thumbimage}}" width="64" height="64">
-                        <img src="img/placeholders/avatars/avatar1.jpg" alt="avatar" class="widget-image img-circle pull-left animation-fadeIn" data-ng-hide="{{credentials.thumbimage}}" width="64" height="64">
+                        <img src="img/placeholders/avatars/avatar1.jpg" alt="avatar" class="widget-image img-circle pull-left animation-fadeIn" width="64" height="64" name="img-profile">
                     </label>
                     <div class="col-xs-9">
-                        <!-- <i class="fa fa-fw fa-upload"></i> <a href="javascript:void(0)">Upload New Avatar</a><br>
-                        <i class="fa fa-fw fa-picture-o"></i> <a href="javascript:void(0)">Choose from Library</a>
-                         -->
                          <input type="file" ng-file-select="copyFiles($files)">
-
                     </div>
                 </div>
                 <div class="form-group">
@@ -281,8 +276,8 @@ $(function(){
                 </div>
                 <div class="form-group">
                     <label class="col-xs-3 control-label" for="add-contact-group">Status</label>
-                    <label class="col-xs-9 switch switch-success" for="val_status">
-                        <input type="checkbox" name="val_status" value="1" data-ng-model="credentials.status" >
+                    <label class="col-xs-9 switch switch-success">
+                        <input type="checkbox" data-ng-model="credentials.status" >
                         <span data-toggle="tooltip" title="" data-original-title="Estatus de usuario"></span>
                     </label>
                 </div>
@@ -297,9 +292,6 @@ $(function(){
                         <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Agregar Usuario</button>
                     </div>
                 </div>
-                
-<!--                {{credentials.admin=[]}}
-                {{credentials.roles[0]="user"}}-->
             </form>
             
             <!-- END Add Contact Content -->
@@ -320,13 +312,10 @@ $(function(){
             <form class="form-horizontal form-bordered" name="updatecontactForm" data-ng-submit="updateUserProfile()"  autocomplete="off"  novalidate="novalidate" id="form-update-validation">
                 <div class="form-group">
                     <label class="col-xs-3 control-label">
-                        <img data-ng-src="{{credentials.thumbimage}}" alt="avatar" class="widget-image img-circle pull-left animation-fadeIn" width="64" height="64">
+                        <img data-ng-src="{{credentials.thumbimage}}" alt="avatar" class="widget-image img-circle pull-left animation-fadeIn" width="64" height="64" name="img-profile">
                     </label>
                     <div class="col-xs-9">
-                        <!-- <i class="fa fa-fw fa-upload"></i> <a href="javascript:void(0)">Upload New Avatar</a><br>
-                        <i class="fa fa-fw fa-picture-o"></i> <a href="javascript:void(0)">Choose from Library</a><br><br> -->
                         <input type="file" ng-file-select="copyFiles($files)">
-                        <!-- <i class="fa fa-fw fa-times"></i> <a href="javascript:void(0)" class="text-danger">Remove Avatar</a> -->
                     </div>
                 </div>
                 <div class="form-group">
@@ -462,9 +451,9 @@ $(function(){
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-3 control-label" for="add-contact-group">Status</label>
-                    <label class="col-xs-9 switch switch-success" for="val_status">
-                        <input type="checkbox" name="val_status" value="1" data-ng-model="credentials.status" >
+                    <label class="col-xs-3 control-label" for="val_status_update">Status</label>
+                    <label class="col-xs-9 switch switch switch-success">
+                        <input type="checkbox" data-ng-model="credentials.status">
                         <span data-toggle="tooltip" title="" data-original-title="Estatus de usuario"></span>
                     </label>
                 </div>

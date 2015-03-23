@@ -1,7 +1,7 @@
 <!-- Tasks Header -->
-<script src="lib/app.js"></script>
-<script src="lib/pages/formsValidation.js"></script>
-<script src="lib/pages/formsWizard.js"></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/pages/formsValidation.js"></script>
+<script src="scripts/pages/formsWizard.js"></script>
 <script>
     $(function(){ FormsWizard.init(); });
 </script>
@@ -13,8 +13,8 @@
 </ul>
 <!-- END Tasks Header -->
 <!-- Tasks Row -->
-<div data-ng-controller="CuentasController" >
-<div class="row" data-ng-init="find()" data-ng-hide="wizardActive">
+<div data-ng-controller="CuentasController" data-ng-init="find()">
+<div class="row" data-ng-hide="wizardActive">
     <input type="hidden" data-ng-module="cuentas.created" value=""/>
     <div class="col-sm-4 col-lg-3">
         <!-- Task Lists Block -->

@@ -190,6 +190,11 @@ a.button {
     list-style-type: none;
 }
 
+.scroll{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 120px;
+}
 
 .preloader {
     display: none;
@@ -1901,7 +1906,19 @@ a[data-toggle="lightbox-image"]:hover img {
 #error-container .form-control {
     border-color: #ffffff;
 }
+/* Table 
+*/
+.table-sm-th th{
+    font-size: 12px !important;
+}
 
+.table-md-th th{
+    font-size: 16px !important;
+}
+
+.table-lg-th th{
+    font-size: 22px !important;
+}
 /* Pricing Table */
 .table.table-pricing {
     background-color: #ffffff;

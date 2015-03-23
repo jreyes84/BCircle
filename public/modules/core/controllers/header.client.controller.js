@@ -42,17 +42,35 @@ angular.module('core').controller('HeaderController', ['$scope' , '$rootScope' ,
 		};
 
 		$scope.changeLocation = function(url){
-			if(url !== '')
+			if(url !== ''){
+				var width = $element.parent().parent().parent().parent().find('#main-container').width();
+				$scope.msgSmartNotification('','Espere un momento, cargando página.','fa fa-clock-o','#1c86e8', width+'', 100);
 				$location.path(url);
+			}
+				
 		};
 
 		$scope.childClickLocation = function(url){
-			if(url !== '')
+			if(url !== ''){
+				var width = $element.parent().parent().parent().parent().find('#main-container').width();
+				$scope.msgSmartNotification('','Espere un momento, cargando página.','fa fa-clock-o','#1c86e8', width+'', 100);
 				$location.path(url);
+			}
+				
 		};
+		//socket io users connected
+		Socket.on('notify.chatusersconnected', function(users){
+			$scope.usersConnected= [];
+			angular.forEach(users, function(user){
+				$scope.usersConnected.push(user);	
+			});
+		});	
 
 		$scope.logout = function(){
-			$scope.logout=false;
+			$scope.logout = false;
+			$http.post('/chats/listUserSession').success(function(response){
+			}).error(function(errorResponse){
+			});
 		};
 
 		// Collapsing the menu after navigation
@@ -86,8 +104,23 @@ angular.module('core').controller('HeaderController', ['$scope' , '$rootScope' ,
 
 		$scope.deleteClassActiveColor = function(elementActive){
 			angular.forEach($element.find('#colors-thems li'),function(li,key){
-				console.log(li);
 			});
+		};
+
+		$scope.msgSmartNotification = function( title,  content, icon, color, widthBox ,time){
+			if (!time) {
+				time=1000;
+			}
+			$scope.msgTitle = title;
+			$scope.msgContent = content;
+			$scope.msgIcon = icon;
+			$scope.msgColor = color;
+			$scope.msgWidthBox = widthBox;
+			$scope.isOk = false;
+
+			$timeout(function () {
+            	$scope.isOk = undefined;
+        	},time);
 		};
 	}
 ]);

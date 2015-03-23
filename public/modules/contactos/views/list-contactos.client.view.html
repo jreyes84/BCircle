@@ -1,6 +1,6 @@
 <!-- Contacts Header -->
-<script src="lib/app.js"></script>
-<script src="lib/pages/formsValidation.js"></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/pages/formsValidation.js"></script>
 <script>
 $(function(){ 
     FormsValidation.init(); 
@@ -62,14 +62,11 @@ $(function(){
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li><a href="javascript:void(0)" data-ng-click="changeOption('razonSocial','Por razón social')">Por Razón Social</a></li>
-                        <li><a href="javascript:void(0)" data-ng-click="changeOption('projects.name','Por Proyecto')">Por Proyecto</a></li>
                         <li><a href="javascript:void(0)" data-ng-click="changeOption('comercialName','Por Nom. Comercial')">Por Nombre comercial</a></li>
                         <li><a href="javascript:void(0)" data-ng-click="changeOption('tipocontacto','Por Tipo contacto')">Tipo Contacto</a></li>
-                        <li class="divider"></li>
-                        <li><a href="javascript:void(0)" data-ng-click="changeOption('all','Todos')">Todos</a></li>
                     </ul>
                 </div>
-                <input type="text" class="form-control" placeholder="Buscar contacto..." data-ng-model="textFindMe" data-ng-keypress="onKeyFindMe($event)">
+                <input type="text" class="form-control" placeholder="Buscar" data-ng-model="letter" data-ng-keypress="onKeyFindMe($event)">
             </div>
         </div>
         <div class="block">
@@ -109,22 +106,18 @@ $(function(){
 
             <!-- Contacts Content -->
             <div class="row style-alt">
-                <div class="col-sm-6 col-lg-4" data-ng-repeat="contacto in contactos | contactsFilters:letter" deletewidget>
-                        <div class="block-options pull-right" style="z-index: 10000; position:absolute; top:-10px; right:10px;">
-                            <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-danger" data-toggle="tooltip" title="" data-original-title="Delete" data-ng-click="deleteContact(contacto,$index)"><i class="fa fa-times"></i></a>
+                <div class="col-sm-6 col-lg-4" data-ng-repeat="contacto in contactos | filterByFields:letter:field" >
+                    <a href="javascript:void(0)" class="widget widget-hover-effect1" data-ng-click="edit(contacto,$index)" 
+                    data-toggle-click="block-show" data-idshow="block-update-contact">
+                        <div class="widget-simple">
+                            <img data-ng-src="{{contacto.thumbimage}}" alt="avatar" class="widget-image img-circle pull-left" data-ng-if="contacto.thumbimage !==''">
+                            <img src="img/placeholders/avatars/avatar1.jpg" alt="avatar" class="widget-image img-circle pull-left" data-ng-if="contacto.thumbimage===''">
+                            <h4 class="widget-content">
+                                <strong>{{contacto.razonSocial}}</strong>
+                                <small>{{contacto.comercialName}}</small>
+                            </h4>
                         </div>
-                        <a href="javascript:void(0)" class="widget widget-hover-effect1" data-ng-click="edit(contacto,$index)" 
-                        data-toggle-click="block-show" data-idshow="block-update-contact" user-Update-Block >
-                            <div class="widget-simple">
-
-                                <img data-ng-src="{{contacto.thumbimage}}" alt="avatar" class="widget-image img-circle pull-left" data-ng-if="contacto.thumbimage !==''">
-                                <img src="img/placeholders/avatars/avatar1.jpg" alt="avatar" class="widget-image img-circle pull-left" data-ng-if="contacto.thumbimage===''">
-                                <h4 class="widget-content">
-                                    <strong>{{contacto.razonSocial}}</strong>
-                                    <small>{{contacto.comercialName}}</small>
-                                </h4>
-                            </div>
-                        </a>
+                    </a>
                 </div>
                 <!-- END Contact Widget -->
                 <div class="alert alert-warning text-center" data-ng-if="!contactos.length">

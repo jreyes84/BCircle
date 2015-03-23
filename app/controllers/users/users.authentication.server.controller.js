@@ -7,6 +7,7 @@ var _ = require('lodash'),
 	errorHandler = require('../errors'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
+	Session = mongoose.model('Session'),
 	User = mongoose.model('User');
 
 /**
@@ -60,15 +61,12 @@ exports.signup = function(req, res) {
  * Signin after passport authentication
  */
 exports.signin = function(req, res, next) {
-	console.log('signin');
 	passport.authenticate('local', function(err, user, info) {
-		console.log(info);
 		if (err || !user) {
 			console.log('error 400');
 			res.status(400).send(info);
 		} else {
 			// Remove sensitive data before login
-			console.log('authenticate');
 			user.password = undefined;
 			user.salt = undefined;
 
@@ -87,6 +85,7 @@ exports.signin = function(req, res, next) {
  * Signout
  */
 exports.signout = function(req, res) {
+	req.session.destroy();
 	req.logout();
 	res.redirect('/');
 };

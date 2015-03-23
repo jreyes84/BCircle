@@ -45,8 +45,7 @@ var UserSchema = new Schema({
 		type : String ,
 		default : 'img/placeholders/avatars/avatar.jpg',
 		trim : true
-	},
-	
+	},	
 	fullimage : {
 		type : String ,
 		default : 'img/placeholders/avatars/avatar@2x.jpg',
@@ -64,7 +63,7 @@ var UserSchema = new Schema({
 		required: 'Please fill in a username',
 		default: '',
 		validate: [validateLocalStrategyProperty, 'Please fill in your email'],
-		match: [/.+\@.+\..+/, 'Please fill a valid email address']
+		match: [/.+\@.+\..+/, 'Please fill a valid username']
 	},
 	password : {
 		type: String,

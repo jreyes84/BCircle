@@ -12,8 +12,9 @@ angular.module('contactos').controller('ContactosController', ['$scope', '$http'
 		$scope.tagTextProject = '';
 		$scope.isdisabled = false;
 		$scope.findMeBy = 'razonSocial';
+		$scope.field = 'razonSocial';
 		$scope.findMeByText = 'Por Razón Social';
-		$scope.textFindMe = '';
+		$scope.letter='';
 		$scope.blockEdit = false;
 		$scope.blockNew = false;
 		//
@@ -351,33 +352,33 @@ angular.module('contactos').controller('ContactosController', ['$scope', '$http'
 		};
 
 		$scope.changeOption = function(option,text){
-			$scope.findMeBy = option;
+			$scope.field = option;
 			$scope.findMeByText = text;
 		};
 
 		$scope.startFinding = function(){
-			var param;
+			// var param;
 			
-			switch($scope.findMeBy){
-				case 'razonSocial' : param = { name : 'razonSocial', value : $scope.textFindMe }; break;
-				case 'projects.name' : param = { name : 'projects.name', value : $scope.textFindMe }; break;
-				case 'comercialName' : param = { name : 'comercialName', value : $scope.textFindMe }; break;
-				case 'tipocontacto' : param = { name : 'tipocontacto', value : $scope.textFindMe }; break;
-			}
+			// switch($scope.findMeBy){
+			// 	case 'razonSocial' : param = { name : 'razonSocial', value : $scope.textFindMe }; break;
+			// 	case 'projects.name' : param = { name : 'projects.name', value : $scope.textFindMe }; break;
+			// 	case 'comercialName' : param = { name : 'comercialName', value : $scope.textFindMe }; break;
+			// 	case 'tipocontacto' : param = { name : 'tipocontacto', value : $scope.textFindMe }; break;
+			// }
 
-			if( $scope.textFindMe !== '' ){
-				$http.post('/contactos/listByParam', param).success(function(response){
-					$scope.contactos = [];
-					$scope.contactos = response;
-					$scope.textFindMe ='';
-				}).error(function(response){
-					$scope.error = response.message;
-				});	
-			}
+			// if( $scope.textFindMe !== '' ){
+			// 	$http.post('/contactos/listByParam', param).success(function(response){
+			// 		$scope.contactos = [];
+			// 		$scope.contactos = response;
+			// 		$scope.textFindMe ='';
+			// 	}).error(function(response){
+			// 		$scope.error = response.message;
+			// 	});	
+			// }
 
-			if($scope.findMeBy === 'all'){
-				$scope.find();
-			}			
+			// if($scope.findMeBy === 'all'){
+			// 	$scope.find();
+			// }			
 		};
 
 		$scope.onKeyFindMe = function(myevent){
@@ -488,7 +489,6 @@ angular.module('contactos').controller('ContactosController', ['$scope', '$http'
 		$scope.updateCountries = function(){
 			$http.get('http://localhost:3000/scriptCountries.json').success(function ( response ) {
 				// body...
-				console.log(response);
 			}).error(function(errorResponse){
 				console.log(errorResponse.message);
 			});

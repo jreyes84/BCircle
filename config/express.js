@@ -141,10 +141,10 @@ module.exports = function(db) {
 	// use passport session
 	app.use(passport.initialize());
 	app.use(passport.session());
-
+	
 	// connect flash for flash messages
 	app.use(flash());
-
+	
 	// Use helmet to secure Express headers
 	app.use(helmet.xframe());
 	app.use(helmet.xssFilter());

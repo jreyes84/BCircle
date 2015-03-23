@@ -5,9 +5,9 @@
 <html class=" js no-touch" style=""><!--<![endif]--><head>
         <meta charset="utf-8">
 
-        <title>ProUI - Responsive Bootstrap Admin Template</title>
+        <title>Blue Circle</title>
 
-        <meta name="description" content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
+        <meta name="description" content="Blue Circle">
         <meta name="author" content="pixelcave">
         <meta name="robots" content="noindex, nofollow">
 
@@ -42,7 +42,7 @@
         <!-- END Stylesheets -->
 
         <!-- Modernizr (browser feature detection library) & Respond.js (Enable responsive CSS code on browsers that don't support it, eg IE8) -->
-        <script src="lib/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
+        <script src="scripts/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
     <style type="text/css">.jqstooltip { width: auto !important; height: auto !important; position: absolute;left: 0px;top: 0px;visibility: hidden;background: #000000;color: white;font-size: 11px;text-align: left;white-space: nowrap;padding: 5px;z-index: 10000;}.jqsfield { color: white;font: 10px arial, san serif;text-align: left;}</style></head>
     <body data-ng-controller="AuthenticationController">
         <!-- Login Background -->
@@ -56,14 +56,18 @@
         <div id="login-container" class="animation-fadeIn">
             <!-- Login Title -->
             <div class="login-title text-center">
-                <h1><i class="gi gi-flash"></i> <strong>ProUI</strong><br><small>Please <strong>Login</strong> or <strong>Register</strong></small></h1>
+                <h1><img src="img/logo.png" width="32"><strong>Blue Circle</strong><br><small>Please <strong>Login</strong> or <strong>Register</strong></small></h1>
             </div>
             <!-- END Login Title -->
 
             <!-- Login Block -->
             <div class="block push-bit">
                 <!-- Login Form -->
-                <form method="post" id="form-login" data-ng-submit="signin()" class="form-horizontal form-bordered form-control-borderless" novalidate="novalidate">
+                <!-- <section data-ui-view>
+
+                </section> -->
+                
+                <form id="form-login" data-ng-submit="signin()" class="form-horizontal form-bordered form-control-borderless" novalidate="novalidate" data-ng-if="login">
                     <div class="form-group">
                         <div class="col-xs-12">
                             <div class="input-group">
@@ -80,33 +84,47 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div data-ng-if="error">
+                                <label style="color:red;">Usuario y/o password incorrectos </label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group form-actions">
                         <div class="col-xs-4">
-                            <label class="switch switch-primary" data-toggle="tooltip" title="" data-original-title="Remember Me?">
+                            <label class="switch switch-primary" data-toggle="tooltip" title="" data-original-title="Recordar?">
                                 <input type="checkbox" id="login-remember-me" name="login-remember-me" checked="">
                                 <span></span>
                             </label>
                         </div>
                         <div class="col-xs-8 text-right">
-                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Login to Dashboard</button>
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Login </button>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-12 text-center">
-                            <a href="javascript:void(0)" id="link-reminder-login"><small>Forgot password?</small></a> -
-                            <a href="javascript:void(0)" id="link-register-login"><small>Create a new account</small></a>
+                            <a href="javascript:void(0)" data- ng-click="onClickForgot()"><small>Olvidaste tu password?</small></a> -
+                            <a href="javascript:void(0)" data-ng-click="onClickNew()"><small>Crear cuenta</small></a>
                         </div>
                     </div>
                 </form>
                 <!-- END Login Form -->
 
                 <!-- Reminder Form -->
-                <form method="post" id="form-reminder" class="form-horizontal form-bordered form-control-borderless display-none" novalidate="novalidate">
+                <form class="form-horizontal form-bordered form-control-borderless" novalidate="novalidate" data-ng-if="forgot" data-ng-submit="forgoted()">
                     <div class="form-group">
                         <div class="col-xs-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="gi gi-envelope"></i></span>
-                                <input type="text" id="reminder-email" name="reminder-email" class="form-control input-lg" placeholder="Email">
+                                <input type="text" id="reminder-email" name="reminder-email" data-ng-model="credentials.username" class="form-control input-lg" placeholder="Email" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div data-ng-if="error">
+                                <label style="color:red;">{{error}}</label>
                             </div>
                         </div>
                     </div>
@@ -117,14 +135,14 @@
                     </div>
                     <div class="form-group">
                         <div class="col-xs-12 text-center">
-                            <small>Did you remember your password?</small> <a href="javascript:void(0)" id="link-reminder"><small>Login</small></a>
+                            <small>Recordaste tu password?</small> <a href="javascript:void(0)" data-ng-click="onClickLogin()"><small>Login</small></a>
                         </div>
                     </div>
                 </form>
                 <!-- END Reminder Form -->
 
                 <!-- Register Form -->
-                <form method="post" id="form-register" data-ng-submit="signup()" class="form-horizontal form-bordered form-control-borderless display-none" novalidate="novalidate">
+                <form data-ng-submit="signup()" class="form-horizontal form-bordered form-control-borderless" novalidate="novalidate" data-ng-if="register">
                     <div class="form-group">
                         <div class="col-xs-6">
                             <div class="input-group">
@@ -174,7 +192,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-xs-12 text-center">
-                            <small>Do you have an account?</small> <a href="javascript:void(0)" id="link-register"><small>Login</small></a>
+                            <small>Tienes cuenta?</small> <a href="javascript:void(0)" data-ng-click="onClickLogin()"><small>Login</small></a>
                         </div>
                     </div>
                 </form>
@@ -184,7 +202,7 @@
 
             <!-- Footer -->
             <footer class="text-muted text-center">
-                <small><span id="year-copy">2014</span> © <a href="http://goo.gl/TDOSuC" target="_blank">ProUI 2.1</a></small>
+                <small><span id="year-copy">2015</span> © <a href="http://www.zapatasestudios.com.mx" target="_blank">Zapatas Estudios</a></small>
             </footer>
             <!-- END Footer -->
         </div>
@@ -216,18 +234,18 @@
 
         <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script>!window.jQuery && document.write(decodeURI('%3Cscript src="lib/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
+        <script>!window.jQuery && document.write(decodeURI('%3Cscript src="scripts/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
 
         {% for jsFile in jsFiles %}
             <script type="text/javascript" src="{{jsFile}}"></script>
         {% endfor %}
         <!-- Bootstrap.js, Jquery plugins and Custom JS code -->
-        <script src="lib/vendor/bootstrap.min.js"></script>
-        <script src="lib/plugins.js"></script>
-        <script src="lib/app.js"></script>
+        <script src="scripts/vendor/bootstrap.min.js"></script>
+        <script src="scripts/plugins.js"></script>
+        <script src="scripts/app.js"></script>
 
         <!-- Load and execute javascript code used only in this page -->
-        <script src="lib/pages/login.js"></script>
+        <script src="scripts/pages/login.js"></script>
         <script>$(function(){ Login.init(); });</script>
     
 </body></html>

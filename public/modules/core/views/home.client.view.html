@@ -1,12 +1,12 @@
 <!-- Dashboard Header -->
 <!-- For an image header add the class 'content-header-media' and an image as in the following example -->
 
-<script src="lib/app.js"></script>
-<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
-<script src="lib/helpers/gmaps.min.js"></script>
+<script src="scripts/app.js"></script>
+<!-- <script src="http://maps.google.com/maps/api/js?sensor=true"></script> -->
+<!-- <script src="scripts/helpers/gmaps.min.js"></script> -->
 
 <!-- Load and execute javascript code used only in this page -->
-<script src="lib/pages/index.js"></script>
+<script src="scripts/pages/index.js"></script>
 <script>$(function(){ Index.init(); });</script>
 
 <div data-ng-controller="HomeController" data-home-keypress>
@@ -97,7 +97,7 @@
                     <i class="fa fa-calendar"></i>
                 </div>
                 <h3 class="widget-content text-right animation-pullDown">
-                     <strong>Events</strong>
+                     <strong>Eventos</strong>
                     <small>Tus eventos</small>
                 </h3>
             </div>
@@ -119,46 +119,40 @@
         </a>
         <!-- END Widget -->
     </div>
-    <div class="col-sm-6">
+
+</div>
+<!-- END Mini Top Stats Row -->
+<div class="row">
+    <div class="col-sm-6 col-lg-3" data-ng-init="">
         <!-- Widget -->
-        <a href="javascript:void(0)" class="widget widget-hover-effect1">
+        <a href="/#!/products" class="widget widget-hover-effect1" data-ng-click="clickContacts()">
             <div class="widget-simple">
-                <div class="widget-icon pull-left themed-background animation-fadeIn">
-                    <i class="gi gi-wallet"></i>
+                <div class="widget-icon pull-left themed-background-fire animation-fadeIn">
+                    <i class="gi gi-cart_in"></i>
                 </div>
-                <div class="pull-right">
-                    <!-- Jquery Sparkline (initialized in js/pages/index.js), for more examples you can check out http://omnipotent.net/jquery.sparkline/#s-about -->
-                    <span id="mini-chart-sales"></span>
-                </div>
-                <h3 class="widget-content animation-pullDown visible-lg">
-                    Latest <strong>Sales</strong>
-                    <small>Per hour</small>
+                <h3 class="widget-content text-right animation-pullDown">
+                    +{{users.length}} <strong>Productos</strong>
+                    <small>Administra tus productos</small>
                 </h3>
             </div>
         </a>
         <!-- END Widget -->
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6 col-lg-3">
         <!-- Widget -->
-        <a href="page_widgets_stats.html" class="widget widget-hover-effect1">
+        <a href="/#!/punto_venta" class="widget widget-hover-effect1" data-ng-click="clickContacts()">
             <div class="widget-simple">
-                <div class="widget-icon pull-left themed-background animation-fadeIn">
-                    <i class="gi gi-crown"></i>
+                <div class="widget-icon pull-left themed-background-dark animation-fadeIn">
+                    <i class="fa fa-shopping-cart"></i>
                 </div>
-                <div class="pull-right">
-                    <!-- Jquery Sparkline (initialized in js/pages/index.js), for more examples you can check out http://omnipotent.net/jquery.sparkline/#s-about -->
-                    <span id="mini-chart-brand"></span>
-                </div>
-                <h3 class="widget-content animation-pullDown visible-lg">
-                    Our <strong>Brand</strong>
-                    <small>Popularity over time</small>
+                <h3 class="widget-content text-right animation-pullDown">
+                    <strong>Punto de venta</strong>
                 </h3>
             </div>
         </a>
         <!-- END Widget -->
     </div>
 </div>
-<!-- END Mini Top Stats Row -->
 
 <!-- Widgets Row -->
 <div class="row">
@@ -216,7 +210,7 @@
                             <div class="timeline-content">
                                 <p class="push-bit"><a href="page_ready_user_profile.html"><strong>Ella Winter</strong></a></p>
                                 <p class="push-bit"><strong>Happy Hour!</strong> Free drinks at <a href="javascript:void(0)">Cafe-Bar</a> all day long!</p>
-                                <div id="gmap-timeline" class="gmap"></div>
+                                <!-- <div id="gmap-timeline" class="gmap"></div> -->
                             </div>
                         </li>
                         <li class="active">
@@ -339,104 +333,6 @@
             </div>
         </div>
         <!-- END Charts Widget -->
-
-        <!-- Weather Widget -->
-        <div class="widget">
-            <div class="widget-advanced widget-advanced-alt">
-                <!-- Widget Header -->
-                <div class="widget-header text-left">
-                    <!-- For best results use an image with at least 150 pixels in height (with the width relative to how big your widget will be!) - Here I'm using a 1200x150 pixels image -->
-                    <img src="img/placeholders/headers/widget5_header.jpg" alt="background" class="widget-background animation-pulseSlow">
-                    <h3 class="widget-content widget-content-image widget-content-light clearfix">
-                        <span class="widget-icon pull-right">
-                            <i class="fa fa-sun-o animation-pulse"></i>
-                        </span>
-                        Weather <strong>Station</strong><br>
-                        <small><i class="fa fa-location-arrow"></i> The Mountain</small>
-                    </h3>
-                </div>
-                <!-- END Widget Header -->
-
-                <!-- Widget Main -->
-                <div class="widget-main">
-                    <div class="row text-center">
-                        <div class="col-xs-6 col-lg-3">
-                            <h3>
-                                <strong>10&deg;</strong> <small>C</small><br>
-                                <small>Sunny</small>
-                            </h3>
-                        </div>
-                        <div class="col-xs-6 col-lg-3">
-                            <h3>
-                                <strong>80</strong> <small>%</small><br>
-                                <small>Humidity</small>
-                            </h3>
-                        </div>
-                        <div class="col-xs-6 col-lg-3">
-                            <h3>
-                                <strong>60</strong> <small>km/h</small><br>
-                                <small>Wind</small>
-                            </h3>
-                        </div>
-                        <div class="col-xs-6 col-lg-3">
-                            <h3>
-                                <strong>5</strong> <small>km</small><br>
-                                <small>Visibility</small>
-                            </h3>
-                        </div>
-                    </div>
-                </div>
-                <!-- END Widget Main -->
-            </div>
-        </div>
-        <!-- END Weather Widget-->
-
-        <!-- Advanced Gallery Widget -->
-        <div class="widget">
-            <div class="widget-advanced">
-                <!-- Widget Header -->
-                <div class="widget-header text-center themed-background-dark">
-                    <h3 class="widget-content-light clearfix">
-                        Awesome <strong>Gallery</strong><br>
-                        <small>4 Photos</small>
-                    </h3>
-                </div>
-                <!-- END Widget Header -->
-
-                <!-- Widget Main -->
-                <div class="widget-main">
-                    <a href="page_comp_gallery.html" class="widget-image-container">
-                        <span class="widget-icon themed-background"><i class="gi gi-picture"></i></span>
-                    </a>
-                    <div class="gallery gallery-widget" data-toggle="lightbox-gallery">
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-3">
-                                <a href="img/placeholders/photos/photo15.jpg" class="gallery-link" title="Image Info">
-                                    <img src="img/placeholders/photos/photo15.jpg" alt="image">
-                                </a>
-                            </div>
-                            <div class="col-xs-6 col-sm-3">
-                                <a href="img/placeholders/photos/photo5.jpg" class="gallery-link" title="Image Info">
-                                    <img src="img/placeholders/photos/photo5.jpg" alt="image">
-                                </a>
-                            </div>
-                            <div class="col-xs-6 col-sm-3">
-                                <a href="img/placeholders/photos/photo6.jpg" class="gallery-link" title="Image Info">
-                                    <img src="img/placeholders/photos/photo6.jpg" alt="image">
-                                </a>
-                            </div>
-                            <div class="col-xs-6 col-sm-3">
-                                <a href="img/placeholders/photos/photo13.jpg" class="gallery-link" title="Image Info">
-                                    <img src="img/placeholders/photos/photo13.jpg" alt="image">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- END Widget Main -->
-            </div>
-        </div>
-        <!-- END Advanced Gallery Widget -->
     </div>
 </div>
 <!-- END Widgets Row -->

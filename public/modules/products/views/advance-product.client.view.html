@@ -1,0 +1,129 @@
+<script src="scripts/app.js"></script>
+<div data-ng-controller="ProductsController" data-ng-init="findOne()">
+	<div class="content-header">
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li><a href="#!/products">Productos</a></li>
+        <li><a href="javascript:void(0)">Configuración avanzada</a></li>
+    </ul>
+    <div class="row">
+    	<div class="block">
+    		<div class="block-title">
+                <div class="block-options pull-right">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-primary enable-tooltip" data-toggle="tooltip" title="Actualizar" data-original-title="Actualizar" data-ng-click="update(product)"><i class="fa fa-plus"></i>
+                    </a>
+                </div>
+    			<h2>Configuración avanzada</h2>
+    		</div>
+    		<div class="row">
+    			<form action="post" class="form-horizontal" data-ng-submit="">
+	    			<div class="form-group">
+	    				<label class="col-md-1 control-label">
+	                        <img data-ng-src="{{product.thumbimage}}" alt="avatar" class="widget-image img-circle pull-left animation-fadeIn" width="64" height="64" name="img-product">
+	                    </label>
+	                    <div class="col-md-2">
+	                         <input type="file" ng-file-select="copyFiles($files)">
+	                    </div>
+    					<label class="col-md-1 control-label">Nombre</label>
+	                    <div class="col-md-2">
+	                        <input type="text" class="form-control" data-ng-model="product.name" placeholder="Nombre" autocomplete="off">
+	                    </div>
+	                    <label class="col-md-1 control-label">Descripción</label>
+	                    <div class="col-md-4">
+	                    	<input type="text" class="form-control" data-ng-model="product.descripcion" placeholder="Descripción" autocomplete="off">
+	                    </div>
+    				</div>
+    				<div class="form-group">
+    					<label class="col-md-2 control-label">No. Documento</label>
+    					<div class="col-md-2">
+	                    	<input type="text" class="form-control" data-ng-model="product.name_document" placeholder="Folio documento">
+	                    </div>
+    					<label class="col-md-2 control-label">UPC</label>
+    					<div class="col-md-2">
+	                    	<input type="text" class="form-control" data-ng-model="product.upc" placeholder="UPC">
+	                    </div>
+    					<label class="col-md-2 control-label">Código de Barras</label>
+    					<div class="col-md-2">
+	                    	<input type="text" class="form-control" data-ng-model="product.code_bar" placeholder="Código de barras">
+	                    </div>
+    				</div>
+    				<div class="form-group">
+    					<label class="col-md-2 control-label">Stock Mínimo</label>
+	                    <div class="col-md-2">
+	                    	<input type="Number" class="form-control" data-ng-model="product.stock_min" placeholder="Stock minimo" min="0"/>
+	                    </div>
+    					<label class="col-md-2 control-label">Stock Máximo</label>
+	                    <div class="col-md-2">
+	                        <input type="Number" class="form-control" data-ng-model="product.stock_max" placeholder="Stock maximo" min="0" />
+	                    </div>
+    				</div>
+    				<div class="form-group">
+    					<label class="col-md-2 control-label">No. Series</label>
+    					<div class="col-md-10">
+    						<div class="tagsinput" style="width: auto; height: auto;">
+				                <span data-ng-repeat="(key, tag) in product.no_series" class="tag">
+				                    <span >{{ tag.name }} </span>
+				                    <a data-ng-click="deleteTag(key,tag.name)" data-confirm-Alert="Esta seguro de eliminar {{tag.name}}? ">x</a>
+				                </span>
+				                <div>
+				                    <input type="text" data-tag-Input data-ng-model="tagTextSerie" style="color: rgb(102, 102, 102); width: 300px;" data-new-tag="addTag()" data-delete-tag="deleteTag()" placeholder="Ingrese sus números de series">    
+				                </div>
+				                <div class="tags_clear"></div>
+				            </div>
+    					</div>
+    				</div>
+    				<div class="form-group">
+    					<label class="col-md-2 control-label">Precio compra</label>
+                        <div class="col-md-2" data-ng-show="showPriceSell">
+                            <input class="form-control" type="text" placeholder="Ingrese el nuevo precio" data-ng-keypress="onEnterNewSell($event)" data-ng-model="newSellPrice"/>
+                        </div>
+    					<div class="col-md-2" data-ng-hide="showPriceSell">
+    						<select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="precio_compra" placeholder="Precio compra" data-ng-change="onSellPriceChange()">
+                                 <option ng-repeat="compra in product.precio_compra" value="{{compra._id}}">{{compra.precio}}</option>
+                            </select>
+    					</div>
+    					<div class="col-md-8">
+                            <div class="col-md-2">
+                                <a href="javascript:void(0)" data-ng-click="showPriceSell=true" class="btn btn-xs btn-primary" data-toggle="tooltip" title="" data-original-title="Agregar precio" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk"><i class="fa fa-plus"></i>
+                                </a>
+                                <a href="javascript:void(0)" data-ng-click="deletePriceSell()" class="btn btn-xs btn-danger" data-toggle="tooltip" title="" data-original-title="Eliminar precio" data-ng-show="precio_compra"><i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-10">
+                                <select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="prov_compra" placeholder="Proveedor" data-ng-change="onProvSellChange()">
+                                 <option ng-repeat="proveedor in inputTagContactos" value="{{proveedor.id}}">{{proveedor.text}}</option>
+                            </select>
+                            </div>
+    						
+    					</div>
+    				</div>
+                    <div class="form-group">
+    					<label class="col-md-2 control-label">Precio venta</label>
+                        <div class="col-md-2" data-ng-show="showPurchPrice">
+                            <input class="form-control" type="text" placeholder="Ingrese el nuevo precio" data-ng-keypress="onEnterNewPurch($event)" data-ng-model="newPurchPrice"/>
+                        </div>
+    					<div class="col-md-2" data-ng-hide="showPurchPrice">
+    						<select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="precio_venta" placeholder="Precio venta" data-ng-change="onPurchPriceChange()">
+                                 <option ng-repeat="venta in product.precio_venta" value="{{venta._id}}">{{venta.precio}}</option>
+                            </select>
+    					</div>
+                        <div class="col-md-8">
+                            <div class="col-md-2">
+                                <a href="javascript:void(0)" data-ng-click="showPurchPrice=true" class="btn btn-xs btn-primary" data-toggle="tooltip" title="" data-original-title="Agregar precio"><i class="fa fa-plus"></i>
+                                </a>
+                                <a href="javascript:void(0)" data-ng-click="deletePricePurch()" class="btn btn-xs btn-danger" data-toggle="tooltip" title="" data-original-title="Eliminar precio" data-ng-show="precio_venta"><i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-10">
+                                <select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="prov_venta" placeholder="Proveedores" multiple data-ng-change="onProvPurchChange()">
+                                     <option ng-repeat="proveedor in inputTagContactos2" value="{{proveedor.id}}">{{proveedor.text}}</option>
+                                </select>
+                            </div>                            
+                        </div>
+    				</div>
+    			</form>
+    		</div>
+    		
+    	</div>
+    </div>
+</div>

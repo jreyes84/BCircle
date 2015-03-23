@@ -11,6 +11,7 @@ module.exports = function(app) {
 		.put(documentos.update);
 	app.route('/documentos/uploadFile').post(documentos.uploadFile);
 	app.route('/documentos/watchFile').post(documentos.watchFile);
+	app.route('/documentos/listByDocument').post(documentos.listByDocument);
 	app.route('/documentos/listExpiratedDocuments').post(documentos.listExpiratedDocuments);
 
 	app.route('/documentos/:documentoId')

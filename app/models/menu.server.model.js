@@ -13,13 +13,11 @@ var MenuSchema = new Schema({
 	name: {
 		type: String,
 		default: '',
-		required: 'Please fill Menu name',
 		trim: true
 	},
 	description: {
 		type: String,
 		default: '',
-		required: 'Please fill Menu description',
 		trim: true
 	},
 	url: {
@@ -44,19 +42,16 @@ var MenuSchema = new Schema({
 		name: {
 			type: String,
 			default: '',
-			required: 'Please fill Submenu name',
 			trim: true
 		},
 		description: {
 			type: String,
 			default: '',
-			required: 'Please fill Submenu description',
 			trim: true
 		},
 		url: {
 			type: String,
 			default: '',
-			required: 'Please fill Submenu url',
 			trim: true
 		},
 		icon : {

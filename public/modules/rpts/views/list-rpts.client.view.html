@@ -1,8 +1,33 @@
 <!-- Contacts Header -->
-<script src="lib/app.js"></script>
-<script src="lib/pages/tablesDatatables.js"></script>
-<script>$(function(){ TablesDatatables.init(); });</script>
-<div data-ng-controller="RptsController" >
+<script src="scripts/app.js"></script>
+<script src="scripts/pages/tablesDatatables.js"></script>
+
+<script src='scripts/exports/jspdf/libs/Blob/Blob.js' type='text/javascript'></script>
+<script src='scripts/exports/jspdf/libs/FileSaver/FileSaver.js' type='text/javascript'></script>
+
+<script src='scripts/exports/jspdf/libs/png_support/zlib.js' type='text/javascript'></script>
+<script src='scripts/exports/jspdf/libs/png_support/png.js' type='text/javascript'></script>
+
+<script src='scripts/exports/jspdf/libs/deflate.js' type='text/javascript'></script>
+
+<script src='scripts/exports/jspdf/jspdf.min.js' type='text/javascript'></script>
+<script src='scripts/exports/jspdf/jspdf.plugin.addimage.js' type='text/javascript'></script>
+<script src='scripts/exports/jspdf/jspdf.plugin.png_support.js' type='text/javascript'></script>
+<script type="text/javascript" src="scripts/exports/tableExport.js"></script>
+<script type="text/javascript" src="scripts/exports/jquery.base64.js"></script>
+<script type="text/javascript" src="scripts/exports/html2canvas.js"></script>
+<script type="text/javascript" src="scripts/exports/jspdf/libs/sprintf.js"></script>
+<!-- <script type="text/javascript" src="scripts/exports/jspdf/jspdf.js"></script> -->
+<script type="text/javascript" src="scripts/exports/jspdf/libs/base64.js"></script>
+<script type="text/javascript" src="scripts/exports/export.js"></script>
+
+<script>
+    $(function(){ 
+        TablesDatatables.init();         
+    });
+
+</script>
+<div data-ng-controller="RptsController" data-ng-init="find()" >
     <div class="content-header">
     </div>
     <ul class="breadcrumb breadcrumb-top">
@@ -23,8 +48,9 @@
                             <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-default dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-original-title="Opciones de reporte"><span class="caret"></span></a>
                             <ul class="dropdown-menu dropdown-custom dropdown-menu-right">
                                 <li>
-                                    <a href="javascript:void(0)" data-ng-click="exportToExcel()"><i class="fa fa-file-excel-o pull-right" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk"></i>  Exportar CSV</a>
-                                    <a href="javascript:void(0)"><i class="fa fa-file-pdf-o pull-right"></i> Exportar PDF</a>
+                                    <!-- data-ng-click="exportToExcel()" -->
+                                    <a href="javascript:void(0)" id="exportExcel"><i class="fa fa-file-excel-o pull-right" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk"></i>  Exportar excel</a>
+                                    <a href="javascript:void(0)" id="exportPDF"><i class="fa fa-file-pdf-o pull-right"></i> Exportar PDF</a>
                                 </li>
                                 <li class="divider"></li>
                                 <li>
@@ -47,17 +73,23 @@
                                 <form data-ng-submit="send()">
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">Reportes</label>
-                                        <select ui-select2="{allowClear:true}" data-ng-model="selectReporte" data-placeholder="Seleccione tipo de reporte" style="width:100%" class="text-center" name="selectReporte">
+                                        <select ui-select2="{allowClear:true}" data-ng-model="selectReporte" data-placeholder="Seleccione tipo de reporte" style="width:100%" class="text-center" name="selectReporte" id="selectReporte">
                                             <!-- <option ng-repeat="option in options" value="{{option.value}}">{{option.text}}</option> -->
-                                            <option value="rptIgnis" class="text-center">Reporte Ignis</option>
+                                            <option value="rptIgnis" class="text-center">Concentrado de cuentas</option>
                                             <option value="balanceGrl" class="text-center">Balance General</option>
 
                                         </select>
-                                    </div>                            
+                                    </div>  
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Círculo</label>
+                                        <select ui-select2="{allowClear:true}" data-ng-model="filtros.circle" data-placeholder="Seleccione círculo" style="width:100%" class="text-center" data-ng-change="onCircleChange()">
+                                            <option ng-repeat="circle in circles" value="{{circle._id}}" class="text-center">{{circle.name}}</option>
+                                        </select>
+                                    </div>                          
                                     <div class="form-group form-actions">
                                         <div class="col-xs-12">
-                                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Submit</button>
-                                            <button type="reset" class="btn btn-sm btn-warning" data-ng-click="resetFields()"><i class="fa fa-repeat"></i> Reset</button>
+                                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Sacar reporte</button>
+                                            <button type="reset" class="btn btn-sm btn-warning" data-ng-click="resetFields()" id="reset"><i class="fa fa-repeat" ></i> Limpiar</button>
                                             <a data-ng-href="{{rootFile}}" data-ng-show="rootFile" target="_blank" data-toggle="tooltip" title="" data-tooltip data-original-title="Para descargar, click derecho Guardar archivo como...">
                                             <span class="label label-info">Descargar reporte</span>
                                         </a>
@@ -79,7 +111,7 @@
                                         <label class="col-md-2 control-label"><a href="#modal-terms" data-toggle="modal">Cuentas</a></label>
                                         <div class="col-md-2">
                                             <label class="switch switch-success" for="val_cuenta">
-                                                <input type="checkbox" id="val_cuenta" name="val_cuenta" value="1" data-ng-model="filtros.cuenta" >
+                                                <input type="checkbox" id="val_cuenta" name="val_cuenta" value="1" data-ng-model="filtros.cuenta" data-ng-change="onCheckFilterAccountChange()">
                                                 <span data-toggle="tooltip" title="" data-original-title="Filtrar por cuentas"></span>
                                             </label>
                                         </div>
@@ -130,15 +162,18 @@
                     </div>
                 </div>
             </div>
-
             <!-- END Block with Options -->
         </div>
+    </div>
+    <div class="row">
+        <table id="tableToExport" style="display:none">
+        </table>
     </div>
     <div class="row" data-ng-if="dtOptionsRes"> 
         <div class="col-md-12">
             <!-- Block with Options -->
             <div class="block">
-                <table id="foobar" class="table table-vcenter table-condensed table-bordered dataTable no-footer" role="grid" aria-describedby="example-datatable_info" datatable dt-options="dtOptionsRes" dt-columns="dtColumnsRes" >
+                <table id="rptIgnis" class="table table-vcenter table-condensed table-bordered dataTable no-footer" role="grid" aria-describedby="example-datatable_info" datatable dt-options="dtOptionsRes" dt-columns="dtColumnsRes" >
                     <tbody>
                         <tr ng-repeat="result in resultados" role = "row">
                             <td class="text-center">{{result.name_document}}</td>
@@ -147,6 +182,9 @@
                             <td class="text-center">{{result.cargoQty}}</td>
                             <td class="text-center">{{result.abonoQty}}</td>
                             <td class="text-center">{{result.name}}</td>
+                            <td class="text-center">{{result.date_year | date:'yyyy'}}</td>
+                            <td class="text-center">{{result.date_monthFull | date:'MMMM'}}</td>
+                            <td class="text-center">{{result.date_month | date:'MM'}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
@@ -157,6 +195,9 @@
                             <td class="text-center"> $ {{resultados.totalCargo}}</td>
                             <td class="text-center"> $ {{resultados.totalAbono}}</td>
                             <td class="text-center"> </td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -165,50 +206,114 @@
             
         </div>
     </div>
-    <div class="row" data-ng-if="balanceGrl"> 
-        <div class="col-md-12">
+    <div class="row" data-ng-if="balanceGrl" id="tblGeneral"> 
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
             <!-- Block with Options -->
             <div class="block">
-                <table class="table table-vcenter table-condensed  dataTable" role="grid" aria-describedby="example-datatable_info"  data-ng-repeat="tipo in balanceGrl" border="0">
-                    <thead>
-                        <tr role="row">
-                            <th class="text-center sorting" tabindex="0" aria-controls="example-datatable" rowspan="1" colspan="1">{{tipo.name}}</th>
+                <table class="table table-vcenter table-condensed" role="grid" aria-describedby="example-datatable_info" style="width:1000px" data-level="principal" id="table-balanceGrl">
+                    <thead id="header-table">
+                        <tr >
+                            <th class="text-center">BALANCE GENERAL </th>
+                        </tr>
+                        <tr >
+                            <th class="text-center">Balance general del ____ al _____</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr ng-repeat="cuenta in tipo.cuenta" role = "row">
-                            <td colspan="2">
-                                {{cuenta.name}}
-                                <table style="width:100%; margin-left : 20px;" border="0">
-                                    <thead></thead>
+                    <tbody id="body-table">
+                        <tr role = "row" data-ng-repeat="tipo in balanceGrl" data-ng-show="tipo.finded">
+                            <td>
+                                <table class="table table-vcenter table-condensed" data-level="first">
                                     <tbody>
-                                        <tr data-ng-repeat="subcuenta in cuenta.subcuenta"> 
-                                            <td style="width:59.5%">{{subcuenta.name}}</td>
-                                            <td >$ {{subcuenta.cantidad}}</td>
+                                        <tr>
+                                            <td>
+                                                <span name="first-title" data-show="{{tipo.finded}}">{{tipo.name}}</span>
+                                                <table style="" class="table table-vcenter table-condensed"  data-level="second">
+                                                    <tbody>
+                                                        <tr data-ng-repeat="cuenta in tipo.cuenta" role="row" data-ng-show="cuenta.finded"> 
+                                                            <td>
+                                                                <span name="second-title" data-show="{{cuenta.finded}}">{{cuenta.name}}</span>
+                                                                <table style="margin-left:20px" class="table table-vcenter table-condensed" data-level="third">
+                                                                    <tbody>
+                                                                        <tr role="row" data-ng-repeat="subcuenta in cuenta.subcuenta" data-ng-show="subcuenta.finded">
+                                                                            <td style="width:300px">
+                                                                                <span name="third-title" data-show="{{subcuenta.finded}}">{{subcuenta.name}}</span>
+                                                                            </td>
+                                                                            <td style="width:100px" data-ng-repeat="subYear in subcuenta.years" data-total>
+                                                                                <span name="third-total">
+                                                                                    $ {{subYear.total}}
+                                                                                </span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                    <tfoot>
+                                                                        <table style="margin-left:20px" class="table table-vcenter table-condensed" data-footer="third">
+                                                                            <tr role="row">
+                                                                                <td style="width:300px">
+                                                                                    <span name="third-title">Total {{cuenta.name}}</span>
+                                                                                </td>
+                                                                                <td style="width:100px;" data-ng-repeat="cuenYear in cuenta.years" >
+                                                                                    <strong><span name="third-total">$ {{cuenYear.total}}</span></strong>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </tfoot>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td >
+                                                            <table style="margin-left:20px" class="table table-vcenter table-condensed" data-footer="first">
+                                                                <tr role="row">
+                                                                    <td style="width:300px" name="third-total">
+                                                                        <span name="third-title">Total {{tipo.name}}</span>
+                                                                    </td>
+                                                                    <td style="width:100px" data-ng-repeat="tipYears in tipo.years" data-total>
+                                                                        <strong>
+                                                                            <span name="third-total">$ {{tipYears.total}}</span></strong>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </td>
                                         </tr>
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td > Total {{cuenta.name}}</td>
-                                            <td > $ {{cuenta.cantidad}}</td>
-                                        </tr>
-                                    </tfoot>
-                                    
                                 </table>
-                                
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot>
+                    <tfoot id="body-footer">
                         <tr>
-                            <td > Total {{tipo.name}}</td>
-                            <td > $ {{tipo.cantidad}}</td>
+                            <td>
+                                <table class="table table-vcenter table-condensed" data-footer="principal">
+                                    <tr>
+                                        <td style="width:300px"><h3>
+                                            <span name="principal-title">Capital</span></h3>
+                                        </td>
+                                        <td style="width:100px" data-ng-repeat="balaYears in balanceGrl.years" data-total>
+                                            <h3>
+                                                <strong>
+                                                    <span name="principal-total">$ {{balaYears.total}}</span>
+                                                </strong>
+                                            </h3>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                     </tfoot>
                 </table>
+                
             </div>
             <!-- END Block with Options -->
-            
+        </div>
+        <div class="col-md-2"></div>
+        <div style="display:none" id="exportTableDiv">
         </div>
     </div>
 </div>

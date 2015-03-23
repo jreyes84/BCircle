@@ -2,17 +2,21 @@
 
 angular.module('historials').filter('sumByKey', [
 	function() {
-		return function(data, key, type) {
+		return function(data, key, type,circleFilter) {
             if (typeof(data) === 'undefined' || typeof(key) === 'undefined') {
                 return 0;
             }
- 
             var sum = 0;
-            for (var i = data.length - 1; i >= 0; i--) {
-            	if(type === data[i].typeaccount)
-                	sum += parseInt(data[i][key]);
-            }
- 
+            angular.forEach(data, function(myData, i){
+                if(myData.typeaccount === type){
+                    angular.forEach(myData.circles, function(circles, c){
+                        if (circles.name === circleFilter){
+                            sum+= parseInt(myData[key]);
+                        }
+                    });
+                }
+            });
+
             return sum;
         };
 	}

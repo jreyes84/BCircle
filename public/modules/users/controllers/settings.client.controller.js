@@ -1,16 +1,14 @@
 'use strict';
 
 angular.module('users').controller('SettingsController', ['$scope', '$http' , '$location' , '$element' , '$timeout' , 'Socket', 'Users', 'Authentication','Menus', 'Circulos' , '$upload', 'Historials',
-	function($scope, $http, $location , $element , $timeout , Socket , Users, Authentication, Menus, Circulos , $upload, Historials) {
+	function($scope, $http, $location , $element , $timeout , Socket , Users , Authentication, Menus, Circulos , $upload, Historials) {
 		$scope.user = Authentication.user;	
 		/*Socket.on('menu.assigned', function(user){
 			console.log(user);
 			$scope.groups = user.groups;
 		});	*/
-		/*
-		gi gi-user_add
-		gi gi-user_remove
-		*/
+
+		//#1c86e8
 		$scope.groups = {};
 		
 		$scope.roles = {
@@ -74,10 +72,10 @@ angular.module('users').controller('SettingsController', ['$scope', '$http' , '$
 
 		// Update a user profile
 		$scope.updateUserProfile = function() {
+			$scope.msgSmartNotification('','Espere un momento...','fa fa-clock-o','#1c86e8', 100);
 			$scope.success = $scope.error = null;
 			var user = new Users($scope.credentials);
 			var index = $scope.indexUser;
-
 			user.$update(function(response) {
 				$scope.userid = response._id;
 				$scope.success = true;
@@ -85,26 +83,14 @@ angular.module('users').controller('SettingsController', ['$scope', '$http' , '$
 				if($scope.avatar){
 					$scope.onFileSelect($scope.avatar,function(){
 						$scope.msgSmartNotification('Usuario','Se guardo correctamente','fa fa-check','#739E73');
-			            $scope.isOk = true;	
-						$timeout(function () {
-		                	$scope.isOk = undefined;
-		            	},1000);	
 					});
 				}else{
 					$scope.msgSmartNotification('Usuario','Se guardo correctamente','fa fa-check','#739E73');
-		            $scope.isOk = true;	
-					$timeout(function () {
-	                	$scope.isOk = undefined;
-	            	},1000);
 				}
 			}, function(response) {
 
 				$scope.error = response.data.message;
 				$scope.msgSmartNotification('Error','No se guardo correctamente: '+ $scope.error,'fa fa-frown-o','#C46A69');
-	            $scope.isOk = false;	
-				$timeout(function () {
-                	$scope.isOk = undefined;
-            	},1000);
 			});
 		};
 
@@ -123,8 +109,6 @@ angular.module('users').controller('SettingsController', ['$scope', '$http' , '$
 
 		$scope.listMyUsers = function () {
 			$scope.success = $scope.error = null;
-
-
 			$http.get('/users/userslist' , $scope.user).success(function(response) {
 				$scope.success = true;
 				$scope.users = response;
@@ -141,6 +125,7 @@ angular.module('users').controller('SettingsController', ['$scope', '$http' , '$
 		};
 
 		$scope.signup = function() {
+			$scope.msgSmartNotification('','Espere un momento...','fa fa-clock-o','#1c86e8', 100);
 			var isValid = true;
 			if($scope.credentials){
 				if(!$scope.credentials.roles){
@@ -162,28 +147,15 @@ angular.module('users').controller('SettingsController', ['$scope', '$http' , '$
 				$http.post('/auth/signup', $scope.credentials).success(function(response) {
 					// If successful we assign the response to the global user model
 					$scope.users.push(response);
+
 					$scope.userid = response._id;
 					if($scope.avatar){
-
 						$scope.onFileSelect($scope.avatar, function(){
-							$scope.msgSmartNotification('Usuario','Se guardo correctamente','fa fa-check','#739E73');
-				            $scope.isOk = false;	
-							$timeout(function () {
-			                	$scope.isOk = undefined;
-			                	//$scope.find();
-
-			            	},1000);
-							
+							$scope.msgSmartNotification('Usuario','Se guardo correctamente','fa fa-check','#739E73');							
 							$scope.credentials=null;
 						});	
 					}else{
 						$scope.msgSmartNotification('Usuario','Se guardo correctamente','fa fa-check','#739E73');
-			            $scope.isOk = false;	
-						$timeout(function () {
-		                	$scope.isOk = undefined;
-		                	//$scope.find();
-
-		            	},1000);
 						$scope.credentials=null;
 					}
 					$scope.createHistorial(response, 'Usuario', 'gi gi-group', 'users/userslist' );
@@ -191,12 +163,6 @@ angular.module('users').controller('SettingsController', ['$scope', '$http' , '$
 				}).error(function(response) {
 					$scope.error = response.message;
 					$scope.msgSmartNotification('Error','No se guardo correctamente: '+ $scope.error,'fa fa-frown-o','#C46A69');
-		            $scope.isOk = false;	
-					$timeout(function () {
-	                	$scope.isOk = undefined;
-	                	$scope.find();
-
-	            	},1000);
 				});
 			}else
 			{
@@ -309,6 +275,39 @@ angular.module('users').controller('SettingsController', ['$scope', '$http' , '$
 
 	    $scope.copyFiles = function($files){
 	    	$scope.avatar = $files;
+	    	$scope.onFileSelect($scope.avatar);
+	    };
+		
+		$scope.onFileSelect = function ($files, callback) {
+	        $scope.selectedFiles = [];
+	        $scope.progress = [];
+	        if ($scope.upload && $scope.upload.length > 0) {
+	            for (var i = 0; i < $scope.upload.length; i++) {
+	                if ($scope.upload[i] !== null) {
+	                    $scope.upload[i].abort();
+	                }
+	            }
+	        }
+	        $scope.upload = [];
+	        $scope.uploadResult = [];
+	        $scope.selectedFiles = $files;
+	        $scope.dataUrls = [];
+	        for (var j = 0; j < $files.length; j++) {
+	            var $file = $files[j];
+	            if (window.FileReader && $file.type.indexOf('image') > -1) {
+	                var fileReader = new FileReader();
+	                fileReader.readAsDataURL($files[j]);
+
+	                $scope.setPreview(fileReader, j);
+	            }
+	            $scope.progress[j] = -1;
+	            if(callback){
+	            	if ($scope.uploadRightAway) {
+		                $scope.start(j, callback);
+		            }	
+	            }
+	            
+	        }
 	    };
 
 	    $scope.onFileSelect = function ($files, callback) {
@@ -334,16 +333,20 @@ angular.module('users').controller('SettingsController', ['$scope', '$http' , '$
 	                $scope.setPreview(fileReader, j);
 	            }
 	            $scope.progress[j] = -1;
-	            if ($scope.uploadRightAway) {
-	                $scope.start(j,callback);
+	            if(callback){
+	            	if ($scope.uploadRightAway) {
+		                $scope.start(j, callback);
+		            }	
 	            }
+	            
 	        }
 	    };
 
 	    $scope.setPreview = function (fileReader, index) {
 	        fileReader.onload = function (e) {
 	            $timeout(function () {
-	                $scope.dataUrls[index] = e.target.result;
+	            	$element.find('img[name=img-profile]').attr('src', e.target.result);
+	            	$element.find('img[name=img-profile]').css({'width':'64px','height':'64px'});
 	            });
 	        };
 		};
@@ -372,10 +375,6 @@ angular.module('users').controller('SettingsController', ['$scope', '$http' , '$
 	        	});
 	            $element.find('div[name=progressBar]').css('display','none');
 	            $scope.msgSmartNotification('Usuario','Se guardo correctamente','fa fa-check','#739E73');
-	            $scope.isOk = false;	
-				$timeout(function () {
-                	$scope.isOk = undefined;
-            	},1000);
 	            if(callback)
 	            	callback();
 	            $scope.upload=[];
@@ -387,13 +386,6 @@ angular.module('users').controller('SettingsController', ['$scope', '$http' , '$
 	            .css( 'width' , $scope.progress[index] +'%' );
 	        });
 	    };
-
-	    $scope.msgSmartNotification = function( title,  content, icon, color){
-			$scope.msgTitle = title;
-			$scope.msgContent = content;
-			$scope.msgIcon = icon;
-			$scope.msgColor = color;
-		};
 
 		//CIRCLES OPTIONS
 		$scope.onClickLi = function(index, newCircle, circle){
@@ -506,6 +498,21 @@ angular.module('users').controller('SettingsController', ['$scope', '$http' , '$
 				$scope.error = errorResponse.data.message;
 				$scope.msgSmartNotification('Error' , $scope.error , 'fa fa-frown-o' , '#C46A69' );
 			});
+		};
+
+		//SmartNotifications
+		$scope.msgSmartNotification = function( title,  content, icon, color, time){
+			if(!time)
+				time = 1000;
+			$scope.msgTitle = title;
+			$scope.msgContent = content;
+			$scope.msgIcon = icon;
+			$scope.msgColor = color;
+
+			$scope.isOk = true;	
+			$timeout(function () {
+            	$scope.isOk = undefined;
+        	},time);
 		};
 		
 	}

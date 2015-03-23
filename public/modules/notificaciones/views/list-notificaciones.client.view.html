@@ -1,119 +1,59 @@
 <div data-ng-controller="NotificacionesController" data-ng-init="find()">
-    <a href="javascript:void(0)" class="btn btn-sm btn-info" data-toggle="tooltip" data-original-title="Guardar" data-ng-click="saveDocument()" id="save" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isNotifed" style="display:none"></a>
+    <a href="javascript:void(0)" class="btn btn-sm btn-info" data-toggle="tooltip" data-original-title="Guardar" data-ng-click="saveDocument()" id="save" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-size="{{msgWidthBox}}" data-ng-model="isNotifed" style="display:none"></a>
+
 <!-- Wrapper for scrolling functionality -->
     <div class="sidebar-scroll">
         <!-- Sidebar Content -->
         <div class="sidebar-content">
             <!-- Chat -->
             <!-- Chat demo functionality initialized in js/app.js -> chatUi() -->
-           <!--  <a href="page_ready_chat.html" class="sidebar-title">
-                <i class="gi gi-comments pull-right"></i> <strong>Chat</strong>UI
-            </a> -->
-            <!-- Chat Users -->
-            <!-- <ul class="chat-users clearfix">
-                <li>
-                    <a href="javascript:void(0)" class="chat-user-online">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar12.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" class="chat-user-online">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar15.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" class="chat-user-online">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar10.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" class="chat-user-online">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar4.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" class="chat-user-away">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar7.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" class="chat-user-away">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar9.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" class="chat-user-busy">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar16.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar1.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar4.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar3.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar13.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)">
-                        <span></span>
-                        <img src="img/placeholders/avatars/avatar5.jpg" alt="avatar" class="img-circle">
-                    </a>
-                </li>
-            </ul> -->
-            <!-- END Chat Users -->
+            <div data-ng-controller = "ChatsController" data-ng-init="find()" data-chatui>
+                <a href="javascript:" class="sidebar-title" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-size="{{msgWidthBox}}" data-ng-model="isOk" >
+                    <i class="gi gi-comments pull-right"></i> <strong>Ir al</strong>Chat
+                </a>
 
-            <!-- Chat Talk -->
-            <!-- <div class="chat-talk display-none"> -->
-                <!-- Chat Info -->
-                <!-- <div class="chat-talk-info sidebar-section">
-                    <img src="img/placeholders/avatars/avatar5.jpg" alt="avatar" class="img-circle pull-left">
-                    <strong>{{user.displayName}}</strong>
-                    <button id="chat-talk-close-btn" class="btn btn-xs btn-default pull-right">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div> -->
-                <!-- END Chat Info -->
+                <!-- Chat Users -->
+                <ul class="chat-users clearfix">
+                    <li data-ng-repeat="userConnected in usersConnected">
+                        <a href="javascript:void(0)" class="chat-user-online" data-ng-click="onClickUserChat(userConnected)">
+                            <span></span>
+                            <img data-ng-src="{{userConnected.thumbimage}}" alt="avatar" class="img-circle">
+                        </a>
+                    </li>
+                </ul>
+            
+                <!-- END Chat Users -->
 
-                <!-- Chat Messages -->
-                <!-- <ul class="chat-talk-messages">
-                    <li class="text-center"><small>Yesterday, 18:35</small></li>
-                    <li class="chat-talk-msg animation-slideRight">Hey admin?</li>
-                    <li class="chat-talk-msg animation-slideRight">How are you?</li>
-                    <li class="text-center"><small>Today, 7:10</small></li>
-                    <li class="chat-talk-msg chat-talk-msg-highlight themed-border animation-slideLeft">I'm fine, thanks!</li>
-                </ul> -->
-                <!-- END Chat Messages -->
+                <!-- Chat Talk -->
+                <div class="chat-talk" data-ng-show="showChatUser">
+                    <!-- Chat Info -->
+                    <div class="chat-talk-info sidebar-section">
+                        <img data-ng-src="{{userChatFrom.thumbimage}}" alt="avatar" class="img-circle pull-left">
+                        <strong>{{userChatTo.displayName}}</strong>
+                        <button id="chat-talk-close-btn" class="btn btn-xs btn-default pull-right" data-ng-click="onCloseChat()">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                    <!-- END Chat Info -->
 
-                <!-- Chat Input -->
-                <!-- <form action="index.html" method="post" id="sidebar-chat-form" class="chat-form">
-                    <input type="text" id="sidebar-chat-message" name="sidebar-chat-message" class="form-control form-control-borderless" placeholder="Type a message..">
-                </form> -->
-                <!-- END Chat Input -->
-            <!-- </div> -->
+                    <!-- Chat Messages -->
+                    <ul class="chat-talk-messages">
+                        <!-- <li class="text-center"><small>Yesterday, 18:35</small></li> -->
+                        <!-- <li class="chat-talk-msg animation-slideRight">Hey admin?</li> -->
+                        <!-- <li class="chat-talk-msg animation-slideRight">How are you?</li> -->
+                        <!-- <li class="text-center"><small>Today, 7:10</small></li> -->
+                        <!-- <li class="chat-talk-msg chat-talk-msg-highlight themed-border animation-slideLeft">I'm fine, thanks!</li> -->
+                        <li class="chat-talk-msg" data-ng-repeat="chat in chatConversation.chat" data-ng-class="chat.userWrote === userChatFrom._id ? 'chat-talk-msg-highlight themed-border animation-slideLeft' :'themed-border animation-slideRight'">{{chat.text}}</li>
+                    </ul>
+                    <!-- END Chat Messages -->
+
+                    <!-- Chat Input -->
+                    <form method="post" id="sidebar-chat-form" class="chat-form">
+                        <input type="text" id="sidebar-chat-message" name="sidebar-chat-message" class="form-control form-control-borderless" placeholder="Escribe mensaje" data-ng-model="textToSend" data-ng-keypress="onKeypressChat($event)">
+                    </form>
+                    <!-- END Chat Input -->
+                </div>
+            </div>
             <!--  END Chat Talk -->
             <!-- END Chat -->
 
@@ -127,29 +67,11 @@
                     <i class="{{notificacion.icon}}"></i> <strong>{{notificacion.descripcion}}</strong>
                     <br>
                     <a href="javascript:void(0)" class="btn btn-xs btn-primary"><i class="fa fa-check" data-ng-click="thisNotyHasBeenSeen(notificacion)"></i> Ir</a>
-                    <!-- <small>just now</small><br>
-                    <i class="fa fa-thumbs-up fa-fw"></i> Upgraded to Pro plan
-                </div>
-                <div class="alert alert-info alert-alt">
-                    <small>2 hours ago</small><br>
-                    <i class="gi gi-coins fa-fw"></i> You had a new sale!
-                </div>
-                <div class="alert alert-success alert-alt">
-                    <small>3 hours ago</small><br>
-                    <i class="fa fa-plus fa-fw"></i> <a href="/#!/profile"><strong>John Doe</strong></a> would like to become friends!<br>
-                    <a href="javascript:void(0)" class="btn btn-xs btn-primary"><i class="fa fa-check"></i> Ir</a>
-                    <a href="javascript:void(0)" class="btn btn-xs btn-default"><i class="fa fa-times"></i> Ignore</a>
-                </div>
-                <div class="alert alert-warning alert-alt">
-                    <small>2 days ago</small><br>
-                    Running low on space<br><strong>18GB in use</strong> 2GB left<br>
-                    <a href="page_ready_pricing_tables.html" class="btn btn-xs btn-primary"><i class="fa fa-arrow-up"></i> Upgrade Plan</a>
-                </div> -->
             </div>
             <!-- END Activity -->
 
             <!-- Messages -->
-            <a href="page_ready_inbox.html" class="sidebar-title">
+            <!-- <a href="page_ready_inbox.html" class="sidebar-title">
                 <i class="fa fa-envelope pull-right"></i> <strong>Messages</strong>UI (5)
             </a>
             <div class="sidebar-section">
@@ -173,10 +95,12 @@
                     Henry Ellis<small class="pull-right">40 min ago</small><br>
                     <a href="page_ready_inbox_message.html"><strong>You reached 10.000 Followers!</strong></a>
                 </div>
-            </div>
+            </div> -->
             <!-- END Messages -->
         </div>
         <!-- END Sidebar Content -->
     </div>
     <!-- END Wrapper for scrolling functionality -->
+    </div>
 </div>
+

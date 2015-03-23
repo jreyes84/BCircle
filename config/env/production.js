@@ -2,7 +2,8 @@
 
 module.exports = {
 	host: '0.0.0.0',
-	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://0.0.0.0/project-lk',
+	//db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://0.0.0.0/project-lk',
+	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://admin:betoreyes@ds045011.mongolab.com:45011/heroku_app34087509',
 	assets: {
 		lib: {
 			css: [

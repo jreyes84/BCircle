@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'project-lk';
-	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',  'ui.router', 'ui.bootstrap', 'ui.utils', 'angular-momentjs', 'angular.filter' , 'ui.calendar' , 'ui.select2','btford.socket-io', 'datatables','angularFileUpload','cb.x2js'];
+	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate' , 'ngCookies',  'ngTouch',  'ngSanitize',  'ui.router', 'ui.bootstrap', 'ui.utils', 'angular-momentjs', 'angular.filter' , 'ui.calendar' , 'ui.select2','btford.socket-io', 'datatables','smart-table','angularFileUpload','cb.x2js'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {

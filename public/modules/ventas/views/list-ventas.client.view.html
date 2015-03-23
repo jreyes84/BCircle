@@ -1,0 +1,151 @@
+<div data-ng-controller="VentasController" style="min-height: 700px;" data-ng-init="find()">
+    <!-- Blank Header -->
+    <div class="content-header">
+
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Pages</li>
+        <li><a href="">Punto de venta</a></li>
+    </ul>
+    <!-- END Blank Header -->
+
+    <!-- Example Block -->
+    <div class="col-lg-8">
+        <div class="block">
+            <div class="block-title">
+                <div class="block-options pull-right" data-ng-show="configButton">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-default" data-toggle="tooltip" title="" data-tooltip="Configuración" data-ng-click="onClickConfig()">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="puntoVentaTemplate" data-placeholder="Seleccione templates" multiple data-ng-change="onTagChange()" data-ng-show="configSelect">
+                     <option ng-repeat="template in inputTagTemplate" value="{{template.id}}">{{template.text}}</option>
+                </select>
+                <br>
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-primary btn-lg" data-ng-click="textFilter=''">Cancelar</button>
+                    </div>
+                    <input type="text" class="form-control input-lg" placeholder="" data-ng-model="textFilter">
+                </div>
+            </div>
+            <!-- Example Content -->
+            <div class="row">
+                <div class="container-fluid scroll">
+                    <div class="col-sm-6 col-md-4" data-ng-repeat="promotion in promotions | filter:textFilter" >
+                        <a href="javascript:void(0)" class="widget widget-hover-effect1 themed-background" data-ng-click="onPromoClick(promotion)">
+                            <div class="widget-simple">
+                                <h4 class="widget-content widget-content-light">
+                                    <strong>{{promotion.name}}</strong>
+                                </h4>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- END Example Content -->
+        </div>
+        <div class="block">
+            <!-- Example Content -->
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4" data-ng-repeat="product in products | filter:textFilter">
+                    <div class="block-options pull-right" style="z-index: 999; position:absolute; top:-10px; right:10px;" ng-show="showActions">
+                        <a href="javascript:void(0)" class="btn btn-alt btn-sm btn-danger" data-toggle="tooltip" title="" data-original-title="Delete" data-ng-click="deleteProduct(product,$index)"><i class="fa fa-times"></i></a>
+                    </div>
+                    <a href="javascript:void(0)" class="widget widget-hover-effect3 themed-background" ng-swipe-left="showActions = true" ng-swipe-right="showActions = false" data-press-by-time data-ng-click="onClickProduct(product)">
+                        <div class="widget-simple">
+                            <img data-ng-src="{{product.thumbimage}}" alt="avatar" class="widget-image img-circle pull-left">
+                            <h4 class="widget-content widget-content-light">
+                                <strong>{{product.name}}</strong>
+                                <small>$ {{product.precio_venta}} - <span data-ng-repeat="grupo in product.grupos">{{grupo.name}} </span></small>
+                            </h4>
+
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- END Example Content -->
+        </div>
+        <div class="block">
+            <!-- Responsive Partial Title -->
+            <div class="block-title">
+                <h2><strong>Carrito</strong></h2>
+            </div>
+            <!-- END Responsive Partial Title -->
+
+            <!-- Responsive Partial Content -->
+            <div class="row">
+                <table class="table table-vcenter table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 150px;" class="text-center hidden-xs hidden-sm"><i class="gi gi-user"></i></th>
+                            <th class="text-center">Producto</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-center">Precio</th>
+                            <th class="text-center">Subtotal</th>
+                            <th class="text-center">Opción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat = "carrito in cart.productos">
+                            <td class="text-center hidden-sm hidden-xs"><img src="img/placeholders/avatars/avatar8.jpg" alt="avatar" class="img-circle"></td>
+                            <td class="text-center"><a href="javascript:void(0)">{{carrito.name}}</a></td>
+                            <td class="text-center">{{carrito.cantidad}}</td>
+                            <td class="text-center"><a href="javascript:void(0)" class="label label-warning">$ {{carrito.precio_venta}}</a></td>
+                            <td class="text-center"><a href="javascript:void(0)" class="label label-warning">$ {{carrito.subtotal}}</a></td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-md">
+                                    <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete" data-ng-click="onDeleteProduct($index,carrito)"><i class="fa fa-times"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-right"><h2>Total:</h2></td>
+                            <td colspan="2"><h2><strong>$ {{cart.total}}</strong></h2></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            
+            <!-- END Responsive Partial Content -->
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="block">
+            <form>
+                <!-- Example Title -->
+                <div class="form-group">
+                    <input type="text" class="form-control text-center" placeholder="" data-ng-model="calcNumber">
+                </div>
+                <div class="block-title">
+                </div>
+                <!-- END Example Title -->
+                <!-- Example Content -->
+                <div class="row">
+                    <div class="{{calc.dataclass}}" data-ng-repeat="calc in calculadora">
+                        <a href="javascript:void(0)" class="widget widget-hover-effect3 themed-background-night" data-ng-click="onClickCalcNumber(calc.value)">
+                            <div class="widget-simple">
+                                <h4 class="widget-content widget-content-light text-center">
+                                    <strong>{{calc.text}}</strong>
+                                </h4>
+
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <button type="submit" class="btn btn-alt btn-lg btn-success col-xs-12 col-md-12 col-lg-12" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk" data-ng-click="purchaseCart()"><i class="fa fa-money"></i></i><span> Cobrar</span></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+        
+    <!-- END Example Block -->
+</div>

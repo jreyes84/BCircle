@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd" version="3.2" serie="MGZI" folio="540283" fecha="2015-01-06T23:59:00" sello="P/KnwwST/LgiZBAgu8vt/iMryCGGbrMh6cNYEYj5f0/QH5uG76K1Hwki+2QT5ZtCVssY8OQr+4YYDeOIxaNv+nG4BcD1iuvYR10VsRiz/L6d+EObK/G3CUEG1xCaaau62yNMsLndM4yTO6BEEEHKhLYQBi2Z67LlOcg78/AarhA=" formaDePago="Pago en una sola exhibicion" condicionesDePago="CREDITO" noCertificado="00001000000301967632" subTotal="859.91" total="997.50" tipoDeComprobante="ingreso" metodoDePago="No identificado" LugarExpedicion="GUADALAJARA JALISCO" NumCtaPago="No identificado" certificado="MIIEYDCCA0igAwIBAgIUMDAwMDEwMDAwMDAzMDE5Njc2MzIwDQYJKoZIhvcNAQEFBQAwggGKMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMTUwMwYJKoZIhvcNAQkCDCZSZXNwb25zYWJsZTogQ2xhdWRpYSBDb3ZhcnJ1YmlhcyBPY2hvYTAeFw0xMzEyMjExODIzMDdaFw0xNzEyMjExODIzMDdaMIGsMRowGAYDVQQDExFNVUxUSUdBUyBTQSBERSBDVjEaMBgGA1UEKRMRTVVMVElHQVMgU0EgREUgQ1YxGjAYBgNVBAoTEU1VTFRJR0FTIFNBIERFIENWMSUwIwYDVQQtExxNVUw3ODEwMjBNSjcgLyBBRU5CNzcwMjEyTEIxMR4wHAYDVQQFExUgLyBBRU5CNzcwMjEySEpDQ1hSMDkxDzANBgNVBAsTBk1hdHJpejCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAmHNWWQ82ft1tdGTkGjIT75LGWBg0boiSwphqXmYRaHnGjeYERHbOWYsN0BFRA74BnJgapdAkF/Go4F/2ldPBIafhxLzWj4E2VT51Md87MI41eIcczLOExbLcN6cogWswuOnnwzLDC2Qh2Tyox18j+yKCtKlk9wF3zd4aiNPyLU8CAwEAAaMdMBswDAYDVR0TAQH/BAIwADALBgNVHQ8EBAMCBsAwDQYJKoZIhvcNAQEFBQADggEBAKNMX8MIPYXAT/Q+YcT+OWwdxMh9gECOZGBa/JHcElFV2Dxfsfw7KLP5CiMjY5qFL9Opn8qm3GH4uov9BHpzLvUtHFYKpIGloKxNzGOo7RVFEwCR3E66+69KZ8ALWybE+C9+Hg6/WmTQeUq1EiErvzgIO5COlG+hoF16LcnzELEqWAOe5v5Om6t47XNzTt0s0+9W1RFJa6+yFlf52S9Y0FTAkdzEFo1jdC4bflTS/wtgWWqV7XB/HYbkk055ZD65H5l8QVIHQr6/rYwXM1+rvilkeJDWXI9B3MRH4G0DyzuvvnHuk6N6gDPtoojm830kfb5DPLD/Hdp2M1Ta/3iukSs=">
+<cfdi:Emisor rfc="MUL781020MJ7" nombre="MULTIGAS, S.A. DE C.V."> 
+<cfdi:DomicilioFiscal calle="CALLE 18" noExterior="2316" colonia="ZONA INDUSTRIAL" municipio="GUADALAJARA" estado="JALISCO" pais="MEXICO" codigoPostal="44940" />
+<cfdi:RegimenFiscal Regimen="Regimen General de Ley Persona Moral" />
+</cfdi:Emisor>
+<cfdi:Receptor rfc="UILB480910DLA" nombre="BLANCA URIBE LOMELI">
+<cfdi:Domicilio calle="CHICHENITZA" noExterior="443" colonia="JARDINES DEL SOL" municipio="ZAPOPAN" estado="JALISCO" pais="MEXICO" codigoPostal="45050" />
+</cfdi:Receptor>
+<cfdi:Conceptos>
+<cfdi:Concepto cantidad="133" unidad="LITRO" descripcion="GAS L.P base calculo[6.465517] Remision(es):SJO2040882349" valorUnitario="6.465517" importe="859.91">
+</cfdi:Concepto>
+</cfdi:Conceptos>
+<cfdi:Impuestos totalImpuestosTrasladados="137.59">
+
+  <cfdi:Traslados>
+    <cfdi:Traslado impuesto="IVA" tasa="16.00" importe="137.59" />
+  </cfdi:Traslados>
+</cfdi:Impuestos>
+<cfdi:Complemento>
+ 
+<tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/TimbreFiscalDigital/TimbreFiscalDigital.xsd" selloCFD="P/KnwwST/LgiZBAgu8vt/iMryCGGbrMh6cNYEYj5f0/QH5uG76K1Hwki+2QT5ZtCVssY8OQr+4YYDeOIxaNv+nG4BcD1iuvYR10VsRiz/L6d+EObK/G3CUEG1xCaaau62yNMsLndM4yTO6BEEEHKhLYQBi2Z67LlOcg78/AarhA=" FechaTimbrado="2015-01-07T05:03:32" UUID="F108970A-EE42-4ADD-AF87-3E736D9C2F57" noCertificadoSAT="00001000000202864530" version="1.0" selloSAT="rwDPzkDNV3ELGxx3GoYPj9ZpzJRc2kXe/Vn3gDvNmwJBCTgh7CF0SU06dX4y+NhBmcTmgwGuGrMqIB7QeCotIVw07eSaQhht3iyeOsTPkistq8OvrqmOL+E3R25dHVAauT/HBPrkaD10uJJr5e2zxCftrtdPDjry1IcHBgOctFs=" /></cfdi:Complemento>
+</cfdi:Comprobante>
+

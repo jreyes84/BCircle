@@ -18,6 +18,7 @@ var _ = require('lodash'),
  * Forgot for reset password (forgot POST)
  */
 exports.forgot = function(req, res, next) {
+	console.log(req.body);
 	async.waterfall([
 		// Generate random token
 		function(done) {
@@ -34,7 +35,7 @@ exports.forgot = function(req, res, next) {
 				}, '-salt -password', function(err, user) {
 					if (!user) {
 						return res.status(400).send({
-							message: 'No account with that username has been found'
+							message: 'No hay cuentas con ese usuario'
 						});
 					} else if (user.provider !== 'local') {
 						return res.status(400).send({
@@ -51,7 +52,7 @@ exports.forgot = function(req, res, next) {
 				});
 			} else {
 				return res.status(400).send({
-					message: 'Username field must not be blank'
+					message: 'El campo Email no puede ir en blanco'
 				});
 			}
 		},
@@ -68,18 +69,19 @@ exports.forgot = function(req, res, next) {
 		function(emailHTML, user, done) {
 			var smtpTransport = nodemailer.createTransport(config.mailer.options);
 			var mailOptions = {
-				to: user.email,
+				to: user.username,
 				from: config.mailer.from,
 				subject: 'Password Reset',
 				html: emailHTML
 			};
+			console.log(mailOptions,emailHTML);
 			smtpTransport.sendMail(mailOptions, function(err) {
 				if (!err) {
 					res.send({
-						message: 'An email has been sent to ' + user.email + ' with further instructions.'
+						message: 'Un email ha sido enviado a ' + user.email + ' con instrucciones.'
 					});
 				}
-
+				console.log(err);
 				done(err);
 			});
 		}

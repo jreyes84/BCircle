@@ -1,8 +1,14 @@
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', 'Authentication', '$element',
-	function($scope, $http , Authentication, $element) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$stateParams','Authentication', '$element',
+	function($scope, $http , $stateParams, Authentication, $element) {
 		$scope.authentication = Authentication;
+		$scope.msgError='';
+		$scope.forgot = false;
+		$scope.register = false;
+		$scope.login = true;
+		$scope.credentials={};
+
 		// If user is signed in then redirect back home
 		$scope.signup = function() {
 			if(!$scope.credentials.roles){
@@ -26,6 +32,17 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 				}
 			}).error(function(response) {
 				$scope.error = response.message;
+				console.log($scope.error);
+			});
+		};
+
+		$scope.forgoted = function(){
+			console.log('Home');
+			$http.post('/auth/forgot',$scope.credentials).success(function(response){
+
+			}).error(function(response){
+				$scope.error = response.message;
+
 			});
 		};
 
@@ -33,11 +50,33 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 			$http.post('/auth/signin', $scope.credentials).success(function(response) {
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response;
+				$scope.error = undefined;
 				window.location.reload();
 				// And redirect to the index page
 			}).error(function(response) {
 				$scope.error = response.message;
+				if($scope.error === 'Unknown user'){
+					$scope.msgError = 'Usuario no encontrado';
+				}
 			});
+		};
+
+		$scope.onClickNew= function(){
+			$scope.forgot = false;
+			$scope.register = true;
+			$scope.login = false;
+		};
+
+		$scope.onClickForgot= function(){
+			$scope.register = false;
+			$scope.forgot = true;
+			$scope.login = false;
+		};
+
+		$scope.onClickLogin = function(){
+			$scope.register = false;
+			$scope.forgot = !false;
+			$scope.login = true;
 		};
 	}
 ]);

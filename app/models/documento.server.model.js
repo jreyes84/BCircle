@@ -34,6 +34,11 @@ var DocumentoSchema = new Schema({
 		cargoQty : { type : Number }, 
 		abonoQty : { type : Number },
 		edit : { type : Boolean, default : false },
+		circles : [{
+			idcircle : { type : Schema.ObjectId },
+			name : { type : String },
+			checked : { type : Boolean, default : true }
+		}],
 		typeaccount : { type: String, default:'' }
 	}],
 	xml : {

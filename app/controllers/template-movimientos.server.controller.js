@@ -97,7 +97,8 @@ exports.delete = function(req, res) {
 /**
  * List of Template movimientos
  */
-exports.list = function(req, res) { TemplateMovimiento.find().sort('-created').exec(function(err, templateMovimientos) {
+exports.list = function(req, res) { 
+	TemplateMovimiento.find().sort('-created').exec(function(err, templateMovimientos) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -182,7 +183,7 @@ exports.listTemplatesAndCuentas = function (req, res) {
 
 
 exports.listCuentasFromTemplates = function(req,res){
-	var array=[];
+	var array = [];
 	var param = req.body;
 	//Function to verify if exists before push it to the array
 	var checkIfExistBeforePushIt = function(param, array, account, typeaccount){
@@ -205,7 +206,7 @@ exports.listCuentasFromTemplates = function(req,res){
 			}
 		});
 	};
-
+	console.log(param);
 	TemplateMovimiento.find( { _id : { $in : param } } ).exec(function(err, templates){
 		if(err){
 			return res.status(400).send({
@@ -214,19 +215,43 @@ exports.listCuentasFromTemplates = function(req,res){
 		}else
 		{
 			//Get templates
-			templates.forEach(function(count){
-				count.cuenta.forEach(function(account){
-					array.push( { idcuenta : account.idcuenta , name : account.name, cargo : account.cargo , abono : account.abono, cargo_a : account.cargo_a , cargoQty : 0 , abonoQty : 0 ,edit : false, typeaccount: account.typeaccount } );
-				});
-			});
-
 			//Get cuentas
 			Cuenta.find().exec(function(err_1 , cuentas){
+
 				if(err_1){
 					return res.status(400).send({
 						message: errorHandler.getErrorMessage(err_1)
 					});
 				}else{
+
+					templates.forEach(function(count){
+						count.cuenta.forEach(function(account){
+							cuentas.forEach(function(tipo){
+								if(account.idcuenta+'' === tipo._id+''){
+									array.push( { idcuenta : tipo._id , name : tipo.name, cargo : account.cargo, abono: account.abono , cargo_a: account.cargo_a, cargoQty : 0 , abonoQty : 0, edit : false, circles: tipo.circles, typeaccount: tipo.typecuenta } );
+								}else{
+									tipo.cuenta.forEach(function(cuenta){
+										if(account.idcuenta+'' === cuenta._id+''){
+											array.push( { idcuenta : cuenta._id , name : cuenta.name, cargo : account.cargo, abono: account.abono , cargo_a: account.cargo_a, cargoQty : 0 , abonoQty : 0, edit : false, circles: cuenta.circles, typeaccount: tipo.typecuenta } );
+										}else{
+											cuenta.subcuenta.forEach(function(subcuenta){
+												if(account.idcuenta+'' === subcuenta._id+''){
+													array.push( { idcuenta : subcuenta._id , name : subcuenta.name, cargo : account.cargo, abono: account.abono , cargo_a: account.cargo_a, cargoQty : 0 , abonoQty : 0, edit : false, circles: subcuenta.circles, typeaccount: tipo.typecuenta } );
+												}else{
+													subcuenta.detalle.forEach(function(detalle){ //Get detalle
+														if(account.idcuenta+'' === detalle._id+''){
+															array.push( { idcuenta : detalle._id , name : detalle.name, cargo : account.cargo, abono: account.abono , cargo_a: account.cargo_a, cargoQty : 0 , abonoQty : 0, edit : false, circles: detalle.circles, typeaccount: tipo.typecuenta } );
+														}
+													});	
+												}
+											});
+										}
+									});				
+								}								
+							});
+						});
+					});
+
 					cuentas.forEach(function(tipo){
 						checkIfExistBeforePushIt(param, array, tipo, tipo.typecuenta); // call function
 
@@ -243,6 +268,7 @@ exports.listCuentasFromTemplates = function(req,res){
 							});
 						});				
 					});
+					console.log(array);
 					res.jsonp(array);
 				}//else
 			});

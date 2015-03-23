@@ -91,6 +91,7 @@ exports.update = function(req, res) {
 
 		newArray.save(function(err) {
 			if (err) {
+				console.log(err);
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)
 				});
@@ -145,6 +146,85 @@ exports.list = function(req, res) { Cuenta.find({}).sort('order').exec(function(
 			});
 		} else {
 			res.jsonp(cuentas);
+		}
+	});
+};
+
+
+exports.listAPC = function(req, res) {
+	Cuenta.find({ typecuenta : { $in : ['Activo','Pasivo','Capital'] } }).sort('order').exec(function(err, rpts) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(rpts);
+		}
+	});
+};
+
+exports.listAccountsByCircle = function(req, res){
+	var all = [];
+	var circles = req.body;
+	var myFunction = function(circulos, cuenta){
+		var finded = false;
+		cuenta.circles.forEach(function(circleCuenta){
+			if(!finded)
+			{
+				circulos.forEach(function(circulo){
+					console.log(circulo,circleCuenta);
+					if(circulo.name){
+						if(circleCuenta.name === circulo.name ){
+							finded=true;
+						}	
+					}else if(circulo.idcircle){
+						if(circleCuenta.idcircle === circulo._id ){
+							finded=true;
+						}	
+					}else{
+						if(circleCuenta.idcircle+'' === circulo+'' ){
+							finded=true;
+						}	
+					}				
+				});
+			}
+		});
+		return finded;
+	};
+
+	Cuenta.find().sort('order').exec(function(err, cuentas) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			cuentas.forEach(function(tipo){						
+				if(tipo.cuenta.length > 0){
+					tipo.cuenta.forEach(function(cuenta){
+						if(cuenta.subcuenta.length > 0){
+							cuenta.subcuenta.forEach(function(subcuenta){
+								if(subcuenta.detalle.length >0 ){
+									subcuenta.detalle.forEach(function(detalle){
+										if(myFunction(circles, detalle))
+											all.push( { _id : detalle._id , name : detalle.name, order: detalle.order });
+									});	
+								}else
+								 {
+								 	if(myFunction(circles, subcuenta))
+								 		all.push( { _id : subcuenta._id , name : subcuenta.name, order:subcuenta.order } );
+								 }
+							});	
+						}else{
+							if(myFunction(circles, cuenta))
+								all.push( { _id : cuenta._id , name : cuenta.name, order: cuenta.order });
+						}								
+					});				
+				}else{
+					if(myFunction(circles, tipo))
+						all.push( { _id : tipo._id, name : tipo.name, order: tipo.order } );		
+				}
+			});
+			res.jsonp(all);
 		}
 	});
 };

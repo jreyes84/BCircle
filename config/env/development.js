@@ -2,7 +2,8 @@
 
 module.exports = {
   	host: '0.0.0.0',
-	db: 'mongodb://0.0.0.0/project-lk-dev',
+	//db: 'mongodb://0.0.0.0/project-lk-dev',
+	db: 'mongodb://admin:betoreyes@ds045011.mongolab.com:45011/heroku_app34087509',
 	app: {
 		title: 'project_lk - Development Environment'
 	},
@@ -37,7 +38,7 @@ module.exports = {
 			service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
 			auth: {
 				user: process.env.MAILER_EMAIL_ID || 'jreyes1684@gmail.com',
-				pass: process.env.MAILER_PASSWORD || 'Mich@pis2116'
+				pass: process.env.MAILER_PASSWORD || 'Bet@reyes16'
 			}
 		}
 	}

@@ -1,0 +1,52 @@
+<!-- <section data-ng-controller="VentasController" data-ng-init="findOne()">
+	<div class="page-header">
+		<h1 data-ng-bind="venta.name"></h1>
+	</div>
+	<div class="pull-right" data-ng-show="authentication.user._id == venta.user._id">
+		<a class="btn btn-primary" href="/#!/ventas/{{venta._id}}/edit">
+			<i class="glyphicon glyphicon-edit"></i>
+		</a>
+		<a class="btn btn-primary" data-ng-click="remove();">
+			<i class="glyphicon glyphicon-trash"></i>
+		</a>
+	</div>
+	<small>
+		<em class="text-muted">
+			Posted on
+			<span data-ng-bind="venta.created | date:'mediumDate'"></span>
+			by
+			<span data-ng-bind="venta.user.displayName"></span>
+		</em>
+	</small>
+</section> -->
+
+<div data-ng-controller="VentasController" >
+    <!-- Blank Header -->
+    <div class="content-header">
+        <div class="header-section">
+            <h1>
+                <i class="gi gi-brush"></i>Blank<br><small>A clean page to help you start!</small>
+            </h1>
+        </div>
+    </div>
+    <ul class="breadcrumb breadcrumb-top">
+        <li>Pages</li>
+        <li>Get Started</li>
+        <li><a href="">Blank</a></li>
+    </ul>
+    <!-- END Blank Header -->
+
+    <!-- Example Block -->
+    <div class="block">
+        <!-- Example Title -->
+        <div class="block-title">
+            <h2>Block Title</h2>
+        </div>
+        <!-- END Example Title -->
+
+        <!-- Example Content -->
+        <p>Your content..</p>
+        <!-- END Example Content -->
+    </div>
+    <!-- END Example Block -->
+</div>

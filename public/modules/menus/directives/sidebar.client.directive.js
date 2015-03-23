@@ -23,7 +23,6 @@ angular.module('menus').directive('sidebar', [
 		                    });
 		                }
 		            }
-
 		            return false;
 		        });
 			}

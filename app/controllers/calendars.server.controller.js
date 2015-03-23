@@ -18,7 +18,6 @@ var mongoose = require('mongoose'),
 exports.create = function(req, res) {
 	var calendar = new Calendar(req.body);
 	calendar.user = req.user;
-	console.log('create',req.body);
 	calendar.save(function(err) {
 		if (err) {
 			return res.status(400).send({
@@ -112,10 +111,9 @@ exports.sendEmailToUsers = function(req, res){
 		}	
 		i++;
 	});
-	console.log(to);
 	var mailOptions = {
 		to: to,
-		from: 'jreyes1684@gmail.com',//config.mailer.from,
+		from: config.mailer.from,
 		subject: subject,
 		html: html
 	};

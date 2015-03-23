@@ -68,7 +68,7 @@
         <!-- END Stylesheets -->
 
         <!-- Modernizr (browser feature detection library) & Respond.js (Enable responsive CSS code on browsers that don't support it, eg IE8) -->
-        <script src="/lib/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
+        <script src="/scripts/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
     </head>
     <body>
         <!-- Login Full Background -->
@@ -206,15 +206,15 @@
             {% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>
             {% endfor %} 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script>!window.jQuery && document.write(decodeURI('%3Cscript src="/lib/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
+        <script>!window.jQuery && document.write(decodeURI('%3Cscript src="/scripts/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
 
         <!-- Bootstrap.js, Jquery plugins and Custom JS code -->
-        <script src="/lib/vendor/bootstrap.min.js"></script>
-        <script src="/lib/plugins.js"></script>
-        <script src="/lib/app.js"></script>
+        <script src="/scripts/vendor/bootstrap.min.js"></script>
+        <script src="/scripts/plugins.js"></script>
+        <script src="/scripts/app.js"></script>
 
         <!-- Load and execute javascript code used only in this page -->
-        <script src="/lib/pages/login.js"></script>
+        <script src="/scripts/pages/login.js"></script>
         <script>$(function(){ Login.init(); });</script>
     </body>
 </html>

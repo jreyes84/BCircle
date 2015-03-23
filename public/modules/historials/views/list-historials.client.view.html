@@ -107,7 +107,6 @@
                     <!-- You can remove the class .timeline-hover if you don't want each event to be highlighted on mouse hover -->
                     <ul class="timeline-list timeline-hover" >
                         <li data-ng-repeat="log in historia.logs | filter:{ from : nameCircleType , fromType: nameCircleTypeDoc }" class="active">
-                            {{}}
                             <div class="timeline-icon"><i class="{{log.icon}}" data-tooltip="{{log.from}}"></i></div>
                             <div class="timeline-time" data-ng-if="log.date_document">
                                 {{log.date_document | date: 'dd/MM/yyyy'}}
@@ -117,19 +116,21 @@
                                 <table class="historial-table" >
                                     <tr data-ng-if="log.name_document">
                                         <!-- Start Documento -->
-                                        <td data-ng-if="log.fromType">
+                                        <td data-ng-if="log.fromType" data-tooltip="Tipo póliza">
                                             {{log.fromType}}
                                         </td>
-                                        <td data-ng-if="log.name_document" class="historial-table-1">
+                                        <td data-ng-if="log.name_document" class="historial-table-1" data-tooltip="Folio/ Nom. Documento">
                                             <a data-ng-href="#!/{{log.url}}">{{log.name_document}}</a>
                                         </td>
-                                        <td data-ng-if="log.contacto.length" class="historial-table-l2">{{log.contacto[0]}}</td>
-                                        <td data-ng-if="log.fromType"  class="historial-table-1">
-                                            $ {{log.cuentas|sumByKey:'cargoQty':log.fromType}}
-                                            <!-- <span data-ng-repeat="cuenta in log.cuentas | filter : { typeaccount : log.fromType}">$ {{cuenta.cargoQty}}</span> -->
+                                        <td data-ng-if="log.contacto.length" class="historial-table-l2" data-tooltip="Contacto">{{log.contacto[0]}}</td>
+                                        <td data-ng-if="log.fromType"  class="historial-table-1" data-tooltip="Cargo">
+                                             $ {{log.cuentas|sumByKey:'cargoQty':log.fromType:nameCircleFilter!=='' ? nameCircleFilter : historia.circleName}}
+                                        </td>
+                                        <td data-ng-if="log.fromType"  class="historial-table-1" data-tooltip="Abono">
+                                             $ {{log.cuentas|sumByKey:'abonoQty':log.fromType:nameCircleFilter!=='' ? nameCircleFilter : historia.circleName}}
                                         </td>
                                         <td data-ng-if="log.subtotal" data-tooltip="Subtotal" >${{log.subtotal}}</td>
-                                        <!-- <td data-ng-if="log.impuesto" data-tooltip="Impuesto" class="historial-table-doc-3">${{log.impuesto}}</td> -->
+                                        <td data-ng-if="log.impuesto" data-tooltip="Impuesto" class="historial-table-doc-3">${{log.impuesto}}</td>
                                         <td data-ng-if="log.total" data-tooltip="Total">${{log.total}}</td>
                                         <!-- End documento -->
                                     </tr>
@@ -151,6 +152,7 @@
                                         </td>
                                         <!-- End calendar -->
                                     </tr>
+
                                 </table>
                             </div>
                         </li>

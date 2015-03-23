@@ -24,12 +24,13 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 		$scope.PFBlockVisible = false;
 		$scope.PDBlockVisible = false;
 		$scope.optionTypeOfAccount = [
-						{value:'Activo', text:'Activo'}, 
-						{value:'Pasivo', text:'Pasivo'}, 
-						{value:'Capital', text:'Capital'}, 
-						{value:'Ingreso', text:'Ingreso'}, 
-						{value:'Egreso', text:'Egreso'}
-						];
+			{value:'Activo', text:'Activo'}, 
+			{value:'Pasivo', text:'Pasivo'}, 
+			{value:'Capital', text:'Capital'}, 
+			{value:'Ingreso', text:'Ingreso'}, 
+			{value:'Egreso', text:'Egreso'},
+			{value:'Inventario', text:'Inventario'}
+		];
 		$scope.theStatus = 0;
 
 		// Create new Cuenta
@@ -70,6 +71,7 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 
 		// Find a list of Cuentas
 		$scope.find = function() {
+			//$scope.msgSmartNotification('','Espere un momento...','fa fa-clock-o','#1c86e8', 100);
 			Cuentas.query(function(response){
 				$scope.cuentas = response;
 				$scope.updateTagTipoCuenta();
@@ -126,7 +128,7 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 					var subcuentaCantidad = 0;
 					var detalleCantidad = 0;
 
-					$scope.inputTagTipoCuenta.push({name:value.name});
+					$scope.inputTagTipoCuenta.push({name : value.name});
 					var circuloTipo = angular.copy(circuloA);
 
 					$scope.arrayCircleTipo.push(circuloTipo);
@@ -290,9 +292,14 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 			array.isVisible = false;
 			array.quantityVisible = false;
 			array.cantidad = Number(array.cantidad);
-			$scope.update($scope.cuentas[keytc]);
+			$scope.msgSmartNotification('','Espere un momento ...','fa fa-clock-o','#1c86e8', 100);
+				
+			$scope.update($scope.cuentas[keytc],function(){
+				$scope.msgSmartNotification('Cuentas','Cuenta agregada correctamente','fa fa-check','#739E73');
+				$scope.updateTagTipoCuenta();
+			});
 
-			$scope.updateTagTipoCuenta();
+			
 			
 		};
 
@@ -383,14 +390,18 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 				}else{
 					result = $scope.cuentas[index];
 				}
-				$scope.update(result);
+				$scope.update(result,function(){
+					$scope.msgSmartNotification('Cuentas','Cuenta eliminada correctamente','fa fa-check','#739E73');
+				});
 			}			
 		};
 		//Tags
 		//TipoCuentas
 		$scope.addTag = function() {	
 			var ok=true;
-			if ( $scope.tagTextTipoCuenta.length === 0 || $scope.tagTextTipoCuenta ) {
+			if(!$scope.tagTextTipoCuenta)
+				return;
+			else if ( $scope.tagTextTipoCuenta.length === 0) {
 				return;
 			}else{
 				angular.forEach($scope.inputTagTipoCuenta, function(value,key){
@@ -402,7 +413,9 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 			}
 			if(ok){
 				$scope.inputTagTipoCuenta.push({ name : $scope.tagTextTipoCuenta });
+				$scope.msgSmartNotification('','Espere un momento...','fa fa-clock-o','#1c86e8', 100);
 				$scope.create($scope.tagTextTipoCuenta,function(){
+					$scope.msgSmartNotification('Cuentas','Cuenta agregada correctamente','fa fa-check','#739E73');					
 		        	$scope.updateTagTipoCuenta();
 		        });
 				$scope.tagTextTipoCuenta = '';	
@@ -425,6 +438,7 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 						response = tipo;
 					}
 				});
+				$scope.msgSmartNotification('','Espere un momento ...','fa fa-clock-o','#1c86e8', 100);
 				$scope.deleteItem(response);
 			}
 		};
@@ -463,8 +477,10 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 		        $scope.cuentas[valueIndex].cuenta.push({
 		        	name : valueTag
 		        });
-
+				$scope.msgSmartNotification('','Espere un momento ...','fa fa-clock-o','#1c86e8', 100);
+				
 		        $scope.update($scope.cuentas[valueIndex],function(){
+		        	$scope.msgSmartNotification('Cuentas','Cuenta agregada correctamente','fa fa-check','#739E73');
 		        	$scope.updateTagTipoCuenta();
 		        });
 				
@@ -496,6 +512,7 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 						response = tipo;
 					}
 				});
+				$scope.msgSmartNotification('','Espere un momento ...','fa fa-clock-o','#1c86e8', 100);
 				$scope.deleteItem(response);
 			}
 		};
@@ -533,8 +550,10 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 		        	name : valueTag,
 		        	circles : []
 		        });
-
+				$scope.msgSmartNotification('','Espere un momento ...','fa fa-clock-o','#1c86e8', 100);
+				
 		        $scope.update($scope.cuentas[keytc],function(){
+		        	$scope.msgSmartNotification('Cuentas','Cuenta agregada correctamente','fa fa-check','#739E73');
 		        	$scope.updateTagTipoCuenta();
 		        });
 
@@ -568,6 +587,7 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 						response = tipo;
 					}
 				});
+				$scope.msgSmartNotification('','Espere un momento ...','fa fa-clock-o','#1c86e8', 100);
 				$scope.deleteItem(response);
 			}
 		};
@@ -610,7 +630,10 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 		        	circles : []
 		        });
 
+		        $scope.msgSmartNotification('','Espere un momento ...','fa fa-clock-o','#1c86e8', 100);
+				
 		        $scope.update($scope.cuentas[keytc],function(){
+		        	$scope.msgSmartNotification('Cuentas','Cuenta agregada correctamente','fa fa-check','#739E73');
 		        	$scope.updateTagTipoCuenta();
 		        });
 			}
@@ -637,6 +660,7 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 						response = tipo;
 					}
 				});
+				$scope.msgSmartNotification('','Espere un momento ...','fa fa-clock-o','#1c86e8', 100);
 				$scope.deleteItem(response);
 			}
 		};
@@ -648,7 +672,9 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 		
 		$scope.addTagActivoCirculante = function(){
 			if($scope.tagTextActivoCirculante.length === 0)
-				{return ;}
+				{
+					return ;
+				}
 
 			$scope.inputTagActivoCirculante.push({ name : $scope.tagTextActivoCirculante});
 			$scope.tagTextActivoCirculante ='';
@@ -861,6 +887,7 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 			});
 
 			//insert the first row Activos
+			$scope.msgSmartNotification('','Espere un momento...','fa fa-clock-o','#1c86e8', 100);
 			$scope.updateWizard();
 		};
 		
@@ -921,8 +948,9 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 				}else {
 					arrayCuenta.circles.push({ name : circle.name, idcircle: circle._id, checked: true });
 				}
-
+				$scope.msgSmartNotification('','Espere un momento ...','fa fa-clock-o','#1c86e8', 100);
 				$scope.update( $scope.cuentas[tipo], function(){
+					$scope.msgSmartNotification('Circulo','Circulo actualizado correctamente','fa fa-check','#739E73');
 					//$scope.msgSmartNotification('Círculo','Su círculo fue agregado correctamente','fa fa-check','#739E73');
 					if(tipo !== undefined){
 						if(cuenta !== undefined){
@@ -982,7 +1010,10 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 			circulo.$save(function(response){
 				actual.circleName = '';
 				cuenta.circles.push({ name : response.name, idcircle: response._id, checked: true });
+				$scope.msgSmartNotification('','Espere un momento ...','fa fa-clock-o','#1c86e8', 100);
+				
 				$scope.update($scope.cuentas[tipo], function(){
+					$scope.msgSmartNotification('Círculo','Su círculo fue agregado correctamente','fa fa-check','#739E73');
 					$timeout(function(){
 						//$scope.find();
 						$scope.newCircle = false;
@@ -992,7 +1023,7 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 						
 					},100);
 				});
-				$scope.msgSmartNotification('Círculo','Su círculo fue agregado correctamente','fa fa-check','#739E73');
+				
 			}, function(errorResponse){
 				$scope.error = errorResponse.data.message;
 				$scope.msgSmartNotification('Error' , $scope.error , 'fa fa-frown-o' , '#C46A69' );
@@ -1040,7 +1071,9 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 		//END CIRCLE OPTIONS
 
 		//Notifications
-		$scope.msgSmartNotification = function( title,  content, icon, color){
+		$scope.msgSmartNotification = function( title,  content, icon, color, time){
+			if(!time)
+				time = 1000;
 			$scope.msgTitle = title;
 			$scope.msgContent = content;
 			$scope.msgIcon = icon;
@@ -1049,7 +1082,7 @@ angular.module('cuentas').controller('CuentasController', ['$scope','$http','$ti
 			$scope.isOk = true;	
 			$timeout(function () {
             	$scope.isOk = undefined;
-        	},1000);
+        	},time);
 		};
 
 		//Config cuentas

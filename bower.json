@@ -4,6 +4,8 @@
 	"description": "Fullstack JavaScript with MongoDB, Express, AngularJS, and Node.js.",
 	"dependencies": {
 		"bootstrap": "~3",
+		"jquery": "~2.x",
+    	"jquery-ui": "~1.10.3",
 		"angular": "~1.2",
 		"angular-resource": "~1.2",
 		"angular-animate": "~1.2",
@@ -11,6 +13,20 @@
 		"angular-bootstrap": "~0.11.2",
 		"angular-bootstrap": "~0.12.0",
 		"angular-ui-utils": "~0.1.1",
-		"angular-ui-router": "~0.2.11" 
+		"angular-ui-router": "~0.2.11",
+		"angular-cookies" : "~1.2.23",
+		"angular-datatables" : "~0.2.1",
+		"angular-smart-table" : "~1.4.12",
+		"angular-filter" : "~0.5.2",
+		"angular-momentjs" : "~0.1.8",
+		"angular-sanitize" : "~1.2.23",
+		"angular-socket-io" : "~0.6.0",
+		"angular-touch" : "~1.2.23",
+		"angular-ui-select2" : "~0.0.5",
+		"angular-ui-grid" : "~3.0.0-rc.12",
+		"angular-ui-calendar" : "~0.9.0-beta.1",
+		"ng-file-upload" : "~1.6.12",
+		"ng-file-upload-shim": "~1.6.12",
+		"angular-x2js" : "~0.1.1"
 	}
 }

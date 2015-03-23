@@ -56,6 +56,7 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 					 }	
 				}
 				// // Redirect after save
+				$scope.msgSmartNotification('','Espere un momento...','fa fa-clock-o','#1c86e8', 100);
 				documento.$save(function(response) {
 					$scope.createHistorial(response, 'Nuevo documento', 'fa fa-file-text', 'documentos/'+response._id);
 					$location.path('documentos/' + response._id);
@@ -74,30 +75,30 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 						});
 					});
 					$scope.msgSmartNotification('Documento','Se guardo correctamente','fa fa-check','#739E73');
-					$scope.isOk = true;	
-					$timeout(function () {
-	                	$scope.isOk = undefined;
-	                	$scope.find();
-
-	            	},1000);
 				}, function(errorResponse) {
 					$element.find('#save').attr( 'disabled' , false );	
 					$scope.msgSmartNotification('Error' , errorResponse.data.message , 'fa fa-frown-o' , '#C46A69' );
-					$scope.isOk = false;
-					$timeout(function () {
-	                	$scope.isOk = undefined;
-	            	},1000);
+					
 				});	
 			}else{
 				$element.find('#save').attr('disabled',false);
 			}
 		};
 
-		$scope.msgSmartNotification = function( title,  content, icon, color){
+		$scope.msgSmartNotification = function( title,  content, icon, color, widthBox ,time){
+			if (!time) {
+				time = 1000;
+			}
 			$scope.msgTitle = title;
 			$scope.msgContent = content;
 			$scope.msgIcon = icon;
 			$scope.msgColor = color;
+			$scope.msgWidthBox = widthBox;
+			$scope.isOk = false;
+
+			$timeout(function () {
+            	$scope.isOk = undefined;
+        	},time);
 		};
 
 		$scope.saveDocument = function(){
@@ -177,7 +178,7 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 			 {
 			 	documento.items.splice(length,1);
 			 }
-
+			 $scope.msgSmartNotification('','Espere un momento...','fa fa-clock-o','#1c86e8', 100);
 			 documento.$update(function(response) {
 			 	$scope.createHistorial(response, 'Documento actualizado', 'fa fa-file-text', 'documentos/'+response._id );
 
@@ -192,18 +193,9 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 					$scope.uploadPDF(function(){
 					});
 				}
-				$scope.msgSmartNotification('Documento','Se actualizo correctamente','fa fa-check','#739E73');
-				$scope.isOk = true;	
-				$timeout(function () {
-                	$scope.isOk = undefined;
-                	$scope.find();
-            	},1000);		
+				$scope.msgSmartNotification('Documento','Se actualizo correctamente','fa fa-check','#739E73');		
 			}, function(errorResponse) {
 				$scope.msgSmartNotification('Error' , errorResponse.data.message , 'fa fa-frown-o' , '#C46A69' );
-				$scope.isOk = false;
-				$timeout(function () {
-                	$scope.isOk = undefined;
-            	},1000);
 			});
 		};
 
@@ -311,11 +303,6 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 						$scope.cargos_abonos();
 					}else{
 						$scope.msgSmartNotification('Error','El formato del XML no es correcto','fa fa-frown-o' , '#C46A69');
-						$scope.isOk = true;	
-						$timeout(function () {
-		                	$scope.isOk = undefined;
-		                	$scope.find();
-		            	},1000);
 					}
 				}).error(function(err){
 				});
@@ -324,7 +311,6 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 
 		// Find a list of Documentos //Total y Descripcion
 		$scope.find = function(callback) {
-			console.log($stateParams.documentoId);
 			if($stateParams.documentoId){
 				$scope.findOne();
 			}
@@ -386,6 +372,7 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 
 					$scope.inputTagCuentas = [];
 					$scope.fillListCuentas(callback);
+					// $scope.fillListCuentas();
 				});
 			});			
 		};
@@ -427,7 +414,9 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 					angular.forEach(circulos,function(circulo){
 						$scope.circulos.push({ name : circulo.name, _id : circulo._id, checked : false });
 					});
+
 					$scope.fillAllCircles(response);
+					$scope.fillListCuentas();
 				});
 			});
 		};
@@ -552,31 +541,49 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 						temMov.push(m);
 					});
 					var find = false;
+					var TotalCircles = [];
 					angular.forEach($scope.circulos,function(circle){
 						if(!find){
 							angular.forEach(response, function(result){
-								angular.forEach(result.circles, function(r_circle){
-									if(r_circle.idcircle + '' === circle._id + '' ){
-										find = true;
+								var rcircle;
+								if(result.circles.length > $scope.circulos)
+									rcircle = result.circles;
+								else
+									rcircle = $scope.circulos;
+								angular.forEach(rcircle, function(r_circle){
+									if(r_circle.checked){
 										var ok = false;
-										angular.forEach($scope.documento.circles, function(doc){
-											if(doc.idcircle+'' === r_circle.idcircle+''){
-												ok = true;
-											}
-										});
+										if(!r_circle.idcircle)
+											r_circle.idcircle = r_circle._id;
+										if(r_circle.idcircle + '' === circle._id + '' ){
+											find = true;
+											angular.forEach($scope.documento.circles, function(doc){
+												if(doc.idcircle+'' === r_circle.idcircle+''){
+													ok = true;
+												}
+											});
+										}
 										if(!ok)
-											$scope.documento.circles.push({idcircle:circle._id, name: circle.name , checked : true});
+											TotalCircles.push({idcircle:r_circle.idcircle, name: r_circle.name , checked : true});
 									}
 								});
 							});
 						}
 					});
-
-					if(find){
-						$scope.fillAllCircles($scope.documento);
-					}
+					$scope.fillAllCircles($scope.documento);
 
 					angular.forEach( response , function( res ){
+						angular.forEach(TotalCircles, function(totCircles){
+							var exist = false;
+							angular.forEach(res.circles,function(cir){
+								if(cir.idcircle === totCircles.idcircle){
+									exist=true;
+								}
+							});
+							if (!exist){
+								res.circles.push(totCircles);
+							}
+						});
 						angular.forEach( temMov , function( mov, key ){
 							if( res.idcuenta === mov.idcuenta ){
 								if( !res.cargo && !res.abono){
@@ -597,10 +604,9 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 						});	
 
 						if(ok){
-							if(!found){
-
+							//if(!found){
 								$scope.documento.cuentas.push(res);
-							 } //else{
+							 //} //else{
 							// 	angular.forEach($scope.templates, function(val,k){
 							// 		//if(val === res.id+'')
 							// 		//	$scope.templates.splice( k , 1 );
@@ -684,6 +690,8 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 
 		$scope.showDetail = function( doc ){
 			$scope.showList = false;
+			// var width = $element.parent().parent().parent().parent().find('#main-container').width();
+			// $scope.msgSmartNotification('','Espere un momento.','fa fa-clock-o','#1c86e8', width+'', 100);
 			$scope.documento = doc;
 			$scope.userid = doc._id;
 		};
@@ -885,23 +893,14 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 	    	contacto.$save(function(response) {
 				$scope.inputTagContactos.push( { id : response._id , text : response.razonSocial + ' - ' + response.comercialName } );
 	    		$scope.msgSmartNotification('Contactos','Has agregado un nuevo contacto, recuerda mantener todos sus campos actualizados.','fa fa-bell swing animated','#3276B1');
-				$scope.isOk = true;	
-				
-				$timeout(function () {
-                	$scope.isOk = undefined;
-                	if( !$scope.documento.contacto ){
-						$scope.documento.contacto = [];
-					}								
-					$scope.documento.contacto.push(response._id);
-            	},1000);
+            	if( !$scope.documento.contacto ){
+					$scope.documento.contacto = [];
+				}								
+				$scope.documento.contacto.push(response._id);
 				
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 				$scope.msgSmartNotification('Error','No se pudo agregar el contacto: '+ $scope.error,'fa fa-frown-o','#C46A69');
-	            $scope.isOk = false;	
-				$timeout(function () {
-                	$scope.isOk = undefined;
-            	},1000);
 			});
 	    	$scope.newContacto = [];
 	    };
@@ -917,21 +916,13 @@ angular.module('documentos').controller('DocumentosController', ['$scope' , '$ht
 			contacto.$save(function(response) {				
 				$scope.msgSmartNotification('Contactos','Se guardo correctamente','fa fa-check','#739E73');
 				$scope.inputTagContactos.push({ id : response._id , text : response.razonSocial + ' - ' + response.comercialName });
-	            $scope.isOk = true;	
 	            $scope.credentials = [];
-				$timeout(function () {
-					$scope.documento.contacto.push(response._id);
-                	$scope.isOk = undefined;
-            	},100);
+				$scope.documento.contacto.push(response._id);
 			
 				
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 				$scope.msgSmartNotification('Error','No se guardo correctamente: '+ $scope.error,'fa fa-frown-o','#C46A69');
-	            $scope.isOk = false;	
-				$timeout(function () {
-                	$scope.isOk = undefined;
-            	},1000);
 			});
 		};
 

@@ -1,13 +1,17 @@
 'use strict';
 
 // Rpts controller
-angular.module('rpts').controller('RptsController', ['$scope', '$stateParams', '$location', '$http' , '$timeout', 'Authentication', 'Rpts', 'Contactos', 'Cuentas' , 'DTOptionsBuilder' ,'DTColumnBuilder',
-	function($scope, $stateParams, $location, $http, $timeout, Authentication, Rpts, Contactos, Cuentas, DTOptionsBuilder, DTColumnBuilder ) {
+angular.module('rpts').controller('RptsController', ['$scope', '$stateParams', '$location', '$http' , '$timeout', 'Authentication', 'Rpts', 'Contactos', 'Cuentas', 'Circulos' , 'DTOptionsBuilder' ,'DTColumnBuilder',
+	function($scope, $stateParams, $location, $http, $timeout, Authentication, Rpts, Contactos, Cuentas, Circulos , DTOptionsBuilder, DTColumnBuilder ) {
 		$scope.authentication = Authentication;
 		$scope.resultados = [];
 		$scope.balanceGrl = [];
+		$scope.filtros = {};
 		$scope.rootFile = undefined;
 		// Create new Rpt
+
+		//$scope.msgSmartNotification('Círculo','Su círculo fue agregado correctamente','fa fa-check','#739E73');
+		//$scope.msgSmartNotification('Error' , $scope.error , 'fa fa-frown-o' , '#C46A69' );
 		$scope.create = function() {
 			// Create new Rpt object
 			var rpt = new Rpts ({
@@ -55,6 +59,7 @@ angular.module('rpts').controller('RptsController', ['$scope', '$stateParams', '
 		// Find a list of Rpts
 		$scope.find = function() {
 			$scope.rpts = Rpts.query();
+			$scope.circles = Circulos.query();
 		};
 
 		$scope.findCuentas = function(callback) {
@@ -62,10 +67,6 @@ angular.module('rpts').controller('RptsController', ['$scope', '$stateParams', '
 				$scope.findOne();
 			}
 			$scope.inputTagCuentas = [];
-			$http.post('/cuentas/listDetalle').success(function(response){
-				$scope.inputTagCuentas = response;
-			}).error(function(response){
-			});
 		};
 
 		// Find existing Rpt
@@ -77,26 +78,32 @@ angular.module('rpts').controller('RptsController', ['$scope', '$stateParams', '
 
 		$scope.send = function(){
 			if($scope.selectReporte){
-				if($scope.filtros.start)
-				{
-					$scope.filtros.start += ' 00:00:00'; 
-				}
-				if($scope.filtros.end){
-					$scope.filtros.end += ' 23:59:59'; 
-				}
-				
-				$scope.resultados = [];
-				$scope.dtOptionsRes = [];
-				$scope.balanceGrl = [];
-				$scope.rootFile = undefined;
+				if($scope.filtros.circle){
+					if($scope.filtros.start)
+					{
+						$scope.filtros.start += ' 00:00:00'; 
+					}
+					if($scope.filtros.end){
+						$scope.filtros.end += ' 23:59:59'; 
+					}
+					
+					$scope.resultados = [];
+					$scope.dtOptionsRes = [];
+					$scope.balanceGrl = [];
+					$scope.rootFile = undefined;
 
-				switch($scope.selectReporte){
-					case 'rptIgnis':$scope.resultados = []; $scope.ReporteIgnis(); break;
-					case 'balanceGrl' :$scope.balanceGrl=[]; $scope.balanceGeneral(); break;
-				}	
+					switch($scope.selectReporte){
+						case 'rptIgnis':$scope.resultados = []; $scope.ReporteIgnis(); break;
+						case 'balanceGrl' :$scope.balanceGrl=[]; $scope.balanceGeneral(); break;
+					}
+				}else{
+					$scope.error = 'Seleccione un circulo';
+					$scope.msgSmartNotification('Error' , $scope.error , 'fa fa-frown-o' , '#C46A69' );
+				}
 			}else
 			{
 				$scope.error = 'Seleccione un reporte';
+				$scope.msgSmartNotification('Error' , $scope.error , 'fa fa-frown-o' , '#C46A69' );
 			}
 		};
 
@@ -111,7 +118,10 @@ angular.module('rpts').controller('RptsController', ['$scope', '$stateParams', '
 							angular.forEach(val.cuentas , function(cuenta){
 								if(selected === cuenta.idcuenta){
 									cuenta.name_document = val.name_document;
-									cuenta.date_document = val.date_document;	
+									cuenta.date_document = val.date_document;
+									cuenta.date_year = val.date_document;
+									cuenta.date_monthFull = val.date_document;
+									cuenta.date_month = val.date_document;	
 									$scope.resultados.totalCargo += cuenta.cargoQty;
 									$scope.resultados.totalAbono += cuenta.abonoQty;
 									$scope.resultados.push(cuenta);
@@ -124,6 +134,9 @@ angular.module('rpts').controller('RptsController', ['$scope', '$stateParams', '
 						angular.forEach(val.cuentas , function(cuenta){
 							cuenta.name_document = val.name_document;
 							cuenta.date_document = val.date_document;
+							cuenta.date_year = val.date_document;
+							cuenta.date_monthFull = val.date_document;
+							cuenta.date_month = val.date_document;	
 							cuenta.contactos = [];
 							cuenta.contactos.push(val.contacto);
 							$scope.resultados.totalCargo += cuenta.cargoQty;
@@ -158,7 +171,10 @@ angular.module('rpts').controller('RptsController', ['$scope', '$stateParams', '
 					DTColumnBuilder.newColumn('contacts').withTitle('CONTACTO'),
 					DTColumnBuilder.newColumn('cargoQty').withTitle('CARGO'),
 					DTColumnBuilder.newColumn('abonoQty').withTitle('ABONO'),
-					DTColumnBuilder.newColumn('name').withTitle('CUENTA')
+					DTColumnBuilder.newColumn('name').withTitle('CUENTA'),
+					DTColumnBuilder.newColumn('date_year').withTitle('AÑO'),
+					DTColumnBuilder.newColumn('date_monthFull').withTitle('MES'),
+					DTColumnBuilder.newColumn('date_month').withTitle('MES NO.')
 				];
 			}).error(function(response){
 				console.log(response);
@@ -170,132 +186,98 @@ angular.module('rpts').controller('RptsController', ['$scope', '$stateParams', '
 			$scope.Pasivo = [];
 			$scope.Capital = [];
 			
-			Cuentas.query(function(cuentas){
+			var initializeYears = function( theYear, array ){
+				if(!array.years)
+					array.years = [];
+				var finded = false;
+							
+				angular.forEach(array.years,function(years){
+					if(years.year === theYear){
+						finded= true;
+					}
+				});
+
+				if(!finded)
+					array.years.push({ year : theYear, total : 0 });
+			};
+
+			var addTotal = function(array, theYear, quantity){
+				angular.forEach(array.years, function(years){
+					if(years.year === theYear){
+						years.total += quantity;
+					}
+				});
+			};
+
+			var setTotalYears = function( cuentas, tipo, cuenta, subcuenta, theYear , quantity){
+				addTotal(cuentas,theYear,quantity);
+				addTotal(tipo,theYear,quantity);
+				addTotal(cuenta,theYear,quantity);
+				addTotal(subcuenta,theYear,quantity);
+			};
+
+			//all accounts that has the type : Activo, Pasivo, Capital
+			$http.post('/cuentas/listAPC').success(function(cuentas){
+				//We get all documents with the selected circle and matching filters.
 				$http.post('/rpts/balanceGeneral', $scope.filtros).success(function(response){
-					angular.forEach(cuentas, function(tipo){
-						angular.forEach(response,function(documentos, kt){
-							var encontrado = false;
-							if(!encontrado){
-								if(documentos._id.name === tipo.name){
-									if(documentos.cargo>0){
-										//+
-										tipo.cantidad += documentos.cargo;
-									}else
-									{
-										//-
-										tipo.cantidad -= documentos.abono;
-									}
-									encontrado = true;
-								}else
-								{
-									if(!encontrado){
-										angular.forEach(tipo.cuenta, function(cuenta){
-											if(cuenta.name === documentos._id.name){
-												if(documentos.cargo>0){
-							 						//+
-							 						cuenta.cantidad += documentos.cargo;
-							 					}else
-							 					{
-							 						//-
-							 						cuenta.cantidad -= documentos.abono;
-							 					}
-												encontrado= true;
-											}else
-											{
-												if(!encontrado){
-													angular.forEach(cuenta.subcuenta, function(subcuenta){
-														if(subcuenta.name === documentos._id.name){
-															if(documentos.cargo>0){
-										 						//+
-										 						subcuenta.cantidad += documentos.cargo;
-										 					}else
-										 					{
-										 						//-
-										 						subcuenta.cantidad -= documentos.abono;
-										 					}
-															encontrado = true;
-														}else{
-															if(!encontrado){
-																angular.forEach(subcuenta.detalle, function(detalle){
-																	if(detalle.name === documentos._id.name){
-																		if(documentos.cargo>0){
-													 						//+
-													 						detalle.cantidad += documentos.cargo;
-													 					}else
-													 					{
-													 						//-
-													 						detalle.cantidad -= documentos.abono;
-													 					}
-																		encontrado = true;
-																	}
-																});	
-															}
-														}
-													});
-												}
-											}
-										});
-									}
-								}
-				 			}
-						});	
-					});
-					//With this proccess we selected all accounts that are === 0 
-					var deletes =[];
-						angular.forEach(cuentas, function(tipo,keytipo){
-							if(tipo.cuenta.length>0){
-								angular.forEach(tipo.cuenta, function(cuenta,keycuenta){
-									if(cuenta.subcuenta.length > 0){
-										angular.forEach(cuenta.subcuenta, function(subcuenta, keysubcuenta){
-											if(subcuenta.detalle.length>0){
-												angular.forEach(subcuenta.detalle, function(detalle, keydetalle){
-													if (detalle.cantidad === 0 || !detalle.cantidad )
-														deletes.push({name:detalle.name});
-												});	
-											}
-											if (subcuenta.cantidad === 0 || !subcuenta.cantidad ){
-												deletes.push({name: subcuenta.name});
-											}									
-										});
-									}
-									if( cuenta.cantidad === 0 || !cuenta.cantidad ){
-										deletes.push({ name:cuenta.name });
-									}																	
-								});
-							}
-							if(tipo.cantidad === 0 || !tipo.cantidad)
-								deletes.push({ name:tipo.name });
-					});
-					//Now we deleted all accounts that we have in the array.
-					angular.forEach(deletes, function(value, key){
-						var found= false;
-						angular.forEach(cuentas, function(tipo,keytipo){
-							if(tipo.name === value.name){
-								cuentas.splice(keytipo, 1);
-								found = true;
-							}
-							if(!found){
-								angular.forEach(tipo.cuenta, function(cuenta,keycuenta){
-									if(cuenta.name === value.name){
-										tipo.cuenta.splice(keycuenta,1);
-										found = true;
-									}
-									if(!found){
-										angular.forEach(cuenta.subcuenta, function(subcuenta, keysubcuenta){
-											if(subcuenta.name === value.name){
-												cuenta.subcuenta.splice(keysubcuenta,1);
-												found=true;
-											}
-											if(!found){
-												angular.forEach(subcuenta.detalle, function(detalle, keydetalle){
-													if(detalle.name === value.name){
-														subcuenta.detalle.splice(keydetalle,1);
-														found=true;
-													}
-												});		
-											}
+					angular.forEach(response, function(doc){
+						var date = new Date(doc._id.date_document);
+						var year = date.getFullYear();
+
+						initializeYears( year, cuentas );
+
+						angular.forEach(cuentas, function( tipo, keytipo ){							
+							initializeYears( year, tipo );
+								
+							if(!tipo.finded)
+								tipo.finded = false;
+
+							if(tipo._id === doc._id.idcuenta){
+								tipo.finded = true;
+							}else{
+								angular.forEach(tipo.cuenta, function( cuenta , keycuenta ){
+									if (!cuenta.finded)
+										cuenta.finded = false; // this variable is used to mark the account if was finded.
+									initializeYears(year, cuenta);
+									if(cuenta._id === doc._id.idcuenta){										
+										cuenta.finded = true;
+										tipo.finded = true;
+									}else{
+										angular.forEach(cuenta.subcuenta , function( subcuenta, keysubcuenta ){
+											var quantity = 0;
+											if(!subcuenta.finded)
+												subcuenta.finded = false;
 											
-										});				
+											initializeYears(year, subcuenta);
+
+											if(subcuenta._id === doc._id.idcuenta){
+												if(doc.cargo>0){
+													quantity = doc.cargo; //+
+												}else{
+													quantity = doc.abono; //-
+												}
+
+												setTotalYears(cuentas, tipo, cuenta, subcuenta, year,  quantity);
+												
+												subcuenta.finded = true;
+												cuenta.finded = true;
+												tipo.finded = true;
+											}else{
+												angular.forEach(subcuenta.detalle, function( detalle, keydetalle ){
+													if(detalle._id === doc._id.idcuenta){
+														if( doc.cargo > 0 ){
+															quantity = doc.cargo; //+
+														}else{
+															quantity = doc.abono; //-
+														}
+														setTotalYears(cuentas, tipo, cuenta, subcuenta, year , quantity);
+														subcuenta.finded = true;
+														cuenta.finded = true;
+														tipo.finded = true;
+													}
+												});
+											}
+										});
 									}
 								});
 							}
@@ -309,42 +291,112 @@ angular.module('rpts').controller('RptsController', ['$scope', '$stateParams', '
 		};
 
 		$scope.resetFields = function(){
+			$scope.filtros = {};
+			$scope.selectReporte = undefined;
+			$scope.onCheckFilterAccountChange();
+			$scope.resultados = [];
+			$scope.dtOptionsRes = [];
+			$scope.balanceGrl = [];
+			$scope.rootFile = undefined;
+
 
 		};
 
 		$scope.exportToExcel = function(){
-			var data = [];
-		 	var params;
-		 	var header;
-		 	var fields;
-		 	var delimiter = ',';
-		 	var nameFile = $scope.selectReporte;
-			switch($scope.selectReporte){
-				case 'rptIgnis':
-						fields=['name_document','date_document', 'contacts', 'cargoQty' , 'abonoQty','name'];
-						header=['Documento','Fecha doc.','Contacto','Cargo','Abono','Cuenta'];
-						data = $scope.resultados;
-				break;
-				case 'balanceGrl' : data = $scope.balanceGrl; header=['']; console.log($scope.balanceGrl); break;
-			}
 
-			$http.post('/rpts/exportToCsv' , { data : data , fields : fields,  header : header , nameFile : nameFile } ).success(function(response){
-				$scope.rootFile = response.rootFile;
-				$scope.msgSmartNotification('Reporte', response.ok ,'fa fa-check','#739E73');
-					$scope.isOk = true;	
-					$timeout(function () {
-	                	$scope.isOk = undefined;
-	            	},1000);
+			// if ($scope.selectReporte === 'rptIgnis') {
+			// 	var data = [];
+		 // 	var params;
+		 // 	var header;
+		 // 	var fields;
+		 // 	var delimiter = ',';
+		 // 	var nameFile = $scope.selectReporte;
+			// switch($scope.selectReporte){
+			// 	case 'rptIgnis':
+			// 			fields=['name_document','date_document', 'contacts', 'cargoQty' , 'abonoQty','name'];
+			// 			header=['Documento','Fecha doc.','Contacto','Cargo','Abono','Cuenta'];
+			// 			data = $scope.resultados;
+			// 	break;
+			// 	case 'balanceGrl' : data = $scope.balanceGrl; header=['']; break;
+			// }
+
+			// $http.post('/rpts/exportToCsv' , { data : data , fields : fields,  header : header , nameFile : nameFile } ).success(function(response){
+			// 	$scope.rootFile = response.rootFile;
+			// 	$scope.msgSmartNotification('Reporte', response.ok ,'fa fa-check','#739E73');
+			// 		$scope.isOk = true;	
+			// 		$timeout(function () {
+	  //               	$scope.isOk = undefined;
+	  //           	},1000);
+			// }).error(function(errorResponse){
+
+			// });
+			// 	}
+		};
+
+		$scope.fillListAccountsByCirlce = function(callback){
+			var circles = [];
+
+			circles.push($scope.filtros.circle);
+
+			$http.post('/cuentas/listAccountsByCircle',circles).success(function(response){
+				$scope.inputTagCuentas = response;
+				$scope.onCheckFilterAccountChange();
+				if(callback)
+					callback();
 			}).error(function(errorResponse){
-
+				$scope.error = errorResponse.data.message;
+				$scope.msgSmartNotification('Error' , $scope.error , 'fa fa-frown-o' , '#C46A69' );
 			});
 		};
 
+		$scope.onCircleChange = function(){
+			$scope.fillListAccountsByCirlce();
+		};
+
+		//SmartNotifications
 		$scope.msgSmartNotification = function( title,  content, icon, color){
 			$scope.msgTitle = title;
 			$scope.msgContent = content;
 			$scope.msgIcon = icon;
 			$scope.msgColor = color;
+
+			$scope.isOk = true;	
+			$timeout(function () {
+            	$scope.isOk = undefined;
+        	},1000);
+		};
+		//Alert Notification UI
+		$scope.AlertNotificationCenterForGuests = function(title, content,methods,buttons,type){
+			$scope.alertContent = content;
+			$scope.alertTitle = title;
+			$scope.alertButtons = buttons;
+			$scope.alertMethods = methods;
+
+			$scope.hasGuests = true;
+			$timeout(function () {
+            	$scope.hasGuests = undefined;
+        	},100);
+		};
+
+		//
+		$scope.fillSelectedAccounts = function(response){
+			$scope.filtros.cuentasSelected = [];
+			if(response!==undefined){
+				angular.forEach(response,function(account){
+					$scope.filtros.cuentasSelected.push(account._id);
+				});	
+			}			
+		};
+
+		//
+		$scope.onCheckFilterAccountChange = function(){
+			if($scope.filtros.cuenta){
+				$scope.fillSelectedAccounts($scope.inputTagCuentas);	
+			}else
+			{
+				$scope.fillSelectedAccounts();	
+			}
+			
 		};
 	}
 ]);

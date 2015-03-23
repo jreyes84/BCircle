@@ -12,6 +12,8 @@ module.exports = function(app) {
 		.delete(cuentas.delete);
 	app.route('/cuentas/listdetalle').post(cuentas.listDetalle);
 	app.route('/cuentas/delete').post(cuentas.delete);
+	app.route('/cuentas/listAPC').post(cuentas.listAPC);
+	app.route('/cuentas/listAccountsByCircle').post(cuentas.listAccountsByCircle);
 
 	app.route('/cuentas/:cuentaId')
 		.get(cuentas.read)

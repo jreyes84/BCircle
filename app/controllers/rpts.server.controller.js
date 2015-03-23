@@ -96,9 +96,12 @@ exports.reporte_1 = function(req, res){
 	var start = req.body.start;
 	var end = req.body.end;
 	var parameters = {};
+	var circle = req.body.circle;
+	var id = mongoose.Types.ObjectId(circle);
 
 	if(values.length>0){
 		parameters['cuentas.idcuenta'] = { $in : values };
+		parameters['circles.idcircle'] = { $in :[ id ] };
 	}
 	if(start)
 	{
@@ -117,24 +120,40 @@ exports.reporte_1 = function(req, res){
 
 exports.balanceGeneral = function( req, res ){
 	var values = req.body.cuentasSelected;
+	var circle = req.body.circle;
 	var start = req.body.start;
 	var end = req.body.end;
 	var parameters = {};
+	var id = mongoose.Types.ObjectId(circle);
 
-	if(values.length>0){
-		parameters['cuentas.idcuenta'] = { $in : values };
-	}
+	var circlesId = [];
+
+	values.forEach(function(cuenta){
+		var v = mongoose.Types.ObjectId(cuenta);
+		circlesId.push(v);
+	});
 
 	if(start !== undefined){
-		Documento.aggregate([{ $match : { date_document: { $gt : new Date( start ), $lt : new Date( end ) } } } ,{ $unwind : '$cuentas' }, { $project : { cuentas : 1, name : '$cuentas.name',idcuenta: '$cuentas.idcuenta' } }, { $group: { _id: { idcuenta:'$idcuenta', name: '$name' }, cargo: {$sum:'$cuentas.cargoQty' } , abono: {$sum:'$cuentas.abonoQty' } }} ]).exec(function(err,result){
-			console.log('With date');
-			res.jsonp(result);
-		});
+
+		if( values.length > 0 ){
+			Documento.aggregate([{ $match : { date_document: { $gte : new Date( start ), $lte : new Date( end ) }, 'circles.idcircle': { $in :[ id ] }, 'cuentas.idcuenta' : { $in : circlesId } } } ,{ $unwind : '$cuentas' }, { $project : { cuentas : 1, name : '$cuentas.name',idcuenta: '$cuentas.idcuenta', date_document : 1 } }, { $group: { _id: { idcuenta:'$idcuenta', name: '$name', date_document : '$date_document' }, cargo: {$sum:'$cuentas.cargoQty' } , abono: {$sum:'$cuentas.abonoQty' } }} ]).exec(function(err,result){
+				res.jsonp(result);
+			});
+		}else{
+			Documento.aggregate([{ $match : { date_document: { $gte : new Date( start ), $lte : new Date( end ) } } } ,{ $unwind : '$cuentas' }, { $project : { cuentas : 1, name : '$cuentas.name',idcuenta: '$cuentas.idcuenta', date_document : 1 } }, { $group: { _id: { idcuenta:'$idcuenta', name: '$name', date_document : '$date_document' }, cargo: {$sum:'$cuentas.cargoQty' } , abono: {$sum:'$cuentas.abonoQty' } }} ]).exec(function(err,result){
+				res.jsonp(result);
+			});
+		}
 	}else{
-		Documento.aggregate([{ $unwind : '$cuentas' }, { $project : { cuentas:1, name : '$cuentas.name',idcuenta: '$cuentas.idcuenta' } }, { $group: { _id: { idcuenta:'$idcuenta', name: '$name' }, cargo: {$sum:'$cuentas.cargoQty' } , abono: {$sum:'$cuentas.abonoQty' } }} ]).exec(function(err,result){
-			console.log('Wihtout date');
-			res.jsonp(result);
-		});
+		if (circlesId.length>0) {
+			Documento.aggregate([{ $match : { 'circles.idcircle': { $in :[ id ] }, 'cuentas.idcuenta' : { $in : circlesId } } }, { $unwind : '$cuentas' } , { $project : { cuentas:1, name : '$cuentas.name',idcuenta: '$cuentas.idcuenta', date_document : 1 } }, { $group: { _id: { idcuenta:'$idcuenta', name: '$name', date_document : '$date_document' }, cargo: {$sum:'$cuentas.cargoQty' } , abono: {$sum:'$cuentas.abonoQty' } }} ]).exec(function(err,result){
+				res.jsonp(result);
+			});
+		}else{
+			Documento.aggregate([{ $match : { 'circles.idcircle': { $in :[ id ] } } }, { $unwind : '$cuentas' } , { $project : { cuentas:1, name : '$cuentas.name',idcuenta: '$cuentas.idcuenta', date_document : 1 } }, { $group: { _id: { idcuenta:'$idcuenta', name: '$name', date_document : '$date_document' }, cargo: {$sum:'$cuentas.cargoQty' } , abono: {$sum:'$cuentas.abonoQty' } }} ]).exec(function(err,result){
+				res.jsonp(result);
+			});
+		}
 	}
 };
 

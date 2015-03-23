@@ -15,6 +15,7 @@
   "scripts": {
     "start": "grunt",
     "test": "grunt test",
+    "postinstall": "npm -g install bower",
     "postinstall": "bower install --config.interactive=false"
   },
   "dependencies": {

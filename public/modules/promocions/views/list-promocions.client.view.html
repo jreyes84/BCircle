@@ -1,0 +1,202 @@
+<!-- Contacts Header -->
+<script src="scripts/app.js"></script>
+<script src="scripts/pages/formsValidation.js"></script>
+<script>
+$(function(){ 
+    FormsValidation.init();
+});
+</script>
+<div data-ng-controller="PromocionsController" >
+<div class="content-header">
+</div>
+<ul class="breadcrumb breadcrumb-top">
+    <li>Pages</li>
+    <li><a href="">Productos</a></li>
+</ul>
+
+<!-- Main Row -->
+<div class="row" data-ng-init="find()" > 
+    <input type="hidden" data-ng-model="userid" />
+    <div class="col-lg-12" data-id-content="content-list" data-toggle-config-fields id="content-list">
+        <div class="col-lg-12">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-primary">{{findMeByText}}</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:void(0)" data-ng-click="changeOption('nombre','Nombre')">Nombre</a></li>
+                        <li><a href="javascript:void(0)" data-ng-click="changeOption('combo.producto.name','Producto')">Producto</a></li>
+                    </ul>
+                </div>
+                <input type="text" class="form-control" placeholder="Buscar" data-ng-model="letter">
+            </div>
+        </div>
+        <!-- Contacts Block -->
+        <div class="block">
+            <!-- Contacts Title -->
+            <div class="block-title">
+                <div class="block-options pull-right">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-primary enable-tooltip" data-toggle="tooltip" title="Agregar" data-original-title="Agregar" data-toggle-config-fields data-type-animation="add" data-ng-click="cleanCredentials()"><i class="fa fa-plus"></i>
+                    </a>
+                </div>
+                <div class="block-options text-center">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('')">All</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('A')">A</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('B')">B</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('C')">C</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('D')">D</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('E')">E</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('F')">F</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('G')">G</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('H')">H</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('I')">I</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('J')">J</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('K')">K</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('L')">L</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('M')">M</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('N')">N</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('O')">O</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('P')">P</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Q')">Q</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('R')">R</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('S')">S</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('T')">T</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('V')">V</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('U')">U</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('W')">W</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('X')">X</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Y')">Y</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-ng-click="searchName('Z')">Z</a>
+                </div>
+            </div>
+            <!-- END Contacts Title -->
+
+            <!-- Contacts Content -->
+            <div class="row style-alt">
+                <div class="col-sm-6 col-lg-4" data-ng-repeat="promo in promocions | filterByFields:letter:field" >
+                    <a href="javascript:void(0)" class="widget widget-hover-effect1 animation-fadeIn" data-ng-click="edit(promo)" >
+                        <div class="widget-simple">
+                            <h4 class="widget-content">
+                                <strong>{{promo.name}}</strong>
+                            </h4>
+                        </div>
+                    </a>
+                </div>
+                <!-- END Contact Widget -->
+                <div class="alert alert-warning text-center" data-ng-if="!promocions.length">
+                    No existen promociones aun, <a href="javascript:void(0)">crear uno</a>?
+                </div>
+            </div>
+            <!-- END Contacts Content -->
+        </div>
+        <!-- END Contacts Block -->
+
+    </div>
+    <div class="col-lg-4 animation-slideLeft" data-id-content="add-content" data-toggle-config-fields id="add-content">
+        <!-- Add Contact Block -->
+        <div class="block">
+            <!-- Add Contact Title -->
+            <div class="block-title">
+                <div class="block-options pull-right">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-danger enable-tooltip" data-tooltip="Cancelar" data-ng-click="onClickCancel()" data-toggle-config-fields data-type-animation="cancel"><i class="fa fa-times"></i></a>
+                </div>
+                <h2  data-ng-show="blockNew"><i class="fa fa-plus"></i> Crear producto</h2>
+                <h2  data-ng-show="blockEdit"><i class="fa fa-plus"></i> Modificar producto</h2>
+
+            </div>
+            <!-- END Add Contact Title -->
+
+            <!-- Add Contact Content -->
+            <form class="form-horizontal form-bordered" name="addcontactForm" data-ng-submit="create()"  autocomplete="off"  novalidate="novalidate" id="form-validation">
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">Nombre</label>
+                    <div class="col-xs-9">
+                        <input type="text" data-ng-model="promocion.name" class="form-control" placeholder="Ingrese Nombre de promoción">
+                    </div>
+                </div>              
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">Productos</label>
+                    <div class="col-xs-9">
+                        <select style="width:100%" ui-select2="{allowClear:true, allowDuplicates:true}" data-ng-model="productSelected" data-placeholder="Seleccione contactos" multiple select2 data-change="onChangeSelectProducts(product)" select2>
+                             <option data-ng-repeat="product in inputTagProductos" value="{{product.id}}">{{product.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-12">
+
+                        <table class="table table-vcenter table-striped" data-ng-show="promocion.combo.length">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Nombre</th>
+                                    <th class="text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="producto in promocion.combo" >
+                                    <td class="text-center">
+                                        {{producto.name}}
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-xs">
+                                            <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete" data-ng-click="onDeleteProduct($index)"><i class="fa fa-times"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">Descuento % {{promocion.descuento}}</label>
+                    <div class="col-xs-9">
+                        <input type="number" min="0" max="100" class="form-control" data-ng-model="promocion.descuento"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">Rango de fecha</label>
+                    <div class="input-group input-daterange" data-date-format="mm/dd/yyyy">
+                        <input type="text" id="example-daterange1" name="example-daterange1" class="form-control text-center" placeholder="From" data-ng-model="promocion.start_date">
+                        <span class="input-group-addon"><i class="fa fa-angle-right"></i></span>
+                        <input type="text" id="example-daterange2" name="example-daterange2" class="form-control text-center" placeholder="To" data-ng-model="promocion.end_date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" >Promoción forzada</label>
+                     <div class="col-xs-9">
+                        <label class="col-xs-3 switch switch-success" for="val_forzada">
+                        <input type="checkbox" name="val_forzada" id="val_forzada" value="1" data-ng-model="promocion.forzada" >
+                        <span data-toggle="tooltip" title="" data-original-title="No se pregunta, y se hace efectiva esta promoción en los productos"></span>
+                    </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label" for="add-contact-group">Activo</label>
+                    <div class="col-xs-9">
+                        <label class="col-xs-3 switch switch-success" for="val_active" >
+                        <input type="checkbox" name="val_active" id="val_active" value="1" data-ng-model="promocion.active" checked>
+                        <span data-toggle="tooltip" title="" data-original-title="Estatus promoción"></span>
+                    </label>
+                    </div>
+                </div>
+                <div data-ng-show="error" class="text-center text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+                <div class="form-group form-actions">
+                    <div class="col-xs-9 col-xs-offset-3">
+                        <button type="submit" class="btn btn-sm btn-primary" data-notifications data-title="{{msgTitle}}" data-color="{{msgColor}}" data-icon="{{msgIcon}}" data-content="{{msgContent}}" data-ng-model="isOk">
+                            <i class="fa fa-plus"></i>
+                            <span data-ng-show="blockNew">Agregar Producto</span>
+                            <span data-ng-show="blockEdit">Modificar Producto</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <!-- END Add Contact Content -->
+        </div>
+        <!-- END Add Contact Block -->
+    </div>
+    </div>
+        <!-- <button data-ng-click="updateCountries()">Countries</button>
+    <div data-ng-repeat="pais in paises">
+    </div> -->
+</div>
+<!-- END Main Row -->
