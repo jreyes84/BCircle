@@ -3,8 +3,8 @@
 module.exports = {
 	app: {
 		title: 'project_lk',
-		description: 'An app for everyone',
-		keywords: 'Ad, Ads, Comerciales, Anuncios, Empresas'
+		description: 'ERP Sistem',
+		keywords: ''
 	},
 	host: '0.0.0.0',
 	port: process.env.PORT || 3000,
@@ -14,11 +14,6 @@ module.exports = {
 	assets: {
 		lib: {
 			css: [
-				//'public/css/bootstrap.min.css',
-				//'public/css/plugins.css',
-				//'public/css/main.css',
-				//'public/css/themes.css',
-				//'public/lib/bootstrap/dist/css/bootstrap-theme.css',
 			],
 			js: [
 				 'public/lib/jquery/dist/jquery.min.js',
@@ -48,15 +43,6 @@ module.exports = {
 				 'public/lib/socket.io-client/socket.js',
 				 'public/lib/x2js/xml2json.js',
 				 'public/lib/angular-x2js/src/x2js.js'
-				 //'public/lib/app.js'
-				
-				/*'public/lib/vendor/modernizr-2.7.1-respond-1.4.2.min.js',
-				'public/lib/vendor/bootstrap.min.js',
-				'public/lib/plugins.js"',
-				'public/lib/app.js',*/
-				/*'http://maps.google.com/maps/api/js?sensor=true',
-				'public/lib/helpers/gmaps.min.js' 
-				'public/lib/js/pages/index.js'*/
 			]
 		},
 		css: [

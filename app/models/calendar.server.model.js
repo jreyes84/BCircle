@@ -131,7 +131,9 @@ var CalendarSchema = new Schema({
 			type: String,
 			trim: true,
 			enum : ['minutos','horas','días','semanas']
-		}
+		},
+		endtime : { type: String },
+		sent : { type : Boolean, default:false }
 	}],
 	user: {
 		type: Schema.ObjectId

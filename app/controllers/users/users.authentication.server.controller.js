@@ -7,7 +7,6 @@ var _ = require('lodash'),
 	errorHandler = require('../errors'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
-	Session = mongoose.model('Session'),
 	User = mongoose.model('User');
 
 /**
@@ -15,8 +14,6 @@ var _ = require('lodash'),
  */
 exports.signup = function(req, res) {
 	// For security measurement we remove the roles from the req.body object
-	//delete req.body.roles;
-
 	// Init Variables
 	var user = new User(req.body);
 	
@@ -27,8 +24,6 @@ exports.signup = function(req, res) {
 	user.displayName = user.firstName + ' ' + user.lastName;
 
 	// Then save the user 
-	//console.log('Signup');
-	//console.log(user);
 	user.save(function(err) {
 		if (err) {
 			console.log(err);
@@ -52,7 +47,6 @@ exports.signup = function(req, res) {
 			{
 				res.jsonp(user);
 			}
-
 		}
 	});
 };

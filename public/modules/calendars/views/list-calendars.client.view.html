@@ -115,6 +115,38 @@
                                 <input type="text" id="example-progress-username" name="example-progress-username" class="form-control ui-wizard-content" placeholder="Descripción de tu evento" data-ng-model="newEvent.title" autocomplete="off" >
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-md-2  control-label" for="add-contact-name">Circulos</label>
+                            <div class="col-md-10">
+                                <div class="btn-group" circle-option name="c-options">
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-primary dropdown-toggle enable-tooltip" data-toggle="dropdown" title="" data-original-title="Círculos"><i class="fa fa-dot-circle-o"></i> <span class="caret" data-ng-if="circulos.total < 1"></span><span data-ng-if="circulos.total === 1">{{circulos.title}}</span><span data-ng-if="circulos.total > 1">{{circulos.total}} {{circulos.title}}</span></a>
+                                    <ul class="dropdown-menu dropdown-custom dropdown-menu-right" style="z-index:999999">
+                                        <div class="scroll-menu">
+                                            <h4 data-ng-hide="circulos.length" class="without-cirlces">No hay círculos...</h4>
+                                            <li data-ng-repeat="circulo in circulos" data-ng-click="onClickLi( $index , 0, circulo)">
+                                                <a href="javascript:void(0)">
+                                                    <input type="checkbox" value="{{circulo.name}}" data-ng-model="circulo.checked" /> {{ circulo.name }}
+                                                </a>
+                                            </li>  
+                                        </div> 
+                                        <div>
+                                            <li class="divider"></li>
+                                            <li data-ng-click="onClickLi(undefined,1)" data-ng-hide="newCircle">
+                                                <a href="javascript:void(0)"><i class="fa fa-dot-circle-o"></i> Crear círculo nuevo</a>
+                                            </li>
+                                            <li data-ng-click="onClickLi()" data-ng-show="newCircle">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control input-sm" placeholder="" data-ng-keypress="onKeyPressNewCircle($event)" data-ng-blur="onBlurNewCircle()" data-ng-model="documento.circleName" name="newCircleInput">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-primary btn-sm" name="btnNewCicle" data-ng-click="clicked()" >Crear</button>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </div>                             
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group" data-ng-show="newEvent.allDay">
                             <label class="col-md-2 control-label" for="example-username">Fechas</label>
                             <div class="col-md-10">
@@ -181,7 +213,7 @@
                         <div class="form-group" data-ng-show="newEvent.isrepeat" data-ng-if="repeatDays || repeatWeeks || repeatMonths || repeatYears">
                             <label class="col-md-3">Repetir cada</label>
                             <div class="col-md-2">
-                                <input type="number" class="form-control input-sm" placeholder="1" data-ng-model="newEvent.repeat.every" min="1" max="30" data-ng-change="onEveryDaysChange()">
+                                <input type="number" class="form-control input-sm" placeholder="1" data-ng-model="newEvent.repeat.every" min="1" max="31" data-ng-change="onEveryDaysChange()">
                             </div>
                             <label class="col-md-2" data-ng-show="repeatDays" >días</label>
                             <label class="col-md-2" data-ng-show="repeatWeeks">semanas</label>
@@ -300,6 +332,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Notificaciones</label>
+
                             <div class="col-md-12" data-ng-repeat="notification in newEvent.notifications">
                                     <div class="col-md-3">
                                         <select select-2 style="width:100%" ui-select2 data-ng-model="notification.type_not"class="text-center" data-placeholder="Seleccione tipo de notificación">
@@ -308,18 +341,18 @@
                                         </select>
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="number" class="form-control" placeholder="1" data-ng-model="notification.time" min="1">
+                                        <input type="number" class="form-control" placeholder="1" data-ng-model="notification.time" min="0">
                                     </div>
                                     <div class="col-md-3">
-                                        <select select-2 style="width:100%" ui-select2 data-ng-model="newEvent.notification.every" class="text-center" data-placeholder="Seleccione el lapso">
+                                        <select select-2 style="width:100%" ui-select2 data-ng-model="notification.every" class="text-center" data-placeholder="Seleccione el lapso">
                                             <option value="días" class="text-center" selected="selected">días</option>
                                             <option value="semanas" class="text-center">semanas</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        antes a las 
+                                        antes a las
                                         <div class="input-group bootstrap-timepicker">
-                                        <input type="text" class="form-control input-timepicker24" data-ng-model="newEvent.endtime">
+                                        <input type="text" class="form-control input-timepicker24" data-ng-model="notification.endtime">
                                         <span class="input-group-btn">
                                             <a href="javascript:void(0)" class="btn btn-primary"><i class="fa fa-clock-o"></i></a>
                                         </span>

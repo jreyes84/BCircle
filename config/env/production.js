@@ -2,28 +2,54 @@
 
 module.exports = {
 	host: '0.0.0.0',
-	//db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://0.0.0.0/project-lk',
-	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://admin:betoreyes@ds045011.mongolab.com:45011/heroku_app34087509',
+	port: process.env.PORT || 3000,
+	templateEngine: 'swig',
+	sessionSecret: 'Bc',
+	sessionCollection: 'sessions',
+	db: 'mongodb://admin:betoreyes@ds045011.mongolab.com:45011/heroku_app34087509',
 	assets: {
 		lib: {
 			css: [
-				'public/lib/bootstrap/dist/css/bootstrap.min.css',
-				'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
 			],
 			js: [
-				'public/lib/angular/angular.min.js',
-				'public/lib/angular-resource/angular-resource.js', 
-				'public/lib/angular-cookies/angular-cookies.js', 
-				'public/lib/angular-animate/angular-animate.js', 
-				'public/lib/angular-touch/angular-touch.js', 
-				'public/lib/angular-sanitize/angular-sanitize.js', 
-				'public/lib/angular-ui-router/release/angular-ui-router.min.js',
-				'public/lib/angular-ui-utils/ui-utils.min.js',
-				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js'
+				 'public/lib/jquery/dist/jquery.min.js',
+				 'public/lib/datatables/media/js/jquery.dataTables.min.js',
+				 'public/lib/ng-file-upload/angular-file-upload-shim.min.js', 
+				 'public/lib/angular/angular.js',
+				 'public/lib/angular-filter/dist/angular-filter.min.js',
+				 'public/lib/angular-momentjs/angular-momentjs.js',
+				 'public/lib/angular-ui-calendar/src/calendar.js',
+				 'public/lib/fullcalendar/moment.js',
+				 'public/lib/fullcalendar/fullcalendar.js',
+				 'public/lib/fullcalendar/gcal.js',
+				 'public/lib/ng-file-upload/angular-file-upload.min.js',
+				 'public/lib/angular-datatables/dist/angular-datatables.js',
+				 'public/lib/angular-smart-table/dist/smart-table.min.js',
+				 'public/lib/select2/select2.js',
+				 'public/lib/angular-ui-select2/src/select2.js',
+				 'public/lib/angular-resource/angular-resource.js', 
+				 'public/lib/angular-cookies/angular-cookies.js', 
+				 'public/lib/angular-animate/angular-animate.js', 
+				 'public/lib/angular-touch/angular-touch.js', 
+				 'public/lib/angular-sanitize/angular-sanitize.js', 
+				 'public/lib/angular-ui-router/release/angular-ui-router.js',
+				 'public/lib/angular-ui-utils/ui-utils.js',
+				 'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
+				 'public/lib/angular-socket-io/socket.js',
+				 'public/lib/socket.io-client/socket.js',
+				 'public/lib/x2js/xml2json.js',
+				 'public/lib/angular-x2js/src/x2js.js'
 			]
 		},
-		css: 'public/dist/application.min.css',
-		js: 'public/dist/application.min.js'
+		css: [
+			'public/modules/**/css/*.css'
+		],
+		js: [
+			'public/config.js',
+			'public/application.js',
+			'public/modules/*/*.js',
+			'public/modules/*/*[!tests]*/*.js'
+		],
 	},
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',
@@ -51,12 +77,12 @@ module.exports = {
 		callbackURL: 'http://localhost:3000/auth/github/callback'
 	},
 	mailer: {
-		from: process.env.MAILER_FROM || 'MAILER_FROM',
+		from: process.env.MAILER_FROM || 'jreyes1684@gmail.com',
 		options: {
-			service: process.env.MAILER_SERVICE_PROVIDER || 'MAILER_SERVICE_PROVIDER',
+			service: process.env.MAILER_SERVICE_PROVIDER || 'Gmail',
 			auth: {
-				user: process.env.MAILER_EMAIL_ID || 'MAILER_EMAIL_ID',
-				pass: process.env.MAILER_PASSWORD || 'MAILER_PASSWORD'
+				user: process.env.MAILER_EMAIL_ID || 'jreyes1684@gmail.com',
+				pass: process.env.MAILER_PASSWORD || 'Bet@reyes16'
 			}
 		}
 	}

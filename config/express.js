@@ -24,34 +24,6 @@ var express = require('express'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
 	path = require('path');
-	/*CronJob = require('cron').CronJob,
-	Agenda = require('agenda');
-	
-
-	var agenda = new Agenda({ db: { address: '0.0.0.0:27017/project-lk-dev'}});
-	agenda.define('check date-end documents', function(job, done){
-		//console.log('lslsls');
-		done();
-	});
-	agenda.every('10 seconds', 'check date-end documents');
-	agenda.start();
-	var job = new CronJob({
-  		cronTime: '1 * * * * *', //'00 30 11 * * 1-5',
-  		onTick: function() {
-  			//console.log('okkkk');
-	  },
-	  start: false,
-	  timeZone: 'America/Los_Angeles'
-	});
-	job.start();*/
-	/*
-		Seconds: 0-59
-		Minutes: 0-59
-		Hours: 0-23
-		Day of Month: 1-31
-		Months: 0-11
-		Day of Week: 0-6
-	*/
 
 module.exports = function(db) {
 	// Initialize express app
@@ -187,5 +159,7 @@ module.exports = function(db) {
 	var io = socketio.listen(server);
 	app.set('socketio' , io);
 	app.set('server' , server);
+	var jobSchedule = require('../app/controllers/job-schedule.js');
+	jobSchedule.setupJobs(app);
 	return app;
 };

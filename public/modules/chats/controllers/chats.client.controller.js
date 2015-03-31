@@ -23,21 +23,26 @@ angular.module('chats').controller('ChatsController', ['$scope', '$http', '$elem
 					$scope.chatConversation.chat = [];
 			
 			if($scope.authentication.user._id === data.userToSee){
-				// $scope.chatConversation.chat.push(data);
-				var theUser ={ from : $scope.userChatFrom._id, to: $scope.userChatTo._id };
+				
+				var theUser = { from : $scope.userChatFrom._id, to: $scope.userChatTo._id };
 				$http.post('/chats/getConversationChat' , theUser ).success(function(response){
-					$scope.chatIsNew = false;
-					$scope.chatConversation = response[0];
-					
+					var finded = false;
+					var index;
 					angular.forEach($scope.chatConversation.chat, function(chat){
-						angular.forEach(response, function(res){
-
+						finded = false;
+						angular.forEach(response[0].chat, function(res,i){
+							if(!finded){
+								if(chat._id === res._id){
+									finded=true;
+								}else{
+									index = i;
+								}
+							}
 						});
 					});
-					var num = response.length;
-					if (num  < 1 ){
-						$scope.chatIsNew = true;
-					}
+					console.log(index);
+					var last = response[0].chat.length -1;
+					$scope.chatConversation.chat.push(response[0].chat[last]);
 				}).error(function(errorResponse){
 
 				});

@@ -777,7 +777,8 @@ angular.module('calendars').controller('CalendarsController', ['$scope' , '$comp
 			$http.post('/calendars/listInvitations').success(function(response){
 				$scope.guests = response;
 			}).error(function(errorResponse){
-				$scope.msgSmartNotification('Error' , errorResponse.data.message , 'fa fa-frown-o' , '#C46A69' );
+				console.log(errorResponse);
+				$scope.msgSmartNotification('Error' , errorResponse , 'fa fa-frown-o' , '#C46A69' );
 			});
 		};	
 

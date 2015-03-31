@@ -77,7 +77,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="btn-group" circle-option id="c-options">
+                        <div class="btn-group" circle-option id="c-options"> <!-- animation-pulse -->
                             <a href="javascript:void(0)" class="btn btn-sm btn-primary dropdown-toggle enable-tooltip" data-ng-class="circulos.showNone ? 'red button' : ''" data-toggle="dropdown" title="" data-original-title="Círculos">
                                 <i class="fa fa-dot-circle-o">
                                 </i>
@@ -163,6 +163,20 @@
                         </div>
                     </div> -->
                     <div class="form-group">
+                        <label class="col-md-2 control-label" for="example-hf-email">Avisar a inventarios.</label>
+                        <div class="col-md-4">
+                            <input class="form-control" type="checkbox">
+                        </div>
+                        <label class="col-md-2 control-label" for="example-hf-email">Alerta</label>
+                        <div class="col-md-4">
+                            <select style="width:100%" ui-select2="{allowClear:true}" data-ng-model="documento.time_to_expirate" data-placeholder="Seleccione">
+                                <option>1 hora antes</option>
+                                <option>1 día antes</option>
+                                <option>1 mes antes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label" for="example-hf-email">XML</label>
                         <div class="col-md-4">
                             <input type="file" ng-file-select="copyFilesXML($files)">
@@ -171,13 +185,6 @@
                         <div class="col-md-4">
                             <input type="file" ng-file-select="copyFilesPDF($files)">
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label" for="example-hf-email">Avisar a inventarios.</label>
-                        <div class="col-md-4">
-                            <input class="form-control" type="checkbox">
-                        </div>
-                        
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label" for="example-hf-email"></label>

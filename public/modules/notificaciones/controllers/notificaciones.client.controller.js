@@ -125,11 +125,13 @@ angular.module('notificaciones').controller('NotificacionesController', ['$scope
 				angular.forEach($scope.notificaciones, function(val,k){
 					if(val._id === response._id){
 						$scope.notificaciones.splice(response[0],1);
-						$scope.notificaciones.total -=1;
+						$scope.notificaciones.total -= 1;
 					}
 				});
-				console.log( response.url +'/' + response.idProceso );
-				$location.path( response.url +'/' + response.idProceso);
+				if(response.idProceso!== undefined)
+					$location.path( response.url +'/' + response.idProceso);
+				else
+					$location.path( response.url );
 			}).error(function(responseError){
 
 			});

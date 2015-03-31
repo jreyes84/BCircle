@@ -18,7 +18,6 @@ var _ = require('lodash'),
  * Forgot for reset password (forgot POST)
  */
 exports.forgot = function(req, res, next) {
-	console.log(req.body);
 	async.waterfall([
 		// Generate random token
 		function(done) {
@@ -74,14 +73,12 @@ exports.forgot = function(req, res, next) {
 				subject: 'Password Reset',
 				html: emailHTML
 			};
-			console.log(mailOptions,emailHTML);
 			smtpTransport.sendMail(mailOptions, function(err) {
 				if (!err) {
 					res.send({
 						message: 'Un email ha sido enviado a ' + user.email + ' con instrucciones.'
 					});
 				}
-				console.log(err);
 				done(err);
 			});
 		}

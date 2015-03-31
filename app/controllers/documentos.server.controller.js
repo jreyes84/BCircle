@@ -119,8 +119,8 @@ exports.listByDocument = function(req, res){
  * List of expirated Documents
  */
 exports.listExpiratedDocuments = function(req, res){
-	var user = req.user._id;
-	if(user){
+	if(req.user){
+		var user = req.user._id;
 		Documento.find( { userCreated : user , date_end : { $gt : new Date(req.body.start), $lt : new Date(req.body.end)}, notificado : false } ).exec(function(err, documentos){
 			if(err){
 				return res.status(400).send({

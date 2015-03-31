@@ -186,6 +186,7 @@ exports.list = function(req, res) {
  */
  exports.listInvitations = function(req, res) { 
 	var newList = [];
+	console.log(req.user._id);
 	Contacto.find({$or:[{ isprivate : false },{ user : req.user._id }]}).exec(function(err, contactos) {
 		if (err) {
 			return res.status(400).send({
